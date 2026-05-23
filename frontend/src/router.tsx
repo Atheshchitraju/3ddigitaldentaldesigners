@@ -48,7 +48,7 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
           </button>
 
           <a
-            href="/3ddigitaldentaldesigners/"
+            href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             Go home
@@ -63,8 +63,8 @@ export const getRouter = () => {
   const router = createRouter({
     routeTree,
 
-    // ✅ IMPORTANT FOR GITHUB PAGES
-    basepath: "/3ddigitaldentaldesigners",
+    //  IMPORTANT FOR GITHUB PAGES
+    basepath: "/",
 
     context: {},
 

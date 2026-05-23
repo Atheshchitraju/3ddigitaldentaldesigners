@@ -3,7 +3,7 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "homepage": "https://atheshchitraju.github.io/3ddigitaldentaldesigners/",
+  
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",

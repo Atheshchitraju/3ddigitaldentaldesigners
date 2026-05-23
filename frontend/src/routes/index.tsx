@@ -23,6 +23,9 @@ import Inlay from "@/assets/Lithium Disilicate Inlay.webp";
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
 import logoD from "@/assets/LOGO D.webp";
+import Segamax from "@/assets/Seagmax.webp";
+import Ivoclar from "@/assets/Ivoclar.webp";
+import Nobilcam from "@/assets/Nobilcam.webp";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -398,14 +401,19 @@ function Index() {
             <div className="flex justify-center">
               <div className="grid grid-cols-2 gap-4 md:gap-6 w-full max-w-[320px] sm:max-w-[420px] lg:max-w-none">
                 {/* TOP LEFT SHAPE */}
-                <div className="bg-blue-600 rounded-tl-[70px] rounded-br-[70px] md:rounded-tl-[120px] md:rounded-br-[120px] aspect-square overflow-hidden relative">
+                <div className=" rounded-tl-[70px] rounded-br-[70px] md:rounded-tl-[120px] md:rounded-br-[120px] aspect-square overflow-hidden relative">
+                  <img
+                    src={Segamax}
+                    alt="Segamax Dental Solutions"
+                    className="w-full h-full object-cover hover:scale-105 transition duration-700"
+                  />
                   <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle,_white_1px,_transparent_1px)] bg-[length:22px_22px]" />
                 </div>
 
                 {/* TOP RIGHT IMAGE */}
                 <div className="rounded-tl-[70px] rounded-br-[70px] md:rounded-tl-[120px] md:rounded-br-[120px] overflow-hidden aspect-[0.8/1] shadow-2xl">
                   <img
-                    src={FullArch}
+                    src={Nobilcam}
                     alt="Digital Dental Designers Lab"
                     className="w-full h-full object-cover hover:scale-105 transition duration-700"
                   />
@@ -421,7 +429,12 @@ function Index() {
                 </div>
 
                 {/* BOTTOM RIGHT SHAPE */}
-                <div className="bg-blue-500 rounded-tl-[70px] rounded-br-[70px] md:rounded-tl-[120px] md:rounded-br-[120px] aspect-square overflow-hidden mt-4 md:mt-10 relative">
+                <div className=" rounded-tl-[70px] rounded-br-[70px] md:rounded-tl-[120px] md:rounded-br-[120px] aspect-square overflow-hidden mt-4 md:mt-10 relative">
+                  <img
+                    src={Ivoclar}
+                    alt="Ivoclar Vivadent"
+                    className="w-full h-max object-cover hover:scale-105 transition duration-700"
+                  />
                   <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle,_white_1px,_transparent_1px)] bg-[length:22px_22px]" />
                 </div>
               </div>
