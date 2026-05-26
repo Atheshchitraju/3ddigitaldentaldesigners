@@ -12,6 +12,8 @@ import logo2 from "@/assets/girish.webp";
 import logo3 from "@/assets/House of teeth.webp";
 import logo4 from "@/assets/makers-of-smile.webp";
 import logo5 from "@/assets/tooth-align.webp";
+import logo6 from "@/assets/chaitana-logo.webp";
+import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
 import SurgicalGuide from "@/assets/SurgicalGuideDesign1.webp";
 import digital3D from "@/assets/3D.webp";
@@ -26,6 +28,7 @@ import logoD from "@/assets/LOGO D.webp";
 import Segamax from "@/assets/Seagmax.webp";
 import Ivoclar from "@/assets/Ivoclar.webp";
 import Nobilcam from "@/assets/Nobilcam.webp";
+import upcera from "@/assets/upcera.webp";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -35,6 +38,7 @@ const clients = [
   {
     id: "jas-dental",
     name: "Jas Dental",
+    location: "HSR Layout, Bengaluru",
     logo: logo,
     banner: "/assets/logo.webp",
     description:
@@ -44,6 +48,7 @@ const clients = [
   {
     id: "excel-dental",
     name: "Excel Dental",
+    location: "JP Nagar 7th Phase, Bengaluru",
     logo: logo1,
     banner: "/assets/banners/excel-banner.webp",
     description:
@@ -53,6 +58,7 @@ const clients = [
   {
     id: "girish-dental",
     name: "Girish Dental Clinic",
+    location: "Wilson Garden, Bangalore",
     logo: logo2,
     banner: "/assets/banners/girish-banner1.webp",
     description:
@@ -62,6 +68,7 @@ const clients = [
   {
     id: "house-of-teeth",
     name: "House of Teeth",
+    location: "Singasandra, Bangalore",
     logo: logo3,
     banner: "/assets/banners/house-of-teeth-banner.webp",
     description:
@@ -71,6 +78,7 @@ const clients = [
   {
     id: "makers-of-smile",
     name: "Makers of Smile",
+    location: "Akshayanagar, Bengaluru",
     logo: logo4,
     banner: "/assets/banners/makers-banner.webp",
     description:
@@ -80,10 +88,21 @@ const clients = [
   {
     id: "tooth-align-clinic",
     name: "Tooth Align Clinic",
+    location: "HSR Layout, Bengaluru",
     logo: logo5,
     banner: "/assets/banners/tooth-align-banner.webp",
     description:
       "Orthodontic and aligner-focused dental clinic providing invisible braces, teeth alignment, bite correction, smile enhancement, and modern digital orthodontic care.",
+  },
+
+  {
+    id: "dr-chaitana-dental-care",
+    name: "Dr Chaitana’s Dental Care",
+    location: "Electronic City Phase 1, Bengaluru",
+    logo: logo6,
+    banner: "/assets/banners/chaitana-banner.webp",
+    description:
+      "Advanced prosthodontic and cosmetic dental clinic specializing in smile designing, aligners, implant planning, veneers, full mouth rehabilitation, and modern digital dental solutions.",
   },
 ];
 
@@ -271,6 +290,13 @@ function Index() {
                   <p className="text-muted-foreground leading-relaxed text-sm">
                     {clients[active].description}
                   </p>
+                  <div className="flex items-center gap-3 mt-2 flex-wrap">
+                    <h3 className="text-2xl font-bold text-gray-800">{clients[active].name}</h3>
+
+                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-black text-xs font-semibold border border-white/20">
+                      📍 {clients[active].location}
+                    </span>
+                  </div>
 
                   <div className="mt-6">
                     <Link
@@ -330,9 +356,15 @@ function Index() {
                     Featured Clinic
                   </p>
 
-                  <h3 className="mt-3 text-5xl font-bold text-white leading-[1.05]">
-                    {clients[active].name}
-                  </h3>
+                  <div className="mt-3 flex items-center gap-4 flex-wrap">
+                    <h3 className="text-5xl font-bold text-white leading-[1.05]">
+                      {clients[active].name}
+                    </h3>
+
+                    <span className="px-4 py-2 rounded-full bg-white/15 backdrop-blur-md text-white text-sm font-semibold border border-white/20">
+                      📍 {clients[active].location}
+                    </span>
+                  </div>
 
                   <p className="mt-4 max-w-2xl text-white/80 text-lg leading-relaxed">
                     {clients[active].description}
@@ -422,7 +454,7 @@ function Index() {
                 {/* BOTTOM LEFT IMAGE */}
                 <div className="rounded-tl-[70px] rounded-br-[70px] md:rounded-tl-[120px] md:rounded-br-[120px] overflow-hidden aspect-[0.8/1] shadow-2xl -mt-4 md:-mt-10">
                   <img
-                    src={Dental1}
+                    src={upcera}
                     alt="3D Dental Design"
                     className="w-full h-full object-cover hover:scale-105 transition duration-700"
                   />

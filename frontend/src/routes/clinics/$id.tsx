@@ -232,7 +232,7 @@ const clinics = [
     description:
       "Premium cosmetic and restorative dental clinic focused on advanced smile transformations and personalized patient care.",
 
-    location: "Bangalore, India",
+    location: "Singasandra, Bangalore",
     phone: "+91 8105189978",
     email: "houseofteeth888@gmail.com",
     map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.355070382187!2d77.6403935751214!3d12.884874987422588!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4d08f5a1da6d364f%3A0x78fb3e2cc4b92bb4!2sHouse%20of%20Teeth%20-%20The%20Dental%20Clinic!5e0!3m2!1sen!2sin!4v1778759149577!5m2!1sen!2sin",
@@ -313,6 +313,68 @@ const clinics = [
           "1st Floor, Begur Woods Layout, Plot#58, Devhuti Rockpile, Begur - Koppa Rd, Akshayanagar, Bengaluru, Karnataka 560076",
 
         website: "",
+      },
+    ],
+  },
+  {
+    id: "dr-chaitana-dental-care",
+    name: "Dr Chaitana’s Dental Care",
+
+    logo: "/assets/doctors/chaitana.webp",
+    banner: "/assets/banners/chaitana-banner.webp",
+
+    description:
+      "Dr Chaitana’s Dental Care is a modern prosthodontic and cosmetic dental clinic focused on smile rehabilitation, implant planning, digital dentistry, aligners, veneers, and precision aesthetic treatments with advanced digital workflows.",
+
+    location: "Electronic City Phase 1, Bengaluru",
+    phone: "+91 7353190690",
+    email: "drchaitanasdentalcare@gmail.com",
+
+    map: "https://www.google.com/maps?q=Dr+Chaitana's+Dental+Care+Electronic+City+Bangalore&output=embed",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [
+      "/assets/gallery/chaitana1.webp",
+      "/assets/gallery/chaitana2.webp",
+      "/assets/gallery/chaitana3.webp",
+    ],
+
+    doctors: [
+      {
+        name: "Dr Chaitana Biradar",
+        role: "MDS Prosthodontist",
+
+        image: "/assets/doctors/chaitana.webp",
+
+        experience: "16 Years Experience",
+
+        phone: "7353190690",
+        email: "drchaitanasdentalcare@gmail.com",
+
+        specialization:
+          "Prosthodontics, Smile Rehabilitation, Cosmetic Dentistry, Implant Planning",
+
+        clinicName: "Dr Chaitana’s Dental Care",
+
+        address:
+          "Hanumanth Reddy Building, Next to Good Health Pharmacy, Near Godrej E-City, Doddathoguru, Electronic City Phase 1, Bengaluru, Karnataka 560100",
+
+        website: "",
+
+        additionalInfo:
+          "MDS | Registration No: 25934A | Advanced Digital Dentistry & Prosthodontic Specialist",
       },
     ],
   },
