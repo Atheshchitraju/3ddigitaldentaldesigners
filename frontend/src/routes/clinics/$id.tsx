@@ -1,4 +1,51 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
+/* =========================
+   BANNERS
+========================= */
+
+import jasBanner from "../../assets/logo.webp";
+import excelBanner from "../../assets/excel-banner.webp";
+import girishBanner from "../../assets/girish-banner1.webp";
+import toothAlignBanner from "../../assets/tooth-align-banner.webp";
+import houseBanner from "../../assets/house-of-teeth-banner.webp";
+import makersBanner from "../../assets/makers-banner.webp";
+import chaitanaBanner from "../../assets/chaitana-banner.webp";
+import ecityBanner from "../../assets/ecity-banner.webp";
+
+/* =========================
+   DOCTORS
+========================= */
+
+import bashaDoctor from "../../assets/Basha Sir.webp";
+import dikshyaDoctor from "../../assets/Dikshya Bose.webp";
+import rizwanaDoctor from "../../assets/Dr Rizwana Tarannum.webp";
+import girishDoctor from "../../assets/girish.webp";
+import harithaDoctor from "../../assets/Haritha.webp";
+import chandiniDoctor from "../../assets/chandini.webp";
+import roliDoctor from "../../assets/Roli Singh.webp";
+import chaitanaDoctor from "../../assets/chaitana-logo.webp";
+import ecityDoctor from "../../assets/ecity-doctor.webp";
+
+/* =========================
+   GALLERY
+========================= */
+
+import jas1 from "../../assets/jasdental1.webp";
+import jas2 from "../../assets/jasdental2.webp";
+import jas3 from "../../assets/jasdental3.webp";
+import jas4 from "../../assets/jasdental4.webp";
+import jas5 from "../../assets/jasdental5.webp";
+
+import chaitana1 from "../../assets/chaitana1.webp";
+import chaitana2 from "../../assets/chaitana2.webp";
+import chaitana3 from "../../assets/chaitana3.webp";
+
+import ecity1 from "../../assets/ecity1.webp";
+import ecity2 from "../../assets/ecity2.webp";
+import ecity3 from "../../assets/ecity3.webp";
+import ecity4 from "../../assets/ecity4.webp";
+import ecity5 from "../../assets/ecity5.webp";
+import ecity6 from "../../assets/ecity6.webp";
 
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
@@ -9,8 +56,8 @@ const clinics = [
     id: "jas-dental",
     name: "Jas Dental",
 
-    logo: "/assets/doctors/Basha Sir.webp",
-    banner: "/assets/logo.webp",
+    logo: bashaDoctor,
+    banner: jasBanner,
 
     description:
       "Jas Dental is a premium digital dentistry clinic focused on aesthetic smile design, precision restorations, and modern dental workflows. The clinic combines advanced technology with patient-centered care to deliver high-quality dental solutions.",
@@ -29,19 +76,13 @@ const clinics = [
       "Digital Smile Analysis",
     ],
 
-    gallery: [
-      "/assets/gallery/jasdental1.webp",
-      "/assets/gallery/jasdental2.webp",
-      "/assets/gallery/jasdental3.webp",
-      "/assets/gallery/jasdental4.webp",
-      "/assets/gallery/jasdental5.webp",
-    ],
+    gallery: [jas1, jas2, jas3, jas4, jas5],
 
     doctors: [
       {
         name: "Dr. Basha",
         role: "General & Family Dental Specialist",
-        image: "/assets/doctors/Basha Sir.webp",
+        image: bashaDoctor,
         experience: "25+ Years Experience",
 
         phone: "",
@@ -59,7 +100,7 @@ const clinics = [
       {
         name: "Dr Dikshya Bose",
         role: "General and Family Dentist",
-        image: "/assets/doctors/Dikshya Bose.webp",
+        image: dikshyaDoctor,
         experience: "5+ Years Experience",
 
         phone: "",
@@ -80,8 +121,8 @@ const clinics = [
     id: "excel-dental",
     name: "Excel Dental",
 
-    logo: "/assets/doctors/Dr Rizwana Tarannum.webp",
-    banner: "/assets/banners/excel-banner.webp",
+    logo: rizwanaDoctor,
+    banner: excelBanner,
 
     description:
       "Excel Dental is a modern cosmetic and restorative dental clinic delivering advanced smile transformations using precision digital workflows and premium patient care.",
@@ -106,7 +147,7 @@ const clinics = [
       {
         name: "Dr Rizwana Tarannum",
         role: "B.D.S (Certified Cosmetic Dentist)",
-        image: "/assets/doctors/Dr Rizwana Tarannum.webp",
+        image: rizwanaDoctor,
         experience: "Cosmetic Dental Specialist",
 
         phone: "8792801460",
@@ -127,8 +168,8 @@ const clinics = [
     id: "girish-dental",
     name: "Girish Dental Clinic",
 
-    logo: "/assets/doctors/girish.webp",
-    banner: "/assets/banners/girish-banner1.webp",
+    logo: girishDoctor,
+    banner: girishBanner,
 
     description:
       "Girish Dental Clinic specializes in advanced restorative and cosmetic dentistry with a strong focus on precision digital workflows, smile enhancement, and patient comfort.",
@@ -153,7 +194,7 @@ const clinics = [
       {
         name: "Dr E N Harish Kumar",
         role: "B.D.S.",
-        image: "/assets/doctors/girish.webp",
+        image: girishDoctor,
         experience: "28+ Years Experience",
 
         phone: "9845988184",
@@ -178,8 +219,8 @@ const clinics = [
     id: "tooth-align-clinic",
     name: "Tooth Align Clinic",
 
-    logo: "/assets/doctors/Haritha.webp",
-    banner: "/assets/banners/tooth-align-banner.webp",
+    logo: harithaDoctor,
+    banner: toothAlignBanner,
 
     description:
       "Modern orthodontic and cosmetic dental center specializing in clear aligners and digital orthodontic workflows.",
@@ -204,7 +245,7 @@ const clinics = [
       {
         name: "Dr Haritha",
         role: "Dental Surgeon Dentist",
-        image: "/assets/doctors/Haritha.webp",
+        image: harithaDoctor,
         experience: "14 Years Experience",
 
         phone: "9398753235 / 7090450469",
@@ -226,8 +267,8 @@ const clinics = [
     id: "house-of-teeth",
     name: "House Of Teeth",
 
-    logo: "/assets/doctors/chandini.webp",
-    banner: "/assets/banners/house-of-teeth-banner.webp",
+    logo: chandiniDoctor,
+    banner: houseBanner,
 
     description:
       "Premium cosmetic and restorative dental clinic focused on advanced smile transformations and personalized patient care.",
@@ -252,7 +293,7 @@ const clinics = [
       {
         name: "Dr Chandani",
         role: "BDS, MDS",
-        image: "/assets/doctors/chandini.webp",
+        image: chandiniDoctor,
         experience: "Senior Dental Specialist",
 
         phone: "8105189978",
@@ -273,8 +314,8 @@ const clinics = [
     id: "makers-of-smile",
     name: "Makers Of Smile",
 
-    logo: "/assets/doctors/Roli Singh.webp",
-    banner: "/assets/banners/makers-banner.webp",
+    logo: roliDoctor,
+    banner: makersBanner,
 
     description:
       "Contemporary dental clinic specializing in smile aesthetics and advanced restorative dentistry.",
@@ -299,7 +340,7 @@ const clinics = [
       {
         name: "Dr Roli Singh",
         role: "Implantologist & Dental Surgeon",
-        image: "/assets/doctors/Roli Singh.webp",
+        image: roliDoctor,
         experience: "15 Years Experience",
 
         phone: "7349137242",
@@ -320,8 +361,8 @@ const clinics = [
     id: "dr-chaitana-dental-care",
     name: "Dr Chaitana’s Dental Care",
 
-    logo: "/assets/doctors/chaitana.webp",
-    banner: "/assets/banners/chaitana-banner.webp",
+    logo: chaitanaDoctor,
+    banner: chaitanaBanner,
 
     description:
       "Dr Chaitana’s Dental Care is a modern prosthodontic and cosmetic dental clinic focused on smile rehabilitation, implant planning, digital dentistry, aligners, veneers, and precision aesthetic treatments with advanced digital workflows.",
@@ -345,18 +386,14 @@ const clinics = [
       "Lab Support",
     ],
 
-    gallery: [
-      "/assets/gallery/chaitana1.webp",
-      "/assets/gallery/chaitana2.webp",
-      "/assets/gallery/chaitana3.webp",
-    ],
+    gallery: [],
 
     doctors: [
       {
         name: "Dr Chaitana Biradar",
         role: "MDS Prosthodontist",
 
-        image: "/assets/doctors/chaitana.webp",
+        image: chaitanaDoctor,
 
         experience: "16 Years Experience",
 
@@ -382,8 +419,8 @@ const clinics = [
     id: "e-city-dental",
     name: "E City Dental",
 
-    logo: "/assets/doctors/ecity-doctor.webp",
-    banner: "/assets/banners/ecity-banner.webp",
+    logo: ecityDoctor,
+    banner: ecityBanner,
 
     description:
       "E City Dental is a modern multi-speciality dental center focused on advanced prosthodontics, cosmetic dentistry, digital smile planning, implant rehabilitation, and precision digital workflows with patient-centered care.",
@@ -409,14 +446,7 @@ const clinics = [
       "Lab Support",
     ],
 
-    gallery: [
-      "/assets/gallery/ecity1.webp",
-      "/assets/gallery/ecity2.webp",
-      "/assets/gallery/ecity3.webp",
-      "/assets/gallery/ecity4.webp",
-      "/assets/gallery/ecity5.webp",
-      "/assets/gallery/ecity6.webp",
-    ],
+    gallery: [ecity1, ecity2, ecity3, ecity4, ecity5, ecity6],
 
     doctors: [
       {
@@ -424,7 +454,7 @@ const clinics = [
 
         role: "MPhil BDS",
 
-        image: "/assets/doctors/ecity-doctor.webp",
+        image: ecityDoctor,
 
         experience: "26 Years Experience",
 

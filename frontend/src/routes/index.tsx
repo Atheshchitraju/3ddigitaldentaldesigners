@@ -8,7 +8,7 @@ import { Reveal } from "@/components/Section";
 
 import logo from "@/assets/logo1.webp";
 import logo1 from "@/assets/Excel.webp";
-import logo2 from "@/assets/girish.webp";
+import logo2 from "@/assets/girishlogo.webp";
 import logo3 from "@/assets/House of teeth.webp";
 import logo4 from "@/assets/makers-of-smile.webp";
 import logo5 from "@/assets/tooth-align.webp";
@@ -22,6 +22,15 @@ import Implants from "@/assets/Implants.webp";
 import FullArch from "@/assets/Full Arch Veneer Restoration.webp";
 import Monolithic from "@/assets/Monolithic Zirconia Crown.webp";
 import Inlay from "@/assets/Lithium Disilicate Inlay.webp";
+
+import jasbanner from "@/assets/logo.webp";
+import girishBanner from "@/assets/girish-banner.webp";
+import makersBanner from "@/assets/makers-banner.webp";
+import toothAlignBanner from "@/assets/tooth-align-banner.webp";
+import houseBanner from "@/assets/house-of-teeth-banner.webp";
+import excelBanner from "@/assets/excel-banner.webp";
+import chaitanaBanner from "@/assets/chaitana-banner.webp";
+import ecityBanner from "@/assets/ecity-banner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -41,7 +50,7 @@ const clients = [
     name: "Jas Dental",
     location: "HSR Layout, Bengaluru",
     logo: logo,
-    banner: "/assets/logo.webp",
+    banner: jasbanner,
     description:
       "Advanced cosmetic and restorative dental clinic specializing in smile makeovers, zirconia crowns, dental implants, digital smile design, and precision oral care solutions.",
   },
@@ -51,7 +60,7 @@ const clients = [
     name: "Excel Dental",
     location: "JP Nagar 7th Phase, Bengaluru",
     logo: logo1,
-    banner: "/assets/banners/excel-banner.webp",
+    banner: excelBanner,
     description:
       "Modern digital dental clinic focused on painless dentistry, root canal treatments, cosmetic dentistry, dental veneers, crowns, bridges, and advanced oral rehabilitation.",
   },
@@ -61,7 +70,7 @@ const clients = [
     name: "Girish Dental Clinic",
     location: "Wilson Garden, Bangalore",
     logo: logo2,
-    banner: "/assets/banners/girish-banner1.webp",
+    banner: girishBanner,
     description:
       "Premium family dental clinic providing orthodontics, invisible aligners, smile correction, dental implants, pediatric dentistry, and complete digital dental solutions.",
   },
@@ -71,7 +80,7 @@ const clients = [
     name: "House of Teeth",
     location: "Singasandra, Bangalore",
     logo: logo3,
-    banner: "/assets/banners/house-of-teeth-banner.webp",
+    banner: houseBanner,
     description:
       "Luxury cosmetic dental studio delivering aesthetic smile transformations, ceramic veneers, full mouth rehabilitation, implant restorations, and digital dental artistry.",
   },
@@ -81,7 +90,7 @@ const clients = [
     name: "Makers of Smile",
     location: "Akshayanagar, Bengaluru",
     logo: logo4,
-    banner: "/assets/banners/makers-banner.webp",
+    banner: makersBanner,
     description:
       "Specialized smile design clinic offering cosmetic dentistry, teeth whitening, aligners, digital smile analysis, zirconia restorations, and advanced dental aesthetics.",
   },
@@ -91,7 +100,7 @@ const clients = [
     name: "Tooth Align Clinic",
     location: "HSR Layout, Bengaluru",
     logo: logo5,
-    banner: "/assets/banners/tooth-align-banner.webp",
+    banner: toothAlignBanner,
     description:
       "Orthodontic and aligner-focused dental clinic providing invisible braces, teeth alignment, bite correction, smile enhancement, and modern digital orthodontic care.",
   },
@@ -101,7 +110,7 @@ const clients = [
     name: "Dr Chaitana’s Dental Care",
     location: "Electronic City Phase 1, Bengaluru",
     logo: logo6,
-    banner: "/assets/banners/chaitana-banner.webp",
+    banner: chaitanaBanner,
     description:
       "Advanced prosthodontic and cosmetic dental clinic specializing in smile designing, aligners, implant planning, veneers, full mouth rehabilitation, and modern digital dental solutions.",
   },
@@ -110,7 +119,7 @@ const clients = [
     name: "E City Dental",
     location: "Electronic City Phase 1, Bengaluru",
     logo: logo7,
-    banner: "/assets/banners/ecity-banner.webp",
+    banner: ecityBanner,
 
     description:
       "E City Dental is a premium multi-speciality dental clinic specializing in prosthodontics, smile designing, implant planning, aligners, veneers, full mouth rehabilitation, and advanced digital dentistry workflows.",
