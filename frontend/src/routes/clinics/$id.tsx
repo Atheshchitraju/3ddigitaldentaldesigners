@@ -378,6 +378,73 @@ const clinics = [
       },
     ],
   },
+  {
+    id: "e-city-dental",
+    name: "E City Dental",
+
+    logo: "/assets/doctors/ecity-doctor.webp",
+    banner: "/assets/banners/ecity-banner.webp",
+
+    description:
+      "E City Dental is a modern multi-speciality dental center focused on advanced prosthodontics, cosmetic dentistry, digital smile planning, implant rehabilitation, and precision digital workflows with patient-centered care.",
+
+    location: "Electronic City, Bengaluru",
+
+    phone: "+91 9945529816",
+
+    email: "teamecitydental@gmail.com",
+
+    map: "https://www.google.com/maps?q=E+City+Dental+Electronic+City+Bangalore&output=embed",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [
+      "/assets/gallery/ecity1.webp",
+      "/assets/gallery/ecity2.webp",
+      "/assets/gallery/ecity3.webp",
+      "/assets/gallery/ecity4.webp",
+      "/assets/gallery/ecity5.webp",
+      "/assets/gallery/ecity6.webp",
+    ],
+
+    doctors: [
+      {
+        name: "Dr Ranjani Rao",
+
+        role: "MPhil BDS",
+
+        image: "/assets/doctors/ecity-doctor.webp",
+
+        experience: "26 Years Experience",
+
+        phone: "9945529816 / 8792470946",
+
+        email: "teamecitydental@gmail.com",
+
+        specialization: "Prosthodontics, Cosmetic Dentistry, Implantology, Digital Smile Design",
+
+        clinicName: "E City Dental",
+
+        address:
+          "P-7 ELCIA Building, Phase 1, Electronics City, Hosur Main Road, Bengaluru, Karnataka 560100",
+
+        website: "https://www.ecitydental.com",
+
+        additionalInfo: "Medical Registration No: 7661-A | Advanced Digital Dentistry Specialist",
+      },
+    ],
+  },
 ];
 
 function ClinicPage() {

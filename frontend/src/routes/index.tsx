@@ -13,6 +13,7 @@ import logo3 from "@/assets/House of teeth.webp";
 import logo4 from "@/assets/makers-of-smile.webp";
 import logo5 from "@/assets/tooth-align.webp";
 import logo6 from "@/assets/chaitana-logo.webp";
+import logo7 from "@/assets/ecity-logo.webp";
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
 import SurgicalGuide from "@/assets/SurgicalGuideDesign1.webp";
@@ -103,6 +104,16 @@ const clients = [
     banner: "/assets/banners/chaitana-banner.webp",
     description:
       "Advanced prosthodontic and cosmetic dental clinic specializing in smile designing, aligners, implant planning, veneers, full mouth rehabilitation, and modern digital dental solutions.",
+  },
+  {
+    id: "e-city-dental",
+    name: "E City Dental",
+    location: "Electronic City Phase 1, Bengaluru",
+    logo: logo7,
+    banner: "/assets/banners/ecity-banner.webp",
+
+    description:
+      "E City Dental is a premium multi-speciality dental clinic specializing in prosthodontics, smile designing, implant planning, aligners, veneers, full mouth rehabilitation, and advanced digital dentistry workflows.",
   },
 ];
 
