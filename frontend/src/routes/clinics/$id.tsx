@@ -12,6 +12,7 @@ import makersBanner from "../../assets/makers-banner.webp";
 import chaitanaBanner from "../../assets/chaitana-banner.webp";
 import ecityBanner from "../../assets/ecity-banner.webp";
 import allAboutTeethBanner from "../../assets/allaboutbanner.webp";
+import niranjanBanner from "../../assets/niranjan-banner.webp";
 /* =========================
    DOCTORS
 ========================= */
@@ -26,6 +27,7 @@ import roliDoctor from "../../assets/Roli Singh.webp";
 import chaitanaDoctor from "../../assets/chaitana-logo.webp";
 import ecityDoctor from "../../assets/ecity-doctor.webp";
 import allaboutDoctor from "../../assets/ManjuSangeetha.webp";
+import niranjanDoctor from "../../assets/niranjan-doctor.webp";
 
 /* =========================
    GALLERY
@@ -52,6 +54,13 @@ import allabout1 from "../../assets/allabout1.webp";
 import allabout2 from "../../assets/allabout2.webp";
 import allabout3 from "../../assets/allabout3.webp";
 import allabout4 from "../../assets/allabout4.webp";
+
+import niranjan1 from "../../assets/niranjan1.webp";
+import niranjan2 from "../../assets/niranjan2.webp";
+import niranjan3 from "../../assets/niranjan3.webp";
+import niranjan4 from "../../assets/niranjan4.webp";
+import niranjan5 from "../../assets/niranjan5.webp";
+import niranjan6 from "../../assets/niranjan6.webp";
 
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
@@ -520,6 +529,69 @@ const clinics = [
           "NS Complex, 20/5, 1st Floor, Above Chef Bakers, ORR, Kadubeesanahalli Junction, Bengaluru, Karnataka 560103",
         additionalInfo:
           "Medical Registration No: 21461A | Advanced Prosthodontics & Digital Dentistry Specialist",
+      },
+    ],
+  },
+  {
+    id: "niranjans-dental",
+
+    name: "Niranjan’s Dental",
+
+    logo: niranjanDoctor,
+
+    banner: niranjanBanner,
+
+    description:
+      "Niranjan’s Dental is a premium multi-speciality dental clinic focused on prosthodontics, implant rehabilitation, smile designing, cosmetic dentistry, digital workflows, and precision-driven patient care with advanced modern dental technology.",
+
+    location: "Jubilee Hills, Hyderabad",
+
+    phone: "+91 9347196066",
+
+    email: "niranjandentalclinic123@gmail.com",
+
+    map: "https://www.google.com/maps?q=Niranjan’s+Dental,+Road+No+10B,+Jubilee+Hills,+Hyderabad,+Telangana+500033&output=embed",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [niranjan1, niranjan2, niranjan3, niranjan4, niranjan5, niranjan6],
+
+    doctors: [
+      {
+        name: "Dr. S. Niranjan Reddy",
+
+        role: "MDS",
+
+        image: niranjanDoctor,
+
+        experience: "29 Years Experience",
+
+        phone: "9347196066",
+
+        email: "niranjandentalclinic123@gmail.com",
+
+        specialization:
+          "Prosthodontics, Oral Medicine & Radiology, Cosmetic Dentistry, Implantology, Full Mouth Rehabilitation",
+
+        clinicName: "Niranjan Dental",
+
+        address: "Niranjan’s Dental, Road No 10B, Jubilee Hills, Hyderabad, Telangana 500033",
+
+        website: "https://www.niranjansdental.com",
+
+        additionalInfo:
+          "Medical Registration No: A-3209 | Established in 2003 | Advanced Digital Dentistry Specialist",
       },
     ],
   },

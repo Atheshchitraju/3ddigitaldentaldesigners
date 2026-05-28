@@ -15,6 +15,7 @@ import logo5 from "@/assets/tooth-align.webp";
 import logo6 from "@/assets/chaitana-logo.webp";
 import logo7 from "@/assets/ecity-logo.webp";
 import logo8 from "@/assets/allaboutteethlogo.webp";
+import logo9 from "@/assets/niranjanlogo.webp";
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
 import SurgicalGuide from "@/assets/SurgicalGuideDesign1.webp";
@@ -33,6 +34,7 @@ import excelBanner from "@/assets/excel-banner.webp";
 import chaitanaBanner from "@/assets/chaitana-banner.webp";
 import ecityBanner from "@/assets/ecity-banner.webp";
 import allaboutbanner from "@/assets/allaboutbanner.webp";
+import niranjanBanner from "@/assets/niranjan-banner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -56,7 +58,6 @@ const clients = [
     description:
       "Advanced cosmetic and restorative dental clinic specializing in smile makeovers, zirconia crowns, dental implants, digital smile design, and precision oral care solutions.",
   },
-
   {
     id: "excel-dental",
     name: "Excel Dental",
@@ -66,7 +67,6 @@ const clients = [
     description:
       "Modern digital dental clinic focused on painless dentistry, root canal treatments, cosmetic dentistry, dental veneers, crowns, bridges, and advanced oral rehabilitation.",
   },
-
   {
     id: "girish-dental",
     name: "Girish Dental Clinic",
@@ -76,7 +76,6 @@ const clients = [
     description:
       "Premium family dental clinic providing orthodontics, invisible aligners, smile correction, dental implants, pediatric dentistry, and complete digital dental solutions.",
   },
-
   {
     id: "house-of-teeth",
     name: "House of Teeth",
@@ -86,7 +85,6 @@ const clients = [
     description:
       "Luxury cosmetic dental studio delivering aesthetic smile transformations, ceramic veneers, full mouth rehabilitation, implant restorations, and digital dental artistry.",
   },
-
   {
     id: "makers-of-smile",
     name: "Makers of Smile",
@@ -96,7 +94,6 @@ const clients = [
     description:
       "Specialized smile design clinic offering cosmetic dentistry, teeth whitening, aligners, digital smile analysis, zirconia restorations, and advanced dental aesthetics.",
   },
-
   {
     id: "tooth-align-clinic",
     name: "Tooth Align Clinic",
@@ -106,7 +103,6 @@ const clients = [
     description:
       "Orthodontic and aligner-focused dental clinic providing invisible braces, teeth alignment, bite correction, smile enhancement, and modern digital orthodontic care.",
   },
-
   {
     id: "dr-chaitana-dental-care",
     name: "Dr Chaitana’s Dental Care",
@@ -122,19 +118,26 @@ const clients = [
     location: "Electronic City Phase 1, Bengaluru",
     logo: logo7,
     banner: ecityBanner,
-
     description:
       "E City Dental is a premium multi-speciality dental clinic specializing in prosthodontics, smile designing, implant planning, aligners, veneers, full mouth rehabilitation, and advanced digital dentistry workflows.",
   },
-
   {
     id: "all-about-teeth-dental-clinic",
     name: "All About Teeth Multispecialty Dental Clinic",
-    location: "Indiranagar, Bengaluru",
+    location: "Kadubeesanahalli, Bengaluru",
     logo: logo8,
     banner: allaboutbanner,
     description:
       "Comprehensive dental care with a focus on preventive, restorative, and cosmetic dentistry, utilizing the latest digital technologies for optimal patient outcomes.",
+  },
+  {
+    id: "niranjans-dental",
+    name: "Niranjan’s Dental",
+    location: "Jubilee Hills, Hyderabad",
+    logo: logo9,
+    banner: niranjanBanner,
+    description:
+      "Advanced multi-speciality dental clinic specializing in prosthodontics, implant rehabilitation, smile designing, cosmetic dentistry, aligners, and precision digital dental workflows.",
   },
 ];
 
