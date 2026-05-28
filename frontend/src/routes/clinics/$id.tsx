@@ -11,7 +11,7 @@ import houseBanner from "../../assets/house-of-teeth-banner.webp";
 import makersBanner from "../../assets/makers-banner.webp";
 import chaitanaBanner from "../../assets/chaitana-banner.webp";
 import ecityBanner from "../../assets/ecity-banner.webp";
-
+import allAboutTeethBanner from "../../assets/allaboutbanner.webp";
 /* =========================
    DOCTORS
 ========================= */
@@ -25,6 +25,7 @@ import chandiniDoctor from "../../assets/chandini.webp";
 import roliDoctor from "../../assets/Roli Singh.webp";
 import chaitanaDoctor from "../../assets/chaitana-logo.webp";
 import ecityDoctor from "../../assets/ecity-doctor.webp";
+import allaboutDoctor from "../../assets/ManjuSangeetha.webp";
 
 /* =========================
    GALLERY
@@ -46,6 +47,11 @@ import ecity3 from "../../assets/ecity3.webp";
 import ecity4 from "../../assets/ecity4.webp";
 import ecity5 from "../../assets/ecity5.webp";
 import ecity6 from "../../assets/ecity6.webp";
+
+import allabout1 from "../../assets/allabout1.webp";
+import allabout2 from "../../assets/allabout2.webp";
+import allabout3 from "../../assets/allabout3.webp";
+import allabout4 from "../../assets/allabout4.webp";
 
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
@@ -472,6 +478,48 @@ const clinics = [
         website: "https://www.ecitydental.com",
 
         additionalInfo: "Medical Registration No: 7661-A | Advanced Digital Dentistry Specialist",
+      },
+    ],
+  },
+  {
+    id: "all-about-teeth-dental-clinic",
+    name: "All About Teeth Multispecialty Dental Clinic",
+    logo: allaboutDoctor,
+    banner: allAboutTeethBanner,
+    description:
+      "All About Teeth Multispecialty Dental Clinic is a modern dental center focused on prosthodontics, digital dentistry, smile designing, implant rehabilitation, cosmetic dentistry, and precision-driven patient care with advanced digital workflows.",
+    location: "Kadubeesanahalli, Bengaluru",
+    phone: "+91 8296343683",
+    email: "allaboutteethclinic@gmail.com",
+    map: "https://www.google.com/maps?q=NS+Complex,+20/5,+1st+Floor,+Above+Chef+Bakers,+ORR,+Kadubeesanahalli+Junction,+Bengaluru,+Karnataka+560103&output=embed",
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+    gallery: [allabout1, allabout2, allabout3, allabout4],
+    doctors: [
+      {
+        name: "Dr. Manju Sangeetha",
+        role: "MDS",
+        image: allaboutDoctor,
+        experience: "18+ Years Experience",
+        phone: "8296343683",
+        email: "allaboutteethclinic@gmail.com",
+        specialization:
+          "Prosthodontics, Oral Pathology, Cosmetic Dentistry, Implant Rehabilitation, Digital Dentistry",
+        clinicName: "All About Teeth Multispecialty Dental Clinic",
+        address:
+          "NS Complex, 20/5, 1st Floor, Above Chef Bakers, ORR, Kadubeesanahalli Junction, Bengaluru, Karnataka 560103",
+        additionalInfo:
+          "Medical Registration No: 21461A | Advanced Prosthodontics & Digital Dentistry Specialist",
       },
     ],
   },

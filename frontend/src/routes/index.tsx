@@ -14,6 +14,7 @@ import logo4 from "@/assets/makers-of-smile.webp";
 import logo5 from "@/assets/tooth-align.webp";
 import logo6 from "@/assets/chaitana-logo.webp";
 import logo7 from "@/assets/ecity-logo.webp";
+import logo8 from "@/assets/allaboutteethlogo.webp";
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
 import SurgicalGuide from "@/assets/SurgicalGuideDesign1.webp";
@@ -31,6 +32,7 @@ import houseBanner from "@/assets/house-of-teeth-banner.webp";
 import excelBanner from "@/assets/excel-banner.webp";
 import chaitanaBanner from "@/assets/chaitana-banner.webp";
 import ecityBanner from "@/assets/ecity-banner.webp";
+import allaboutbanner from "@/assets/allaboutbanner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -123,6 +125,16 @@ const clients = [
 
     description:
       "E City Dental is a premium multi-speciality dental clinic specializing in prosthodontics, smile designing, implant planning, aligners, veneers, full mouth rehabilitation, and advanced digital dentistry workflows.",
+  },
+
+  {
+    id: "all-about-teeth-dental-clinic",
+    name: "All About Teeth Multispecialty Dental Clinic",
+    location: "Indiranagar, Bengaluru",
+    logo: logo8,
+    banner: allaboutbanner,
+    description:
+      "Comprehensive dental care with a focus on preventive, restorative, and cosmetic dentistry, utilizing the latest digital technologies for optimal patient outcomes.",
   },
 ];
 
