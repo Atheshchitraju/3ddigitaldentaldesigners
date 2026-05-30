@@ -16,6 +16,13 @@ import logo6 from "@/assets/chaitana-logo.webp";
 import logo7 from "@/assets/ecity-logo.webp";
 import logo8 from "@/assets/allaboutteethlogo.webp";
 import logo9 from "@/assets/niranjanlogo.webp";
+import logo10 from "@/assets/mjb-logo.webp";
+import logo11 from "@/assets/raj-logo.webp";
+import logo12 from "@/assets/srikrishna-logo.webp";
+import logo13 from "@/assets/drrao-logo.webp";
+import logo14 from "@/assets/mydentist-logo.webp";
+import logo15 from "@/assets/cura-logo.webp";
+import logo16 from "@/assets/ruby-logo.webp";
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
 import SurgicalGuide from "@/assets/SurgicalGuideDesign1.webp";
@@ -35,6 +42,13 @@ import chaitanaBanner from "@/assets/chaitana-banner.webp";
 import ecityBanner from "@/assets/ecity-banner.webp";
 import allaboutbanner from "@/assets/allaboutbanner.webp";
 import niranjanBanner from "@/assets/niranjan-banner.webp";
+import mjbBanner from "@/assets/mjb-banner.webp";
+import rajBanner from "@/assets/raj-banner.webp";
+import srikrishnaBanner from "@/assets/srikrishna-banner.webp";
+import drraoBanner from "@/assets/drrao-banner.webp";
+import mydentistBanner from "@/assets/mydentist-banner.webp";
+import curaBanner from "@/assets/cura-banner.webp";
+import rubyBanner from "@/assets/ruby-banner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -138,6 +152,106 @@ const clients = [
     banner: niranjanBanner,
     description:
       "Advanced multi-speciality dental clinic specializing in prosthodontics, implant rehabilitation, smile designing, cosmetic dentistry, aligners, and precision digital dental workflows.",
+  },
+
+  {
+    id: "mjb-dental-clinic",
+
+    name: "MJB Dental Clinic",
+
+    location: "Yousufguda, Hyderabad",
+
+    logo: logo10,
+
+    banner: mjbBanner,
+
+    description:
+      "MJB Dental Clinic is a multi-speciality dental center specializing in smile designing, implants, aligners, veneers, prosthodontics, cosmetic dentistry, and advanced digital dental workflows.",
+  },
+
+  {
+    id: "raj-dental-clinic",
+
+    name: "Raj Dental Clinic and Implant Center",
+
+    location: "Malleshwaram, Bengaluru",
+
+    logo: logo11,
+
+    banner: rajBanner,
+
+    description:
+      "Raj Dental Clinic and Implant Center specializes in smile designing, zirconia crowns, veneers, implant dentistry, full mouth rehabilitation, aligners, and advanced digital dental workflows.",
+  },
+  {
+    id: "sri-krishna-dental-health-care",
+
+    name: "Sri Krishna Dental Health Care",
+
+    location: "Uttarahalli, Bengaluru",
+
+    logo: logo12,
+
+    banner: srikrishnaBanner,
+
+    description:
+      "Sri Krishna Dental Health Care provides comprehensive dental services including smile designing, aligners, veneers, implantology, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry solutions.",
+  },
+  {
+    id: "dr-raos-multispeciality-dental-clinic",
+
+    name: "DR Rao's Multispeciality Dental Clinic",
+
+    location: "HSR Layout, Bengaluru",
+
+    logo: logo13,
+
+    banner: drraoBanner,
+
+    description:
+      "DR Rao's Multispeciality Dental Clinic specializes in dental implants, smile designing, aligners, veneers, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry solutions.",
+  },
+  {
+    id: "my-dentist-clinic",
+
+    name: "My Dentist",
+
+    location: "Neelasandra, Bengaluru",
+
+    logo: logo14,
+
+    banner: mydentistBanner,
+
+    description:
+      "My Dentist is a modern dental clinic providing smile designing, aligners, veneers, implantology, cosmetic dentistry, full mouth rehabilitation, and advanced digital dental solutions.",
+  },
+  {
+    id: "cura-dental-clinic",
+
+    name: "Cura Dental Clinic",
+
+    location: "HSR Layout, Bengaluru",
+
+    logo: logo15,
+
+    banner: curaBanner,
+
+    description:
+      "Cura Dental Clinic is a modern dental practice specializing in smile designing, implants, veneers, aligners, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry.",
+  },
+  {
+    id: "dr-rubys-dental-care",
+
+    name: "Dr Ruby's Dental Care",
+
+    location: "BTM 1st Stage, Bengaluru",
+
+    logo: logo16,
+
+    banner: rubyBanner,
+
+    description:
+      "Dr Ruby's Dental Care provides comprehensive dental treatments including smile designing, aligners, veneers, implantology, cosmetic dentistry, full mouth rehabilitation, and advanced digital dental solutions.",
   },
 ];
 

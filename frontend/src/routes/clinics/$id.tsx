@@ -13,6 +13,14 @@ import chaitanaBanner from "../../assets/chaitana-banner.webp";
 import ecityBanner from "../../assets/ecity-banner.webp";
 import allAboutTeethBanner from "../../assets/allaboutbanner.webp";
 import niranjanBanner from "../../assets/niranjan-banner.webp";
+import mjbBanner from "../../assets/mjb-banner.webp";
+import rajBanner from "../../assets/raj-banner.webp";
+import srikrishnaBanner from "../../assets/srikrishna-banner.webp";
+import drraoBanner from "../../assets/drrao-banner.webp";
+import mydentistBanner from "../../assets/mydentist-banner.webp";
+import curaBanner from "../../assets/cura-banner.webp";
+import rubyBanner from "../../assets/ruby-banner.webp";
+
 /* =========================
    DOCTORS
 ========================= */
@@ -28,6 +36,12 @@ import chaitanaDoctor from "../../assets/chaitana-logo.webp";
 import ecityDoctor from "../../assets/ecity-doctor.webp";
 import allaboutDoctor from "../../assets/ManjuSangeetha.webp";
 import niranjanDoctor from "../../assets/niranjan-doctor.webp";
+import mjbDoctor from "../../assets/mjb-doctor.webp";
+import rajDoctor from "../../assets/raj-doctor1.webp";
+import srikrishnaDoctor from "../../assets/srikrishna-doctor.webp";
+import mydentistDoctor from "../../assets/mydentist-doctor.webp";
+import curaDoctor from "../../assets/cura-doctor.webp";
+import rubyDoctor from "../../assets/ruby-doctor.webp";
 
 /* =========================
    GALLERY
@@ -62,6 +76,37 @@ import niranjan4 from "../../assets/niranjan4.webp";
 import niranjan5 from "../../assets/niranjan5.webp";
 import niranjan6 from "../../assets/niranjan6.webp";
 
+import mjb1 from "../../assets/mjb1.webp";
+import mjb2 from "../../assets/mjb2.webp";
+import mjb3 from "../../assets/mjb3.webp";
+import mjb4 from "../../assets/mjb4.webp";
+import mjb5 from "../../assets/mjb5.webp";
+import mjb6 from "../../assets/mjb6.webp";
+
+import srikrishna1 from "../../assets/srikrishna1.webp";
+import srikrishna4 from "../../assets/srikrishna4.webp";
+import srikrishna5 from "../../assets/srikrishna5.webp";
+import srikrishna6 from "../../assets/srikrishna6.webp";
+import srikrishna7 from "../../assets/srikrishna7.webp";
+import srikrishna8 from "../../assets/srikrishna8.webp";
+
+import drrao1 from "../../assets/drrao1.webp";
+import drrao2 from "../../assets/drrao2.webp";
+
+import mydentist1 from "../../assets/mydentist1.webp";
+import mydentist2 from "../../assets/mydentist2.webp";
+import mydentist3 from "../../assets/mydentist3.webp";
+
+import cura1 from "../../assets/cura1.webp";
+import cura2 from "../../assets/cura2.webp";
+import cura3 from "../../assets/cura3.webp";
+import cura4 from "../../assets/cura4.webp";
+
+import ruby1 from "../../assets/ruby1.webp";
+import ruby2 from "../../assets/ruby2.webp";
+import ruby3 from "../../assets/ruby3.webp";
+import ruby4 from "../../assets/ruby4.webp";
+import ruby5 from "../../assets/ruby5.webp";
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
 });
@@ -592,6 +637,457 @@ const clinics = [
 
         additionalInfo:
           "Medical Registration No: A-3209 | Established in 2003 | Advanced Digital Dentistry Specialist",
+      },
+    ],
+  },
+  {
+    id: "mjb-dental-clinic",
+
+    name: "MJB Dental Clinic",
+
+    logo: mjbDoctor,
+
+    banner: mjbBanner,
+
+    description:
+      "MJB Dental Clinic is a modern multi-speciality dental center focused on prosthodontics, implantology, smile designing, cosmetic dentistry, aligners, and advanced digital dental treatment workflows with patient-centered care.",
+
+    location: "Yousufguda, Hyderabad",
+
+    phone: "+91 9885778820",
+
+    email: "mjbdentist@gmail.com",
+
+    map: "https://www.google.com/maps?q=8-3-231/A/281,+Sri+Krishna+Nagar,+Yousufguda,+Hyderabad,+Telangana+500045&output=embed",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [mjb1, mjb2, mjb3, mjb4, mjb5, mjb6],
+
+    doctors: [
+      {
+        name: "Dr. M. Bharath Kumar",
+
+        role: "BDS",
+
+        image: mjbDoctor,
+
+        experience: "26 Years Experience",
+
+        phone: "9885778820",
+
+        email: "mjbdentist@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "MJB Dental Clinic",
+
+        address: "8-3-231/A/281, Sri Krishna Nagar, Yousufguda, Hyderabad, Telangana 500045",
+
+        additionalInfo:
+          "Medical Registration No: A-13561 | Established in 2003 | Advanced Digital Dentistry Specialist",
+      },
+    ],
+  },
+  {
+    id: "raj-dental-clinic",
+
+    name: "Raj Dental Clinic and Implant Center",
+
+    logo: rajDoctor,
+
+    banner: rajBanner,
+
+    description:
+      "Raj Dental Clinic and Implant Center is a modern multi-speciality dental practice focused on smile designing, implantology, veneers, zirconia crowns, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry solutions.",
+
+    location: "Malleshwaram, Bengaluru",
+
+    phone: "+91 7618704189",
+
+    email: "anushyb5@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.5668567654525!2d77.5706213!3d12.9995326!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae17002e173d55%3A0x5a886a47ba5ce1b2!2sRaj%20Dental%20Clinic%20and%20Implant%20Center!5e0!3m2!1sen!2sus!4v1780038174594!5m2!1sen!2sus",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [],
+
+    doctors: [
+      {
+        name: "Dr. Rachana N Raj",
+
+        role: "BDS",
+
+        image: rajDoctor,
+
+        experience: "2+ Years Experience",
+
+        phone: "7618704189",
+
+        email: "anushyb5@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery, Veneers, Zirconia Crowns, Full Mouth Rehabilitation",
+
+        clinicName: "Raj Dental Clinic and Implant Center",
+
+        address:
+          "No.104, Ashirwad Arcade, 1st Floor, East Park Road, Opp Raghavendraswamy Matta, 8th Cross, Malleshwaram, Bengaluru - 560003",
+
+        website: "https://www.instagram.com/rajdentalclinic2025",
+
+        additionalInfo: "Medical Registration No: 61094A | Established in 2025",
+      },
+
+      // {
+      //   name: "Dr. Anush Y B",
+
+      //   role: "BDS",
+
+      //   image: rajDoctor,
+
+      //   experience: "Dental Specialist",
+
+      //   phone: "9742439549",
+
+      //   email: "anushyb5@gmail.com",
+
+      //   specialization:
+      //     "Implantology, Cosmetic Dentistry, Smile Designing, Full Mouth Rehabilitation",
+
+      //   clinicName: "Raj Dental Clinic and Implant Center",
+
+      //   address:
+      //     "No.104, Ashirwad Arcade, 1st Floor, East Park Road, Opp Raghavendraswamy Matta, 8th Cross, Malleshwaram, Bengaluru - 560003",
+      // },
+    ],
+  },
+  {
+    id: "sri-krishna-dental-health-care",
+
+    name: "Sri Krishna Dental Health Care",
+
+    logo: srikrishnaDoctor,
+
+    banner: srikrishnaBanner,
+
+    description:
+      "Sri Krishna Dental Health Care is a modern dental clinic focused on smile design, implantology, aligners, veneers, cosmetic dentistry, pediatric dentistry, oral surgery, and advanced digital dental workflows.",
+
+    location: "Uttarahalli, Bengaluru",
+
+    phone: "+91 9113997388",
+
+    email: "drchandan.skdhc@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.0323227559093!2d77.54033077512176!3d12.905643137403649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3f6db0a3cc1f%3A0xcc2c87c3e0965f3c!2sSri%20Krishna%20Dental%20Health%20Care!5e0!3m2!1sen!2sin!4v1780118657748!5m2!1sen!2sin",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [srikrishna1, srikrishna4, srikrishna5, srikrishna6, srikrishna7, srikrishna8],
+
+    doctors: [
+      {
+        name: "Dr. Chandan N",
+
+        role: "BDS",
+
+        image: srikrishnaDoctor,
+
+        experience: "4 Years Experience",
+
+        phone: "9113997388",
+
+        email: "drchandan.skdhc@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "Sri Krishna Dental Health Care",
+
+        address:
+          "No.23/A, Gubbalala Main Road, Friends Colony, Uttarahalli, Bengaluru, Karnataka 560061",
+
+        additionalInfo: "Medical Registration No: 55354A | Established in 2026",
+      },
+    ],
+  },
+  {
+    id: "dr-raos-multispeciality-dental-clinic",
+
+    name: "DR Rao's Multispeciality Dental Clinic",
+
+    logo: drraoBanner,
+
+    banner: drraoBanner,
+
+    description:
+      "DR Rao's Multispeciality Dental Clinic is a modern dental center focused on implantology, smile designing, aligners, veneers, cosmetic dentistry, oral surgery, and comprehensive digital dental care.",
+
+    location: "HSR Layout, Bengaluru",
+
+    phone: "+91 9008159445",
+
+    email: "drhanumantharao5@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.817838828609!2d77.644117875122!3d12.919426587391142!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae152612abb4d5%3A0xcdefd74407be2d5d!2sDr.Rao%27s%20multispeciality%20Dental%20clinic!5e0!3m2!1sen!2sus!4v1780120051725!5m2!1sen!2sus",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [drrao1, drrao2],
+
+    doctors: [
+      {
+        name: "Dr. Hanumantha Rao",
+
+        role: "BDS, Dental Implantologist",
+
+        image: drraoBanner,
+
+        experience: "5 Years Experience",
+
+        phone: "9008159445",
+
+        email: "drhanumantharao5@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "DR Rao's Multispeciality Dental Clinic",
+
+        address:
+          "No.45, 1st Floor, 7th Cross, 24th Main, Agara, HSR Layout 1st Sector, Bengaluru, Karnataka 560102",
+
+        additionalInfo: "Medical Registration No: 57291A | Established in 2025",
+      },
+    ],
+  },
+  {
+    id: "my-dentist-clinic",
+
+    name: "My Dentist",
+
+    logo: mydentistDoctor,
+
+    banner: mydentistBanner,
+
+    description:
+      "My Dentist is a patient-focused dental clinic specializing in smile designing, aligners, veneers, implantology, cosmetic dentistry, pediatric dentistry, oral surgery, and advanced digital dental care.",
+
+    location: "Neelasandra, Bengaluru",
+
+    phone: "+91 7019551416",
+
+    email: "wikharuddin@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.272780366838!2d77.61317497512253!3d12.954388987359417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15006b4de7a9%3A0x1dcb74a09313018!2sMy%20Dentist!5e0!3m2!1sen!2sin!4v1780121066218!5m2!1sen!2sin",
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [mydentist1, mydentist2, mydentist3],
+
+    doctors: [
+      {
+        name: "Dr. Wikharuddin",
+
+        role: "BDS",
+
+        image: mydentistDoctor,
+
+        experience: "3 Years Experience",
+
+        phone: "7019551416",
+
+        email: "wikharuddin@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "My Dentist",
+
+        address:
+          "Bazaar Street, Rose Garden, Richard Xavier's Colony, Neelasandra, Bengaluru, Karnataka 560047",
+
+        additionalInfo: "Medical Registration No: 57565A | Established in 2024",
+      },
+    ],
+  },
+  {
+    id: "cura-dental-clinic",
+
+    name: "Cura Dental Clinic",
+
+    logo: curaDoctor,
+
+    banner: curaBanner,
+
+    description:
+      "Cura Dental Clinic provides comprehensive dental care with expertise in prosthodontics, implantology, cosmetic dentistry, smile designing, aligners, veneers, and full mouth rehabilitation using modern digital workflows.",
+
+    location: "HSR Layout, Bengaluru",
+
+    phone: "+91 8095303570",
+
+    email: "curadentalindia@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.9272209273695!2d77.63771847512183!3d12.912399137397525!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15ff1fb2c471%3A0x9b4b90bb4940991d!2sCura%20Dental%2C%20Advanced%20Multispeciality%20Clinic!5e0!3m2!1sen!2sus!4v1780123473361!5m2!1sen!2sus",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [cura1, cura2, cura3, cura4],
+
+    doctors: [
+      {
+        name: "Dr. Simin Kittur",
+
+        role: "MDS",
+
+        image: curaDoctor,
+
+        experience: "8 Years Experience",
+
+        phone: "8095303570",
+
+        email: "curadentalindia@gmail.com",
+
+        specialization:
+          "Prosthodontics, Implantology, Cosmetic Dentistry, Smile Designing, Veneers, Full Mouth Rehabilitation",
+
+        clinicName: "Cura Dental Clinic",
+
+        address:
+          "23rd Cross, 9th Main, 1st Floor, No.380, Sector 7, HSR Layout, Bengaluru, Karnataka 560068",
+
+        website: "https://curadentalhsr.com",
+
+        additionalInfo: "Medical Registration No: 43672A | Established in 2024",
+      },
+    ],
+  },
+  {
+    id: "dr-rubys-dental-care",
+
+    name: "Dr Ruby's Dental Care",
+
+    logo: rubyDoctor,
+
+    banner: rubyBanner,
+
+    description:
+      "Dr Ruby's Dental Care is a patient-focused dental clinic delivering advanced smile designing, aligners, veneers, implantology, cosmetic dentistry, pediatric dentistry, oral surgery, and complete digital dental care solutions.",
+
+    location: "BTM 1st Stage, Bengaluru",
+
+    phone: "+91 8618513520",
+
+    email: "rubiena88@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.8110225457817!2d77.608259975122!3d12.919864387390742!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1585c2f41a5f%3A0x52e17eacec2c637e!2sDr.RUBY%27S%20DENTAL%20CARE!5e0!3m2!1sen!2sus!4v1780127388079!5m2!1sen!2sus",
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [ruby1, ruby2, ruby3, ruby4, ruby5],
+
+    doctors: [
+      {
+        name: "Dr. Rubeena Paramban",
+
+        role: "BDS",
+
+        image: rubyDoctor,
+
+        experience: "13 Years Experience",
+
+        phone: "8618513520",
+
+        email: "rubiena88@gmail.com",
+
+        specialization:
+          "General Dentistry, Cosmetic Dentistry, Implantology, Smile Designing, Aligners, Veneers, Full Mouth Rehabilitation",
+
+        clinicName: "Dr Ruby's Dental Care",
+
+        address:
+          "1st Floor, #65/A, Ganga Nilaya, 8th Cross, 60 Feet Road, Narayan Gowda Layout, BTM 1st Stage, Bengaluru, Karnataka 560029",
+
+        additionalInfo: "Kerala Dental Council Registration No: 11325 | Established in 2021",
       },
     ],
   },
