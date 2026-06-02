@@ -23,6 +23,9 @@ import logo13 from "@/assets/drrao-logo.webp";
 import logo14 from "@/assets/mydentist-logo.webp";
 import logo15 from "@/assets/cura-logo.webp";
 import logo16 from "@/assets/ruby-logo.webp";
+import logo17 from "@/assets/toothlife-logo.webp";
+import logo18 from "@/assets/toothcorner-logo.webp";
+
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
 import SurgicalGuide from "@/assets/SurgicalGuideDesign1.webp";
@@ -49,6 +52,8 @@ import drraoBanner from "@/assets/drrao-banner.webp";
 import mydentistBanner from "@/assets/mydentist-banner.webp";
 import curaBanner from "@/assets/cura-banner.webp";
 import rubyBanner from "@/assets/ruby-banner.webp";
+import toothlifeBanner from "@/assets/toothlife-banner.webp";
+import toothcornerBanner from "@/assets/toothcorner-banner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -252,6 +257,34 @@ const clients = [
 
     description:
       "Dr Ruby's Dental Care provides comprehensive dental treatments including smile designing, aligners, veneers, implantology, cosmetic dentistry, full mouth rehabilitation, and advanced digital dental solutions.",
+  },
+  {
+    id: "toothlife-clinic",
+
+    name: "TOOTHLIFE",
+
+    location: "Haralur, Bengaluru",
+
+    logo: logo17,
+
+    banner: toothlifeBanner,
+
+    description:
+      "TOOTHLIFE is a modern dental clinic providing advanced smile designing, aligners, veneers, implantology, cosmetic dentistry, periodontology, and comprehensive digital dental care.",
+  },
+  {
+    id: "the-tooth-corner",
+
+    name: "The Tooth Corner",
+
+    location: "Bellandur, Bengaluru",
+
+    logo: logo18,
+
+    banner: toothcornerBanner,
+
+    description:
+      "The Tooth Corner is a modern dental clinic specializing in endodontics, smile designing, aligners, veneers, implantology, cosmetic dentistry, and comprehensive digital dental care.",
   },
 ];
 

@@ -20,6 +20,8 @@ import drraoBanner from "../../assets/drrao-banner.webp";
 import mydentistBanner from "../../assets/mydentist-banner.webp";
 import curaBanner from "../../assets/cura-banner.webp";
 import rubyBanner from "../../assets/ruby-banner.webp";
+import toothlifeBanner from "../../assets/toothlife-banner.webp";
+import toothcornerBanner from "../../assets/toothcorner-banner.webp";
 
 /* =========================
    DOCTORS
@@ -38,10 +40,12 @@ import allaboutDoctor from "../../assets/ManjuSangeetha.webp";
 import niranjanDoctor from "../../assets/niranjan-doctor.webp";
 import mjbDoctor from "../../assets/mjb-doctor.webp";
 import rajDoctor from "../../assets/raj-doctor1.webp";
+import rajDoctor1 from "../../assets/rajDoctor1.webp";
 import srikrishnaDoctor from "../../assets/srikrishna-doctor.webp";
 import mydentistDoctor from "../../assets/mydentist-doctor.webp";
 import curaDoctor from "../../assets/cura-doctor.webp";
 import rubyDoctor from "../../assets/ruby-doctor.webp";
+import toothcornerDoctor from "../../assets/toothcorner-doctor.webp";
 
 /* =========================
    GALLERY
@@ -107,6 +111,12 @@ import ruby2 from "../../assets/ruby2.webp";
 import ruby3 from "../../assets/ruby3.webp";
 import ruby4 from "../../assets/ruby4.webp";
 import ruby5 from "../../assets/ruby5.webp";
+
+import toothcorner1 from "../../assets/toothcorner1.webp";
+import toothcorner2 from "../../assets/toothcorner2.webp";
+import toothcorner3 from "../../assets/toothcorner3.webp";
+import toothcorner4 from "../../assets/toothcorner4.webp";
+import toothcorner5 from "../../assets/toothcorner5.webp";
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
 });
@@ -742,7 +752,7 @@ const clinics = [
 
         role: "BDS",
 
-        image: rajDoctor,
+        image: rajDoctor1,
 
         experience: "2+ Years Experience",
 
@@ -763,27 +773,27 @@ const clinics = [
         additionalInfo: "Medical Registration No: 61094A | Established in 2025",
       },
 
-      // {
-      //   name: "Dr. Anush Y B",
+      {
+        name: "Dr. Anush Y B",
 
-      //   role: "BDS",
+        role: "BDS",
 
-      //   image: rajDoctor,
+        image: rajDoctor,
 
-      //   experience: "Dental Specialist",
+        experience: "Dental Specialist",
 
-      //   phone: "9742439549",
+        phone: "9742439549",
 
-      //   email: "anushyb5@gmail.com",
+        email: "anushyb5@gmail.com",
 
-      //   specialization:
-      //     "Implantology, Cosmetic Dentistry, Smile Designing, Full Mouth Rehabilitation",
+        specialization:
+          "Implantology, Cosmetic Dentistry, Smile Designing, Full Mouth Rehabilitation",
 
-      //   clinicName: "Raj Dental Clinic and Implant Center",
+        clinicName: "Raj Dental Clinic and Implant Center",
 
-      //   address:
-      //     "No.104, Ashirwad Arcade, 1st Floor, East Park Road, Opp Raghavendraswamy Matta, 8th Cross, Malleshwaram, Bengaluru - 560003",
-      // },
+        address:
+          "No.104, Ashirwad Arcade, 1st Floor, East Park Road, Opp Raghavendraswamy Matta, 8th Cross, Malleshwaram, Bengaluru - 560003",
+      },
     ],
   },
   {
@@ -1088,6 +1098,129 @@ const clinics = [
           "1st Floor, #65/A, Ganga Nilaya, 8th Cross, 60 Feet Road, Narayan Gowda Layout, BTM 1st Stage, Bengaluru, Karnataka 560029",
 
         additionalInfo: "Kerala Dental Council Registration No: 11325 | Established in 2021",
+      },
+    ],
+  },
+  {
+    id: "toothlife-clinic",
+
+    name: "TOOTHLIFE",
+
+    logo: toothlifeBanner,
+
+    banner: toothlifeBanner,
+
+    description:
+      "TOOTHLIFE is a patient-focused dental clinic led by Dr. Koel Debnath, offering advanced periodontology, smile designing, implantology, aligners, veneers, cosmetic dentistry, and full mouth rehabilitation.",
+
+    location: "Haralur, Bengaluru",
+
+    phone: "+91 8217707232",
+
+    email: "toothlife23@gmail.com",
+
+    map: "https://www.google.com/maps?q=Toothlife+Haralur+Bengaluru+560102&output=embed",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [],
+
+    doctors: [
+      {
+        name: "Dr. Koel Debnath",
+
+        role: "MDS",
+
+        image: toothlifeBanner,
+
+        experience: "10 Years Experience",
+
+        phone: "8217707232",
+
+        email: "toothlife23@gmail.com",
+
+        specialization:
+          "Periodontology, Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "TOOTHLIFE",
+
+        address: "Toothlife, Haralur, Bengaluru, Karnataka 560102",
+
+        additionalInfo: "Medical Registration No: 29821A | Established in 2022",
+      },
+    ],
+  },
+  {
+    id: "the-tooth-corner",
+
+    name: "The Tooth Corner",
+
+    logo: toothcornerDoctor,
+
+    banner: toothcornerBanner,
+
+    description:
+      "The Tooth Corner is a patient-focused dental clinic led by Dr. Shabnam, offering advanced endodontics, smile designing, aligners, veneers, implantology, cosmetic dentistry, and full mouth rehabilitation.",
+
+    location: "Bellandur, Bengaluru",
+
+    phone: "+91 8008816763",
+
+    email: "thetoothcornerdental@gmail.com",
+
+    map: "https://www.google.com/maps?q=Shop+No+09+AGR+Prime+151+Cherry+Lane+Bellandur+Bengaluru+560103&output=embed",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [toothcorner1, toothcorner2, toothcorner3, toothcorner4, toothcorner5],
+
+    doctors: [
+      {
+        name: "Dr. Shabnam",
+
+        role: "MDS (Conservative Dentistry & Endodontics)",
+
+        image: toothcornerDoctor,
+
+        experience: "6+ Years Experience",
+
+        phone: "8008816763",
+
+        email: "thetoothcornerdental@gmail.com",
+
+        specialization:
+          "Endodontics, Prosthodontics, Orthodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "The Tooth Corner",
+
+        address:
+          "Shop No: 09, AGR Prime, 151 Cherry Lane, Below Ratnadeep Super Market, Green Glen Layout, Bellandur, Bengaluru, Karnataka 560103",
+
+        website: "https://thetoothcorner.in",
+
+        additionalInfo: "Medical Registration No: 61240A | Established in 2024",
       },
     ],
   },
