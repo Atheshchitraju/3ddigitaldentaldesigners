@@ -22,6 +22,8 @@ import curaBanner from "../../assets/cura-banner.webp";
 import rubyBanner from "../../assets/ruby-banner.webp";
 import toothlifeBanner from "../../assets/toothlife-banner.webp";
 import toothcornerBanner from "../../assets/toothcorner-banner.webp";
+import toothtalesBanner from "../../assets/toothtales-banner.webp";
+import prakshBanner from "../../assets/prakash-banner.webp";
 
 /* =========================
    DOCTORS
@@ -46,6 +48,8 @@ import mydentistDoctor from "../../assets/mydentist-doctor.webp";
 import curaDoctor from "../../assets/cura-doctor.webp";
 import rubyDoctor from "../../assets/ruby-doctor.webp";
 import toothcornerDoctor from "../../assets/toothcorner-doctor.webp";
+import toothtalesDoctor from "../../assets/toothtales-doctor.webp";
+import prakashDoctor from "../../assets/prakash-doctor.webp";
 
 /* =========================
    GALLERY
@@ -117,6 +121,12 @@ import toothcorner2 from "../../assets/toothcorner2.webp";
 import toothcorner3 from "../../assets/toothcorner3.webp";
 import toothcorner4 from "../../assets/toothcorner4.webp";
 import toothcorner5 from "../../assets/toothcorner5.webp";
+
+import prakash1 from "../../assets/prakash1.webp";
+import prakash2 from "../../assets/prakash2.webp";
+import prakash3 from "../../assets/prakash3.webp";
+import prakash4 from "../../assets/prakash4.webp";
+
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
 });
@@ -1119,8 +1129,7 @@ const clinics = [
 
     email: "toothlife23@gmail.com",
 
-    map: "https://www.google.com/maps?q=Toothlife+Haralur+Bengaluru+560102&output=embed",
-
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.1349043134387!2d77.65617387512164!3d12.89904578740967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae131038f72ddf%3A0x580bd70540d58a9b!2sToothlife%20Dental%20Clinic!5e0!3m2!1sen!2sus!4v1780463850813!5m2!1sen!2sus",
     services: [
       "Smile Design",
       "Aligners",
@@ -1179,7 +1188,7 @@ const clinics = [
 
     email: "thetoothcornerdental@gmail.com",
 
-    map: "https://www.google.com/maps?q=Shop+No+09+AGR+Prime+151+Cherry+Lane+Bellandur+Bengaluru+560103&output=embed",
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7777.389240160373!2d77.66086969357913!3d12.927338500000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae132cce3c0921%3A0xa06b05f19e172ce8!2sThe%20Tooth%20Corner%20Dental%20Clinic!5e0!3m2!1sen!2sus!4v1780463597024!5m2!1sen!2sus",
 
     services: [
       "Smile Design",
@@ -1221,6 +1230,120 @@ const clinics = [
         website: "https://thetoothcorner.in",
 
         additionalInfo: "Medical Registration No: 61240A | Established in 2024",
+      },
+    ],
+  },
+  {
+    id: "tooth-tales",
+
+    name: "Tooth Tales",
+
+    logo: toothtalesDoctor,
+
+    banner: toothtalesBanner,
+
+    description:
+      "Tooth Tales is a modern dental clinic focused on smile designing, aligners, veneers, implantology, cosmetic dentistry, full mouth rehabilitation, and digital dental solutions.",
+
+    location: "Arekere, Bengaluru",
+
+    phone: "+91 7026935371",
+
+    email: "aryachandran163@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.3760525664106!2d77.6043336751213!3d12.883523687423793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae158c1d6cf199%3A0x941c3d5d0a88d025!2sTooth%20Tales%20%E2%80%93%20Advanced%20Dental%20%26%20Smile%20Design%20Clinic%20in%20Arekere!5e0!3m2!1sen!2sus!4v1780463477991!5m2!1sen!2sus",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [],
+
+    doctors: [
+      {
+        name: "Dr. Arya Chandran",
+
+        role: "BDS",
+
+        image: toothtalesDoctor,
+
+        experience: "9 Years Experience",
+
+        phone: "7026935371",
+
+        email: "aryachandran163@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "Tooth Tales",
+
+        address: "Lifecare Arekere, Opposite Post Office, Bengaluru, Karnataka 560076",
+
+        additionalInfo: "Medical Registration No: 21501 | Established on 1 April 2025",
+      },
+    ],
+  },
+  {
+    id: "prakash-dental-hospital",
+
+    name: "PRAKASH DENTAL HOSPITAL",
+
+    logo: prakashDoctor,
+
+    banner: prakshBanner,
+
+    description:
+      "Prakash Dental Hospital is one of the most established dental centers in Guntakal, delivering comprehensive dental care since 2002. Led by Dr. Kakarla Prakash, the clinic combines decades of clinical expertise with modern dental technologies to provide high-quality treatments in implantology, cosmetic dentistry, smile designing, restorative dentistry, orthodontics, and preventive oral healthcare.",
+
+    location: "Guntakal, Andhra Pradesh",
+
+    phone: "+91 9848373504",
+
+    email: "drkakarlaprakash@gmail.com",
+
+    map: "https://www.google.com/maps?q=Prakash+Dental+Hospital+Guntakal+Andhra+Pradesh&output=embed",
+
+    services: [
+      "Smile Design",
+      "Dental Implants",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Root Canal Treatment",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "Cosmetic Dentistry",
+      "Pediatric Dentistry",
+      "Oral Surgery",
+      "General Dentistry",
+    ],
+
+    gallery: [prakash1, prakash2, prakash3, prakash4],
+
+    doctors: [
+      {
+        name: "Dr. Kakarla Prakash",
+        role: "Dental Surgeon",
+        image: prakashDoctor,
+        experience: "26 Years Experience",
+        phone: "9848373504",
+        email: "drkakarlaprakash@gmail.com",
+        specialization:
+          "Implantology, Cosmetic Dentistry, Orthodontics, Endodontics, Prosthodontics, Oral Surgery, Pediatric Dentistry, General Dentistry",
+        clinicName: "PRAKASH DENTAL HOSPITAL",
+        address: "#20/15, Main Road, Opposite Municipal Office, Guntakal, Andhra Pradesh - 515801",
+        additionalInfo:
+          "Dental Council Registration No: A-2443 | Established in 2002 | 26+ Years of Clinical Excellence",
       },
     ],
   },

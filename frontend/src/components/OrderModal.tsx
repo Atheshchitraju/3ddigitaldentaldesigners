@@ -1,50 +1,12 @@
 import API_URL from "@/config/api";
 import { useState } from "react";
+import { clinics } from "@/routes/clinics";
 
 declare global {
   interface Window {
     Razorpay: any;
   }
 }
-
-const clinics = [
-  {
-    id: "jas-dental",
-    name: "JAS Dental",
-    email: "jasaesthetic@gmail.com",
-    whatsapp: "+918217216397",
-  },
-  {
-    id: "excel-dental",
-    name: "Excel Dental",
-    email: "riz.zinu7@gmail.com",
-    whatsapp: "+917569125028",
-  },
-  {
-    id: "girish-dental",
-    name: "Girish Dental Clinic",
-    email: "enharishkumar@gmail.com",
-    whatsapp: "+917569125028",
-  },
-  {
-    id: "tooth-align-clinic",
-    name: "Tooth Align Clinic",
-    email: "drharithatoothalign@gmail.com",
-    whatsapp: "+917569125028",
-  },
-  {
-    id: "house-of-teeth",
-    name: "House Of Teeth",
-    email: "houseofteeth888@gmail.com",
-    whatsapp: "+917569125028",
-  },
-  {
-    id: "makers-of-smile",
-    name: "Makers Of Smile",
-    email: "contact@makersofsmile.com",
-    whatsapp: "+917569125028",
-  },
-];
 
 const products = [
   "Zirconia Classic",
@@ -150,7 +112,7 @@ export default function OrderModal({ open, onClose }: Props) {
     try {
       setLoading(true);
 
-      const clinicData = clinics.find((c) => c.id === selectedClinic);
+      const clinicData = clinics.find((c) => c.slug === selectedClinic);
 
       const finalClinicName = selectedClinic === "other" ? customClinic : clinicData?.name;
 
@@ -234,57 +196,57 @@ export default function OrderModal({ open, onClose }: Props) {
 
           order_id: razorpayData.razorpayOrder.id,
 
-          config: {
-            display: {
-              blocks: {
-                upi: {
-                  name: "UPI",
+          // config: {
+          //   display: {
+          //     blocks: {
+          //       upi: {
+          //         name: "UPI",
 
-                  instruments: [
-                    {
-                      method: "upi",
-                    },
-                  ],
-                },
+          //         instruments: [
+          //           {
+          //             method: "upi",
+          //           },
+          //         ],
+          //       },
 
-                cards: {
-                  name: "Cards",
+          //       cards: {
+          //         name: "Cards",
 
-                  instruments: [
-                    {
-                      method: "card",
-                    },
-                  ],
-                },
+          //         instruments: [
+          //           {
+          //             method: "card",
+          //           },
+          //         ],
+          //       },
 
-                netbanking: {
-                  name: "Netbanking",
+          //       netbanking: {
+          //         name: "Netbanking",
 
-                  instruments: [
-                    {
-                      method: "netbanking",
-                    },
-                  ],
-                },
+          //         instruments: [
+          //           {
+          //             method: "netbanking",
+          //           },
+          //         ],
+          //       },
 
-                wallet: {
-                  name: "Wallet",
+          //       wallet: {
+          //         name: "Wallet",
 
-                  instruments: [
-                    {
-                      method: "wallet",
-                    },
-                  ],
-                },
-              },
+          //         instruments: [
+          //           {
+          //             method: "wallet",
+          //           },
+          //         ],
+          //       },
+          //     },
 
-              sequence: ["block.upi", "block.cards", "block.netbanking", "block.wallet"],
+          //     sequence: ["block.upi", "block.cards", "block.netbanking", "block.wallet"],
 
-              preferences: {
-                show_default_blocks: true,
-              },
-            },
-          },
+          //     preferences: {
+          //       show_default_blocks: true,
+          //     },
+          //   },
+          // },
 
           prefill: {
             name: name,
@@ -424,7 +386,7 @@ export default function OrderModal({ open, onClose }: Props) {
               <option value="">Choose Clinic</option>
 
               {clinics.map((clinic) => (
-                <option key={clinic.id} value={clinic.id}>
+                <option key={clinic.slug} value={clinic.slug}>
                   {clinic.name}
                 </option>
               ))}

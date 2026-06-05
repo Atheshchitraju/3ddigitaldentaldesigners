@@ -65,20 +65,17 @@ export default function AdminOrders() {
 
       const token = localStorage.getItem("adminToken");
 
-      const response = await fetch(
-        `${API_URL}/api/orders/${orderId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-
-          body: JSON.stringify({
-            status,
-          }),
+      const response = await fetch(`${API_URL}/api/orders/${orderId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+
+        body: JSON.stringify({
+          status,
+        }),
+      });
 
       const data = await response.json();
 

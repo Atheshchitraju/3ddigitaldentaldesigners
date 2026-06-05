@@ -4,7 +4,6 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import API_URL from "../../config/api";
 
-
 export const Route = createFileRoute("/admin/orders")({
   component: AdminOrdersPage,
 });
@@ -144,6 +143,11 @@ function AdminOrdersPage() {
       Status: order.status,
 
       Designer: order.designer,
+
+      PaymentStatus: order.paymentStatus,
+      Amount: order.amount,
+      PaymentID: order.paymentDetails?.razorpayPaymentId,
+      PaymentMode: order.paymentDetails?.paymentMethod,
 
       OrderedDate: new Date(order.createdAt).toLocaleString(),
     }));
@@ -346,6 +350,13 @@ function AdminOrdersPage() {
                   <th className="text-left p-4 font-semibold">Ordered Date</th>
 
                   <th className="text-left p-4 font-semibold">Delivered At</th>
+                  <th className="text-left p-4 font-semibold">Payment Status</th>
+
+                  <th className="text-left p-4 font-semibold">Amount</th>
+
+                  <th className="text-left p-4 font-semibold">Payment ID</th>
+
+                  <th className="text-left p-4 font-semibold">Payment Mode</th>
                 </tr>
               </thead>
 
@@ -459,6 +470,27 @@ function AdminOrdersPage() {
                       ) : (
                         "-"
                       )}
+                    </td>
+                    <td className="p-4">
+                      <span
+                        className={`px-2 py-1 rounded-lg text-xs font-semibold ${
+                          order.paymentStatus === "paid"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-yellow-100 text-yellow-700"
+                        }`}
+                      >
+                        {order.paymentStatus || "-"}
+                      </span>
+                    </td>
+
+                    <td className="p-4 font-medium">₹{order.amount || 0}</td>
+
+                    <td className="p-4 text-xs break-all">
+                      {order.paymentDetails?.razorpayPaymentId || "-"}
+                    </td>
+
+                    <td className="p-4">
+                      {order.paymentDetails?.paymentMethod || order.paymentMode || "-"}
                     </td>
                   </tr>
                 ))}

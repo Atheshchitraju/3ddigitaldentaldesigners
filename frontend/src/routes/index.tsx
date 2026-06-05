@@ -25,6 +25,8 @@ import logo15 from "@/assets/cura-logo.webp";
 import logo16 from "@/assets/ruby-logo.webp";
 import logo17 from "@/assets/toothlife-logo.webp";
 import logo18 from "@/assets/toothcorner-logo.webp";
+import logo19 from "@/assets/toothtales-logo.webp";
+import logo20 from "@/assets/prakash-logo.webp";
 
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
@@ -54,6 +56,8 @@ import curaBanner from "@/assets/cura-banner.webp";
 import rubyBanner from "@/assets/ruby-banner.webp";
 import toothlifeBanner from "@/assets/toothlife-banner.webp";
 import toothcornerBanner from "@/assets/toothcorner-banner.webp";
+import toothtalesBanner from "@/assets/toothtales-banner.webp";
+import prakashBanner from "@/assets/prakash-banner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -285,6 +289,30 @@ const clients = [
 
     description:
       "The Tooth Corner is a modern dental clinic specializing in endodontics, smile designing, aligners, veneers, implantology, cosmetic dentistry, and comprehensive digital dental care.",
+  },
+  {
+    id: "tooth-tales",
+
+    name: "Tooth Tales",
+
+    location: "Arekere, Bengaluru",
+
+    logo: logo19,
+
+    banner: toothtalesBanner,
+
+    description:
+      "Tooth Tales provides comprehensive dental care including smile designing, aligners, veneers, implantology, cosmetic dentistry, and advanced digital dentistry solutions.",
+  },
+  {
+    id: "prakash-dental-hospital",
+    name: "Prakash Dental Hospital",
+    location: "Guntakal, Andhra Pradesh",
+    logo: logo20,
+    banner: prakashBanner,
+    description:
+      "Prakash Dental Hospital offers comprehensive dental services including smile designing, aligners, veneers, implantology, cosmetic dentistry, and advanced digital dentistry solutions.",
+
   },
 ];
 

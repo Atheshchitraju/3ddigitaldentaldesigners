@@ -9,6 +9,7 @@ const links = [
   { to: "/equipment", label: "Equipment" },
   { to: "/shade", label: "Shade Matcher" },
   { to: "/designers", label: "Designers" },
+  { to: "/clinics", label: "Clinics" }, // NEW
   { to: "/portfolio", label: "Portfolio" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },

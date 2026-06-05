@@ -17,6 +17,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShadeIndexRouteImport } from './routes/shade/index'
+import { Route as ClinicsIndexRouteImport } from './routes/clinics/index'
 import { Route as ClinicsIdRouteImport } from './routes/clinics/$id'
 import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
@@ -61,6 +62,11 @@ const ShadeIndexRoute = ShadeIndexRouteImport.update({
   path: '/shade/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClinicsIndexRoute = ClinicsIndexRouteImport.update({
+  id: '/clinics/',
+  path: '/clinics/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClinicsIdRoute = ClinicsIdRouteImport.update({
   id: '/clinics/$id',
   path: '/clinics/$id',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/clinics/$id': typeof ClinicsIdRoute
+  '/clinics/': typeof ClinicsIndexRoute
   '/shade/': typeof ShadeIndexRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/clinics/$id': typeof ClinicsIdRoute
+  '/clinics': typeof ClinicsIndexRoute
   '/shade': typeof ShadeIndexRoute
 }
 export interface FileRoutesById {
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/clinics/$id': typeof ClinicsIdRoute
+  '/clinics/': typeof ClinicsIndexRoute
   '/shade/': typeof ShadeIndexRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/orders'
     | '/clinics/$id'
+    | '/clinics/'
     | '/shade/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/orders'
     | '/clinics/$id'
+    | '/clinics'
     | '/shade'
   id:
     | '__root__'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/orders'
     | '/clinics/$id'
+    | '/clinics/'
     | '/shade/'
   fileRoutesById: FileRoutesById
 }
@@ -170,6 +182,7 @@ export interface RootRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   ClinicsIdRoute: typeof ClinicsIdRoute
+  ClinicsIndexRoute: typeof ClinicsIndexRoute
   ShadeIndexRoute: typeof ShadeIndexRoute
 }
 
@@ -231,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShadeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/clinics/': {
+      id: '/clinics/'
+      path: '/clinics'
+      fullPath: '/clinics/'
+      preLoaderRoute: typeof ClinicsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/clinics/$id': {
       id: '/clinics/$id'
       path: '/clinics/$id'
@@ -266,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   ClinicsIdRoute: ClinicsIdRoute,
+  ClinicsIndexRoute: ClinicsIndexRoute,
   ShadeIndexRoute: ShadeIndexRoute,
 }
 export const routeTree = rootRouteImport
