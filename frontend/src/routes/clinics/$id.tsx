@@ -24,7 +24,7 @@ import toothlifeBanner from "../../assets/toothlife-banner.webp";
 import toothcornerBanner from "../../assets/toothcorner-banner.webp";
 import toothtalesBanner from "../../assets/toothtales-banner.webp";
 import prakshBanner from "../../assets/prakash-banner.webp";
-import citysmileBanner from "../../assets/citysmile-banner.webp";
+import citysmileBanner from "../../assets/citysmilebanner.webp";
 import dentaldecodeBanner from "../../assets/dentaldecode-banner.webp";
 import careAndCureBanner from "../../assets/careandcure-banner.webp";
 import sculpturaBanner from "../../assets/sculptura-banner.webp";
