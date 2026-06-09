@@ -20,6 +20,14 @@ import toothtalesDoctor from "@/assets/toothtales-doctor.webp";
 import toothlifeBanner from "@/assets/toothlife-banner.webp";
 import drraobanner from "@/assets/drrao-banner.webp";
 import prakashDoctor from "@/assets/prakash-doctor.webp";
+import citysmileDoctor from "@/assets/citysmile-doctor.webp";
+import chaitanaDoctor from "@/assets/chaitana-logo.webp";
+import ecityDoctor from "@/assets/ecity-doctor.webp";
+import dentaldecodeDoctor from "@/assets/dentaldecode-doctor.webp";
+import careAndCureBanner from "../../assets/careAndCure-logo.webp";
+import sculpturaDoctor from "@/assets/sculptura-doctor.webp";
+import smileDentalDoctor from "@/assets/smileDentalDoctor.webp";
+import whitePearlsDoctor from "@/assets/white-pearls-doctor.webp";
 
 export const Route = createFileRoute("/clinics/")({
   component: ClinicsPage,
@@ -178,6 +186,72 @@ export const clinics = [
     logo: prakashDoctor,
     email: "drkakarlaprakash@gmail.com",
     whatsapp: "9848373504",
+  },
+  {
+    name: "City Smiles Dental Clinic",
+    slug: "city-smiles-dental-clinic",
+    location: "Akshayanagar, Bengaluru",
+    email: "citysmilesdental32@gmail.com",
+    whatsapp: "7619224720",
+    logo: citysmileDoctor,
+  },
+  {
+    name: "Dr Chaitana’s Dental Care",
+    slug: "dr-chaitana-dental-care",
+    location: "Electronic City Phase 1, Bengaluru",
+    email: "drchaitanasdentalcare@gmail.com",
+    whatsapp: "7353190690",
+    logo: chaitanaDoctor,
+  },
+
+  {
+    name: "E City Dental",
+    slug: "e-city-dental",
+    location: "Electronic City, Bengaluru",
+    email: "teamecitydental@gmail.com",
+    whatsapp: "9945529816",
+    logo: ecityDoctor,
+  },
+
+  {
+    name: "Dental Decodé",
+    slug: "dental-decode",
+    location: "Rayasandra, Bengaluru",
+    email: "dentaldecode.in@gmail.com",
+    whatsapp: "9148164187",
+    logo: dentaldecodeDoctor,
+  },
+  {
+    name: "Care and Cure Dental Clinic",
+    slug: "care-and-cure-dental-clinic",
+    location: "Electronic City, Bengaluru",
+    email: "drshameemunisham@gmail.com",
+    whatsapp: "9916299690",
+    logo: careAndCureBanner,
+  },
+  {
+    name: "Sculptura Aesthetic Centre",
+    slug: "sculptura-aesthetic-centre",
+    location: "Jayanagar, Bengaluru",
+    email: "prafullayogish@gmail.com",
+    whatsapp: "9448933330",
+    logo: sculpturaDoctor,
+  },
+  {
+    name: "Smile Dental Care",
+    slug: "smile-dental-care",
+    location: "Shantipura, Electronic City, Bengaluru",
+    email: "dr.aparna.sdc@gmail.com",
+    whatsapp: "8123044110",
+    logo: smileDentalDoctor,
+  },
+  {
+    name: "Dr Neethu's White Pearls Multispeciality Dental Clinic",
+    slug: "white-pearls-multispeciality-dental-clinic",
+    location: "Hullahalli, Begur, Bengaluru",
+    email: "whitepearlsmultispeciality@gmail.com",
+    whatsapp: "7483981229",
+    logo: whitePearlsDoctor,
   },
 ];
 

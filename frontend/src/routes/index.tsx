@@ -27,6 +27,12 @@ import logo17 from "@/assets/toothlife-logo.webp";
 import logo18 from "@/assets/toothcorner-logo.webp";
 import logo19 from "@/assets/toothtales-logo.webp";
 import logo20 from "@/assets/prakash-logo.webp";
+import logo21 from "@/assets/citysmile-logo.webp";
+import logo22 from "@/assets/dentaldecode-logo.webp";
+import logo23 from "@/assets/careAndCure-logo.webp";
+import logo24 from "@/assets/sculptura-logo.webp";
+import logo25 from "@/assets/smileDentallogo.webp";
+import logo26 from "@/assets/white-pearls-logo.webp";
 
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
@@ -58,6 +64,12 @@ import toothlifeBanner from "@/assets/toothlife-banner.webp";
 import toothcornerBanner from "@/assets/toothcorner-banner.webp";
 import toothtalesBanner from "@/assets/toothtales-banner.webp";
 import prakashBanner from "@/assets/prakash-banner.webp";
+import citysmileBanner from "@/assets/citysmile-banner.webp";
+import dentaldecodeBanner from "@/assets/dentaldecode-banner.webp";
+import careAndCureBanner from "@/assets/careandcure-banner.webp";
+import sculpturaBanner from "@/assets/sculptura-banner.webp";
+import smileDentalBanner from "@/assets/smileDentalBanner.webp";
+import whitePearlsBanner from "@/assets/white-pearls-banner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -312,7 +324,60 @@ const clients = [
     banner: prakashBanner,
     description:
       "Prakash Dental Hospital offers comprehensive dental services including smile designing, aligners, veneers, implantology, cosmetic dentistry, and advanced digital dentistry solutions.",
-
+  },
+  {
+    id: "city-smiles-dental-clinic",
+    name: "CitySmile Dental Clinic",
+    location: "Marathahalli, Bengaluru",
+    logo: logo21,
+    banner: citysmileBanner,
+    description:
+      "CitySmile Dental Clinic provides comprehensive dental care including smile designing, aligners, veneers, implantology, cosmetic dentistry, and advanced digital dentistry solutions.",
+  },
+  {
+    id: "dental-decode",
+    name: "Dental Decode",
+    location: "Bengaluru",
+    logo: logo22,
+    banner: dentaldecodeBanner,
+    description:
+      "Dental Decode provides innovative dental solutions with a focus on digital dentistry and advanced treatment approaches.",
+  },
+  {
+    id: "care-and-cure-dental-clinic",
+    name: "Care and Cure Dental Clinic",
+    location: "Electronic City, Bengaluru",
+    logo: logo23,
+    banner: careAndCureBanner,
+    description:
+      "Care and Cure Dental Clinic is a trusted dental care center in Electronic City, Bengaluru, led by Dr. Shameemunisha M. The clinic offers comprehensive dental treatments including smile designing, aligners, veneers, implant planning, cosmetic dentistry, and full mouth rehabilitation with a patient-focused approach.",
+  },
+  {
+    id: "sculptura-aesthetic-centre",
+    name: "Sculptura Aesthetic Centre",
+    location: "Jayanagar, Bengaluru",
+    logo: logo24,
+    banner: sculpturaBanner,
+    description:
+      "Sculptura Aesthetic Centre is a premium dental and aesthetic clinic specializing in prosthodontics, periodontics, smile designing, implant planning, veneers, full mouth rehabilitation, and advanced digital dentistry solutions.",
+  },
+  {
+    id: "smile-dental-care",
+    name: "Smile Dental Care",
+    location: "Shantipura, Electronic City, Bengaluru",
+    logo: logo25,
+    banner: smileDentalBanner,
+    description:
+      "Smile Dental Care is a modern multi-speciality dental clinic specializing in smile designing, aligners, veneers, implant planning, cosmetic dentistry, full mouth rehabilitation, and advanced digital dental workflows.",
+  },
+  {
+    id: "white-pearls-multispeciality-dental-clinic",
+    name: "Dr Neethu's White Pearls Multispeciality Dental Clinic",
+    location: "Hullahalli, Begur, Bengaluru",
+    logo: logo26,
+    banner: whitePearlsBanner,
+    description:
+      "White Pearls Multispeciality Dental Clinic provides advanced smile designing, aligners, veneers, implant planning, cosmetic dentistry, full mouth rehabilitation, and modern digital dental solutions with a patient-focused approach.",
   },
 ];
 

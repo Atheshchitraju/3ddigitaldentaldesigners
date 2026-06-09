@@ -24,7 +24,12 @@ import toothlifeBanner from "../../assets/toothlife-banner.webp";
 import toothcornerBanner from "../../assets/toothcorner-banner.webp";
 import toothtalesBanner from "../../assets/toothtales-banner.webp";
 import prakshBanner from "../../assets/prakash-banner.webp";
-
+import citysmileBanner from "../../assets/citysmile-banner.webp";
+import dentaldecodeBanner from "../../assets/dentaldecode-banner.webp";
+import careAndCureBanner from "../../assets/careandcure-banner.webp";
+import sculpturaBanner from "../../assets/sculptura-banner.webp";
+import smileDentalBanner from "../../assets/smileDentalBanner.webp";
+import whitePearlsBanner from "../../assets/white-pearls-banner.webp";
 /* =========================
    DOCTORS
 ========================= */
@@ -50,6 +55,12 @@ import rubyDoctor from "../../assets/ruby-doctor.webp";
 import toothcornerDoctor from "../../assets/toothcorner-doctor.webp";
 import toothtalesDoctor from "../../assets/toothtales-doctor.webp";
 import prakashDoctor from "../../assets/prakash-doctor.webp";
+import citysmileDoctor from "../../assets/citysmile-doctor.webp";
+import dentalDecodeDoctor from "../../assets/dentaldecode-doctor.webp";
+import careAndCureDoctor from "../../assets/careAndCure-logo.webp";
+import sculpturaDoctor from "../../assets/sculptura-doctor.webp";
+import smileDentalDoctor from "../../assets/smileDentalDoctor.webp";
+import whitePearlsDoctor from "../../assets/white-pearls-doctor.webp";
 
 /* =========================
    GALLERY
@@ -127,6 +138,32 @@ import prakash2 from "../../assets/prakash2.webp";
 import prakash3 from "../../assets/prakash3.webp";
 import prakash4 from "../../assets/prakash4.webp";
 
+import citysmile1 from "../../assets/citysmile1.webp";
+import citysmile2 from "../../assets/citysmile2.webp";
+import citysmile3 from "../../assets/citysmile3.webp";
+import citysmile4 from "../../assets/citysmile4.webp";
+
+import dentaldecode1 from "../../assets/dentaldecode1.webp";
+import dentaldecode2 from "../../assets/dentaldecode2.webp";
+import dentaldecode3 from "../../assets/dentaldecode3.webp";
+import dentaldecode4 from "../../assets/dentaldecode4.webp";
+import dentaldecode5 from "../../assets/dentaldecode5.webp";
+
+import careAndCure1 from "../../assets/careandcure1.webp";
+import careAndCure2 from "../../assets/careandcure2.webp";
+import careAndCure3 from "../../assets/careandcure3.webp";
+
+import sculptura1 from "../../assets/sculptura1.webp";
+import sculptura2 from "../../assets/sculptura2.webp";
+
+import smileDental1 from "../../assets/smileDental1.webp";
+import smileDental2 from "../../assets/smileDental2.webp";
+import smileDental3 from "../../assets/smileDental3.webp";
+
+import whitePearls1 from "../../assets/white-pearls1.webp";
+import whitePearls2 from "../../assets/white-pearls2.webp";
+import whitePearls3 from "../../assets/white-pearls3.webp";
+import whitePearls4 from "../../assets/white-pearls4.webp";
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
 });
@@ -1344,6 +1381,385 @@ const clinics = [
         address: "#20/15, Main Road, Opposite Municipal Office, Guntakal, Andhra Pradesh - 515801",
         additionalInfo:
           "Dental Council Registration No: A-2443 | Established in 2002 | 26+ Years of Clinical Excellence",
+      },
+    ],
+  },
+  {
+    id: "city-smiles-dental-clinic",
+
+    name: "City Smiles Dental Clinic",
+
+    logo: citysmileDoctor,
+
+    banner: citysmileBanner,
+
+    description:
+      "City Smiles Dental Clinic is a modern multi-specialty dental center located in Akshayanagar, Bengaluru. Led by Dr. Namita Jaiswal, the clinic provides comprehensive dental care with expertise in Periodontics, Implantology, Cosmetic Dentistry, Smile Designing, Full Mouth Rehabilitation, and Digital Dentistry. Established in 2019, the clinic combines advanced technology with personalized treatment planning to create healthy and confident smiles.",
+
+    location: "Akshayanagar, Bengaluru",
+
+    phone: "+91 7619224720",
+
+    email: "citysmilesdental32@gmail.com",
+
+    map: "https://www.google.com/maps?q=City+Smiles+Dental+Clinic+Akshayanagar+Bangalore&output=embed",
+
+    services: [
+      "Smile Design",
+      "Dental Implants",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "Cosmetic Dentistry",
+      "Periodontics",
+      "General Dentistry",
+    ],
+
+    gallery: [citysmile1, citysmile2, citysmile3, citysmile4],
+
+    doctors: [
+      {
+        name: "Dr. Namita Jaiswal",
+
+        role: "MDS - Periodontics & Implantology",
+
+        image: citysmileDoctor,
+
+        experience: "16 Years Experience",
+
+        phone: "7619224720",
+
+        email: "citysmilesdental32@gmail.com",
+
+        specialization:
+          "Periodontics, Implantology, Cosmetic Dentistry, Smile Designing, Full Mouth Rehabilitation",
+
+        clinicName: "City Smiles Dental Clinic",
+
+        address:
+          "#220/92, First Floor, Opposite Ganapathy Temple, Yellenahalli Main Road, Akshayanagar, Bengaluru, Karnataka - 560076",
+
+        website: "https://citysmiledentalclinic.com",
+
+        additionalInfo:
+          "MDS | Registration No: 25551-A | Established in 2019 | Specialist in Periodontics & Implantology",
+      },
+    ],
+  },
+  {
+    id: "dental-decode",
+
+    name: "Dental Decodé",
+
+    logo: dentalDecodeDoctor,
+
+    banner: dentaldecodeBanner,
+
+    description:
+      "Dental Decodé is a modern dental care center located in Rayasandra, Bengaluru. Led by Dr. Swati Shikha, MDS, the clinic specializes in smile designing, aligners, veneers, implant planning, cosmetic dentistry, crown design, and full mouth rehabilitation. With a patient-centric approach and advanced digital dentistry solutions, Dental Decodé is committed to delivering healthy, confident smiles through precision-driven treatment planning and modern technology.",
+
+    location: "Rayasandra, Bengaluru",
+
+    phone: "+91 9148164187",
+
+    email: "dentaldecode.in@gmail.com",
+
+    map: "https://www.google.com/maps?q=Dental+Decode+Rayasandra+Bangalore&output=embed",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Cosmetic Dentistry",
+    ],
+
+    gallery: [dentaldecode1, dentaldecode2, dentaldecode3, dentaldecode4, dentaldecode5],
+
+    doctors: [
+      {
+        name: "Dr. Swati Shikha",
+
+        role: "MDS",
+
+        image: dentalDecodeDoctor,
+
+        experience: "8 Years Experience",
+
+        phone: "9148164187",
+
+        email: "dentaldecode.in@gmail.com",
+
+        specialization:
+          "Prosthodontics, Implantology, Cosmetic Dentistry, Smile Designing, Veneers, Full Mouth Rehabilitation, Digital Dentistry",
+
+        clinicName: "Dental Decodé",
+
+        address:
+          "Hosa Road First Floor, Above Sparsh Clinic, Opposite GR Sagar Nivas Apartment Circle, Naganathapura, Rayasandra, Bengaluru, Karnataka 560100",
+
+        website: "https://share.google/LQyWu1j2VTMSaw2ns",
+
+        additionalInfo:
+          "MDS | Registration No: 61087 A | Established in 2026 | Specialist in Advanced Digital Dentistry, Smile Designing, Implant Planning, and Full Mouth Rehabilitation",
+      },
+    ],
+  },
+  {
+    id: "care-and-cure-dental-clinic",
+
+    name: "Care and Cure Dental Clinic",
+
+    logo: careAndCureDoctor,
+
+    banner: careAndCureBanner,
+
+    description:
+      "Care and Cure Dental Clinic is a trusted dental care center located in Electronic City, Bengaluru. Established in 2010 and led by Dr. Shameemunisha M, the clinic provides comprehensive dental care including smile designing, aligners, veneers, crown restorations, implant planning, cosmetic dentistry, and full mouth rehabilitation. With over 15 years of clinical experience, the clinic is committed to delivering personalized and high-quality dental treatments.",
+
+    location: "Electronic City, Bengaluru",
+
+    phone: "+91 9916299690",
+
+    email: "drshameemunisham@gmail.com",
+
+    map: "https://www.google.com/maps?q=Care+and+Cure+Dental+Clinic+Electronic+City+Bangalore&output=embed",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "General Dentistry",
+    ],
+
+    gallery: [careAndCure1, careAndCure2, careAndCure3],
+
+    doctors: [
+      {
+        name: "Dr. Shameemunisha M",
+
+        role: "BDS",
+
+        image: careAndCureDoctor,
+
+        experience: "15 Years Experience",
+
+        phone: "9916299690",
+
+        email: "drshameemunisham@gmail.com",
+
+        specialization:
+          "General Dentistry, Cosmetic Dentistry, Smile Designing, Veneers, Aligners, Implant Planning, Full Mouth Rehabilitation",
+
+        clinicName: "Care and Cure Dental Clinic",
+
+        address: "Gollahalli Road, Shikaripalya, Electronic City, Bengaluru, Karnataka - 560100",
+
+        additionalInfo:
+          "BDS | Registration No: 15417-A | Established in 2010 | 15 Years of Clinical Experience",
+      },
+    ],
+  },
+  {
+    id: "sculptura-aesthetic-centre",
+
+    name: "Sculptura Aesthetic Centre",
+
+    logo: sculpturaDoctor,
+
+    banner: sculpturaBanner,
+
+    description:
+      "Sculptura Aesthetic Centre is a modern dental and aesthetic clinic established in 2013, offering advanced prosthodontic treatments, implant planning, smile designing, veneers, full mouth rehabilitation, cosmetic dentistry, and digital dental workflows.",
+
+    location: "Jayanagar, Bengaluru",
+
+    phone: "+91 9448933330",
+
+    email: "prafullayogish@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.817683137154!2d77.58015857512197!3d12.919436587391168!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae159cc7818531%3A0x95f0106c510ea2f1!2sSculptura%20Aesthetic%20Centre!5e0!3m2!1sen!2sin!4v1780917628655!5m2!1sen!2sin",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [sculptura1, sculptura2],
+
+    doctors: [
+      {
+        name: "Dr. Prafulla",
+
+        role: "MDS Prosthodontist",
+
+        image: sculpturaDoctor,
+
+        experience: "25+ Years Experience",
+
+        phone: "9448933330",
+
+        email: "prafullayogish@gmail.com",
+
+        specialization:
+          "Prosthodontics, Periodontics, Implantology, Cosmetic Dentistry, Smile Rehabilitation",
+
+        clinicName: "Sculptura Aesthetic Centre",
+
+        address: "No.7, 9th Main, 5th Block, Jayanagar, Bengaluru, Karnataka - 560041",
+
+        website: "",
+
+        additionalInfo:
+          "Medical Registration No: 5742-A | Established in 2013 | Advanced Digital Dentistry Specialist",
+      },
+    ],
+  },
+  {
+    id: "smile-dental-care",
+
+    name: "Smile Dental Care",
+
+    logo: smileDentalDoctor,
+
+    banner: smileDentalBanner,
+
+    description:
+      "Smile Dental Care is a modern dental clinic established in 2015, providing comprehensive dental care with expertise in cosmetic dentistry, implantology, smile designing, aligners, veneers, full mouth rehabilitation, and digital dentistry solutions.",
+
+    location: "Shantipura, Electronic City, Bengaluru",
+
+    phone: "+91 8123044110",
+
+    email: "dr.aparna.sdc@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.944952574645!2d77.67975577491617!3d12.846831987457136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6cefcc634a8f%3A0xcc94ddc5e93e05ad!2sSmile%20Dental%20Care!5e0!3m2!1sen!2sin!4v1780920140561!5m2!1sen!2sin",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [smileDental1, smileDental2, smileDental3],
+
+    doctors: [
+      {
+        name: "Dr. Y. Aparna",
+
+        role: "BDS",
+
+        image: smileDentalDoctor,
+
+        experience: "18 Years Experience",
+
+        phone: "8123044110",
+
+        email: "dr.aparna.sdc@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "Smile Dental Care",
+
+        address: "1st Floor, Basavanna Building, Shantipura Main Road, Bengaluru, Karnataka 560100",
+
+        website: "https://smile-dental-care.in/",
+
+        additionalInfo:
+          "Medical Registration No: 6459A | Established in 2015 | Advanced Digital Dentistry Specialist",
+      },
+    ],
+  },
+  {
+    id: "white-pearls-multispeciality-dental-clinic",
+
+    name: "Dr Neethu's White Pearls Multispeciality Dental Clinic",
+
+    logo: whitePearlsDoctor,
+
+    banner: whitePearlsBanner,
+
+    description:
+      "Dr Neethu's White Pearls Multispeciality Dental Clinic is a modern dental center established in 2023, offering comprehensive dental care including smile designing, aligners, veneers, implantology, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry workflows.",
+
+    location: "Hullahalli, Begur, Bengaluru",
+
+    phone: "+91 7483981229",
+
+    email: "whitepearlsmultispeciality@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.230501248169!2d77.62077797512042!3d12.828376387473973!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae6b0021f6556f%3A0x6224bfbcfe864800!2sWhite%20Pearls%20Multispeciality%20Dental%20Clinic!5e0!3m2!1sen!2sin!4v1780922047589!5m2!1sen!2sin",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [whitePearls1, whitePearls2, whitePearls3, whitePearls4],
+
+    doctors: [
+      {
+        name: "Dr. Neethu B L",
+
+        role: "BDS",
+
+        image: whitePearlsDoctor,
+
+        experience: "8 Years Experience",
+
+        phone: "7483981229",
+
+        email: "whitepearlsmultispeciality@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "Dr Neethu's White Pearls Multispeciality Dental Clinic",
+
+        address:
+          "1st Floor, Near VK Woods, Opposite EuroKids, Koppa-Begur Road, Hullahalli, Bengaluru, Karnataka 560083",
+
+        website: "",
+
+        additionalInfo:
+          "Medical Registration No: 44257A | Established in 2023 | Advanced Digital Dentistry Specialist",
       },
     ],
   },
