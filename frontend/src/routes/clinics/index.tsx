@@ -28,6 +28,7 @@ import careAndCureBanner from "../../assets/careAndCure-logo.webp";
 import sculpturaDoctor from "@/assets/sculptura-doctor.webp";
 import smileDentalDoctor from "@/assets/smileDentalDoctor.webp";
 import whitePearlsDoctor from "@/assets/white-pearls-doctor.webp";
+import sailajaDoctor from "@/assets/sailajaDoctor.webp";
 
 export const Route = createFileRoute("/clinics/")({
   component: ClinicsPage,
@@ -252,6 +253,14 @@ export const clinics = [
     email: "whitepearlsmultispeciality@gmail.com",
     whatsapp: "7483981229",
     logo: whitePearlsDoctor,
+  },
+  {
+    name: "Smile Dental Clinic",
+    slug: "smile-dental-clinic-arekere",
+    location: "Arekere, Bannerghatta Road, Bengaluru",
+    email: "dr.shilubds@gmail.com",
+    whatsapp: "9148630602",
+    logo: sailajaDoctor,
   },
 ];
 

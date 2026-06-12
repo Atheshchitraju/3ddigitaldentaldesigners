@@ -1,4 +1,5 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import { Phone, MessageCircle } from "lucide-react";
 /* =========================
    BANNERS
 ========================= */
@@ -30,6 +31,7 @@ import careAndCureBanner from "../../assets/careandcure-banner.webp";
 import sculpturaBanner from "../../assets/sculptura-banner.webp";
 import smileDentalBanner from "../../assets/smileDentalBanner.webp";
 import whitePearlsBanner from "../../assets/white-pearls-banner.webp";
+import sailajaBanner from "@/assets/sailajaBanner.webp";
 /* =========================
    DOCTORS
 ========================= */
@@ -61,6 +63,7 @@ import careAndCureDoctor from "../../assets/careAndCure-logo.webp";
 import sculpturaDoctor from "../../assets/sculptura-doctor.webp";
 import smileDentalDoctor from "../../assets/smileDentalDoctor.webp";
 import whitePearlsDoctor from "../../assets/white-pearls-doctor.webp";
+import sailajaDoctor from "../../assets/sailajaDoctor.webp";
 
 /* =========================
    GALLERY
@@ -164,6 +167,12 @@ import whitePearls1 from "../../assets/white-pearls1.webp";
 import whitePearls2 from "../../assets/white-pearls2.webp";
 import whitePearls3 from "../../assets/white-pearls3.webp";
 import whitePearls4 from "../../assets/white-pearls4.webp";
+
+import sailaja1 from "../../assets/sailaja1.webp";
+import sailaja2 from "../../assets/sailaja2.webp";
+import sailaja3 from "../../assets/sailaja3.webp";
+import sailaja4 from "../../assets/sailaja4.webp";
+
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
 });
@@ -1763,6 +1772,70 @@ const clinics = [
       },
     ],
   },
+  {
+    id: "smile-dental-clinic-arekere",
+
+    name: "Smile Dental Clinic",
+
+    logo: sailajaDoctor,
+
+    banner: sailajaBanner,
+
+    description:
+      "Smile Dental Clinic is a patient-focused dental center established in 2015, offering comprehensive dental treatments including smile designing, aligners, veneers, implantology, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry workflows.",
+
+    location: "Arekere, Bannerghatta Road, Bengaluru",
+
+    phone: "+91 9148630602",
+
+    email: "dr.shilubds@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31114.62770618761!2d77.58705295098203!3d12.886588344925412!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15285dab98ab%3A0x67cc587c76a902e9!2sSmile%20Dental%20Clinic!5e0!3m2!1sen!2sin!4v1781256312075!5m2!1sen!2sin",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [sailaja1, sailaja2, sailaja3, sailaja4],
+
+    doctors: [
+      {
+        name: "Dr. P. Sailaja Setty",
+
+        role: "BDS",
+
+        image: sailajaDoctor,
+
+        experience: "17 Years Experience",
+
+        phone: "9148630602",
+
+        email: "dr.shilubds@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "Smile Dental Clinic",
+
+        address:
+          "No.159-61, G.P. Raja Rathnam Road, BTS Layout, Arekere Government Hospital Road, Bannerghatta, Bengaluru, Karnataka 560076",
+
+        website: "",
+
+        additionalInfo:
+          "Medical Registration No: A-9382 | Established in 2015 | Advanced Digital Dentistry Specialist",
+      },
+    ],
+  },
 ];
 
 function ClinicPage() {
@@ -1997,6 +2070,34 @@ function ClinicPage() {
           </div>
         </section>
       )}
+      {/* FLOATING CONTACT WIDGET */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="bg-white rounded-2xl shadow-2xl p-4 border max-w-xs">
+          <h4 className="font-semibold text-gray-900">Need Help?</h4>
+
+          <p className="text-sm text-gray-600 mt-1">
+            Chat directly with {clinic.doctors?.[0]?.name || clinic.name}
+          </p>
+
+          <div className="mt-3 flex gap-2">
+            <a
+              href={`tel:${clinic.phone}`}
+              className="flex-1 bg-blue-600 text-white py-2 rounded-xl text-center hover:bg-blue-700 transition"
+            >
+              Call
+            </a>
+
+            <a
+              href={`https://wa.me/${clinic.phone.replace(/\D/g, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-green-500 text-white py-2 rounded-xl text-center hover:bg-green-600 transition"
+            >
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

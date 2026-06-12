@@ -5,13 +5,16 @@ import OrderModal from "@/components/OrderModal";
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/services", label: "Services" },
-  { to: "/equipment", label: "Equipment" },
-  { to: "/shade", label: "Shade Matcher" },
-  { to: "/designers", label: "Designers" },
-  { to: "/clinics", label: "Clinics" }, // NEW
+  { to: "/clinics", label: "Clinics" },
   { to: "/portfolio", label: "Portfolio" },
   { to: "/about", label: "About" },
+] as const;
+
+const dentistLinks = [
+  { to: "/services", label: "Services" },
+  { to: "/equipment", label: "Equipment" },
+  // { to: "/shade", label: "Shade Matcher" },
+  { to: "/designers", label: "Designers" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -19,6 +22,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [openOrder, setOpenOrder] = useState(false);
+  const [dentistsOpen, setDentistsOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -42,17 +46,15 @@ export function Navbar() {
         }`}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6">
-          {/* LOGO */}
+          {/* Logo */}
           <Link to="/" preload="intent" className="flex items-center gap-3 group min-w-0">
             <div className="h-11 w-11 rounded-xl overflow-hidden shadow-glow ring-1 ring-primary/30 flex items-center justify-center bg-[#6B1F8C] shrink-0">
               <img
                 src={logo}
-                alt="3D Digital Dental Designers Lab logo"
+                alt="3D Digital Dental Designers Lab"
                 width={44}
                 height={44}
                 loading="eager"
-                fetchPriority="high"
-                decoding="async"
                 className="h-full w-full object-cover"
               />
             </div>
@@ -68,32 +70,78 @@ export function Navbar() {
             </div>
           </Link>
 
-          {/* DESKTOP NAV */}
+          {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-1">
-            {links.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                preload="intent"
-                className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-all duration-200 rounded-md"
-                activeProps={{
-                  className: "px-3 py-2 text-sm font-semibold text-primary rounded-md",
-                }}
-              >
-                {l.label}
-              </Link>
-            ))}
+            {links.map((l) =>
+              l.to === "/clinics" ? (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  preload="intent"
+                  className="px-4 py-2 rounded-full bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white font-semibold shadow-md hover:scale-105 transition-all duration-200"
+                >
+                  {l.label}
+                </Link>
+              ) : (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  preload="intent"
+                  className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-all duration-200 rounded-md"
+                  activeProps={{
+                    className: "px-3 py-2 text-sm font-semibold text-primary rounded-md",
+                  }}
+                >
+                  {l.label}
+                </Link>
+              ),
+            )}
 
-            {/* ORDER BUTTON */}
-            <button
-              onClick={() => setOpenOrder(true)}
-              className="ml-3 inline-flex items-center rounded-full bg-gradient-to-r from-purple-600 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg hover:shadow-purple-500/30 hover:scale-[1.02] transition-all duration-200"
-            >
-              Place Order
-            </button>
+            {/* Dentists Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setDentistsOpen(!dentistsOpen)}
+                className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary flex items-center gap-2"
+              >
+                For Dentists
+                <span
+                  className={`text-xs transition-transform duration-200 ${
+                    dentistsOpen ? "rotate-180" : ""
+                  }`}
+                >
+                  ▼
+                </span>
+              </button>
+
+              {dentistsOpen && (
+                <div className="absolute top-full left-0 mt-2 w-60 rounded-2xl bg-white border border-gray-100 shadow-2xl p-2 z-50">
+                  {dentistLinks.map((item) => (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      preload="intent"
+                      onClick={() => setDentistsOpen(false)}
+                      className="block rounded-xl px-4 py-3 text-sm hover:bg-purple-50 hover:text-primary"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+
+                  <button
+                    onClick={() => {
+                      setDentistsOpen(false);
+                      setOpenOrder(true);
+                    }}
+                    className="block w-full text-left rounded-xl px-4 py-3 text-sm hover:bg-purple-50 hover:text-primary"
+                  >
+                    Order Form
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* MOBILE BUTTON */}
+          {/* Mobile Toggle */}
           <button
             aria-label="Menu"
             onClick={() => setOpen((v) => !v)}
@@ -111,38 +159,66 @@ export function Navbar() {
           </button>
         </nav>
 
-        {/* MOBILE MENU */}
+        {/* Mobile Menu */}
         {open && (
           <div className="lg:hidden px-4 pb-4">
             <div className="glass mt-3 rounded-3xl p-4 flex flex-col gap-1 shadow-2xl border border-white/10 backdrop-blur-xl">
-              {links.map((l) => (
-                <Link
-                  key={l.to}
-                  to={l.to}
-                  preload="intent"
-                  onClick={() => setOpen(false)}
-                  className="px-4 py-3 text-sm font-medium rounded-xl hover:bg-white/10 transition-colors"
-                >
-                  {l.label}
-                </Link>
-              ))}
+              {links.map((l) =>
+                l.to === "/clinics" ? (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    preload="intent"
+                    onClick={() => setOpen(false)}
+                    className="mx-2 my-1 px-4 py-3 text-sm font-semibold rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white shadow-md"
+                  >
+                    {l.label}
+                  </Link>
+                ) : (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    preload="intent"
+                    onClick={() => setOpen(false)}
+                    className="px-4 py-3 text-sm font-medium rounded-xl hover:bg-white/10 transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                ),
+              )}
 
-              {/* MOBILE ORDER BUTTON */}
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  setOpenOrder(true);
-                }}
-                className="mt-3 h-12 rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white font-semibold shadow-lg"
-              >
-                Place Order
-              </button>
+              <div className="border-t border-white/10 my-2 pt-2">
+                <div className="px-4 py-2 text-xs uppercase tracking-wider text-gray-400">
+                  For Dentists
+                </div>
+
+                {dentistLinks.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    preload="intent"
+                    onClick={() => setOpen(false)}
+                    className="block px-4 py-3 text-sm font-medium rounded-xl hover:bg-white/10"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    setOpenOrder(true);
+                  }}
+                  className="block w-full text-left px-4 py-3 text-sm font-medium rounded-xl hover:bg-white/10"
+                >
+                  Order Form
+                </button>
+              </div>
             </div>
           </div>
         )}
       </header>
 
-      {/* ORDER MODAL */}
       <OrderModal open={openOrder} onClose={() => setOpenOrder(false)} />
     </>
   );

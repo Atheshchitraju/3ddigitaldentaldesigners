@@ -33,6 +33,7 @@ import logo23 from "@/assets/careAndCure-logo.webp";
 import logo24 from "@/assets/sculptura-logo.webp";
 import logo25 from "@/assets/smileDentallogo.webp";
 import logo26 from "@/assets/white-pearls-logo.webp";
+import logo27 from "@/assets/sailajalogo.webp";
 
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
@@ -70,6 +71,7 @@ import careAndCureBanner from "@/assets/careandcure-banner.webp";
 import sculpturaBanner from "@/assets/sculptura-banner.webp";
 import smileDentalBanner from "@/assets/smileDentalBanner.webp";
 import whitePearlsBanner from "@/assets/white-pearls-banner.webp";
+import sailajaBanner from "@/assets/sailajaBanner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -379,6 +381,15 @@ const clients = [
     description:
       "White Pearls Multispeciality Dental Clinic provides advanced smile designing, aligners, veneers, implant planning, cosmetic dentistry, full mouth rehabilitation, and modern digital dental solutions with a patient-focused approach.",
   },
+  {
+    id: "smile-dental-clinic-arekere",
+    name: "Smile Dental Clinic",
+    location: "Arekere, Bannerghatta Road, Bengaluru",
+    logo: logo27,
+    banner: sailajaBanner,
+    description:
+      "Smile Dental Clinic is a modern dental care center providing smile designing, aligners, veneers, implant planning, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry solutions.",
+  },
 ];
 
 const stats = [
@@ -490,7 +501,7 @@ function Index() {
               </p>
 
               <h2 className="mt-3 text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight">
-                Elite Dental Clinics
+                Our Elite Dental Clinics
               </h2>
             </div>
 

@@ -65,6 +65,7 @@ export default function OrderModal({ open, onClose }: Props) {
 
   const [product, setProduct] = useState("");
   const [shade, setShade] = useState("");
+  const [shadeMatchingRequired, setShadeMatchingRequired] = useState(false);
   const [notes, setNotes] = useState("");
 
   const [selectedTeeth, setSelectedTeeth] = useState<number[]>([]);
@@ -347,6 +348,7 @@ export default function OrderModal({ open, onClose }: Props) {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  placeholder="BOB WICK"
                   className="w-full h-[52px] border border-gray-300 rounded-lg px-4"
                 />
               </div>
@@ -461,6 +463,32 @@ export default function OrderModal({ open, onClose }: Props) {
                 </option>
               ))}
             </select>
+            <div className="mt-4">
+              <div className="mt-5 p-4 border rounded-xl bg-purple-50 border-purple-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-purple-900">Need Help Selecting a Shade?</h4>
+
+                    <p className="text-sm text-purple-700 mt-1">
+                      Use our AI Shade Matcher to detect the closest VITA shade from a patient
+                      image.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => window.open("/shade", "_blank")}
+                    className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700"
+                  >
+                    Launch Shade Matcher
+                  </button>
+                </div>
+              </div>
+
+              <p className="text-sm text-gray-500 mt-2">
+                Upload a patient image and let AI detect the closest shade.
+              </p>
+            </div>
           </div>
 
           {/* FDI LAYOUT */}
@@ -535,12 +563,49 @@ export default function OrderModal({ open, onClose }: Props) {
 
           {/* FILES */}
 
+          {/* FILES */}
+
           <div>
             <h3 className="text-[24px] font-semibold mb-5">Upload Files</h3>
 
-            <input type="file" multiple onChange={(e) => setFiles(e.target.files)} />
-          </div>
+            <label className="border-2 border-dashed border-gray-300 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-all">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-14 h-14 text-purple-600 mb-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 16V4m0 0l-4 4m4-4l4 4M4 16.5v1.75A1.75 1.75 0 005.75 20h12.5A1.75 1.75 0 0020 18.25V16.5"
+                />
+              </svg>
 
+              <span className="font-semibold text-gray-700">Click to Upload Files</span>
+
+              <span className="text-sm text-gray-500 mt-1">STL, Images, PDFs, Case Photos</span>
+
+              <input
+                type="file"
+                multiple
+                className="hidden"
+                onChange={(e) => setFiles(e.target.files)}
+              />
+            </label>
+
+            {files && files.length > 0 && (
+              <div className="mt-4 space-y-2">
+                {Array.from(files).map((file, index) => (
+                  <div key={index} className="text-sm bg-gray-50 border rounded-lg px-3 py-2">
+                    📎 {file.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           {/* PAYMENT */}
 
           <div>
