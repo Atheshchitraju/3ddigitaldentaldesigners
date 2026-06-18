@@ -32,6 +32,7 @@ import sculpturaBanner from "../../assets/sculptura-banner.webp";
 import smileDentalBanner from "../../assets/smileDentalBanner.webp";
 import whitePearlsBanner from "../../assets/white-pearls-banner.webp";
 import sailajaBanner from "@/assets/sailajaBanner.webp";
+import maDentalBanner from "@/assets/maDentalBanner.webp";
 /* =========================
    DOCTORS
 ========================= */
@@ -64,6 +65,7 @@ import sculpturaDoctor from "../../assets/sculptura-doctor.webp";
 import smileDentalDoctor from "../../assets/smileDentalDoctor.webp";
 import whitePearlsDoctor from "../../assets/white-pearls-doctor.webp";
 import sailajaDoctor from "../../assets/sailajaDoctor.webp";
+import maDentalDoctor from "../../assets/maDentalDoctor.webp";
 
 /* =========================
    GALLERY
@@ -172,6 +174,11 @@ import sailaja1 from "../../assets/sailaja1.webp";
 import sailaja2 from "../../assets/sailaja2.webp";
 import sailaja3 from "../../assets/sailaja3.webp";
 import sailaja4 from "../../assets/sailaja4.webp";
+
+import maDental1 from "../../assets/maDental1.webp";
+import maDental2 from "../../assets/maDental2.webp";
+import maDental3 from "../../assets/maDental3.webp";
+import maDental4 from "../../assets/maDental4.webp";
 
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
@@ -1833,6 +1840,69 @@ const clinics = [
 
         additionalInfo:
           "Medical Registration No: A-9382 | Established in 2015 | Advanced Digital Dentistry Specialist",
+      },
+    ],
+  },
+  {
+    id: "ma-dental-piler",
+
+    name: "MA Dental",
+
+    logo: maDentalDoctor,
+
+    banner: maDentalBanner,
+
+    description:
+      "MA Dental is a modern multispeciality dental clinic established in 2021, offering comprehensive dental treatments including smile designing, aligners, veneers, implantology, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry workflows.",
+
+    location: "Kotapalli Circle, Piler, Andhra Pradesh",
+
+    phone: "+91 9515299307",
+
+    email: "dr.bhanu4all@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d248170.51456440974!2d78.57090900154205!3d13.617304009704133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb295b4f7fa8551%3A0x83cdc378e5ee6d77!2sMa%20Dental!5e0!3m2!1sen!2sin!4v1781328572179!5m2!1sen!2sin",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [maDental1, maDental2, maDental3, maDental4],
+
+    doctors: [
+      {
+        name: "Dr. Bhanu Prakash Reddy T",
+
+        role: "BDS",
+
+        image: maDentalDoctor,
+
+        experience: "15 Years Experience",
+
+        phone: "9515299307",
+
+        email: "dr.bhanu4all@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry, Pediatric Dentistry, Oral Surgery",
+
+        clinicName: "MA Dental",
+
+        address: "Kotapalli Circle, Tirupati Road, Piler, Andhra Pradesh 517214",
+
+        website: "",
+
+        additionalInfo:
+          "Medical Registration No: A9402 | Established in 2021 | Advanced Digital Dentistry Specialist",
       },
     ],
   },

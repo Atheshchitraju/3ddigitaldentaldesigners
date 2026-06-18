@@ -9,16 +9,26 @@ declare global {
 }
 
 const products = [
-  "Zirconia Classic",
-  "Zirconia Monolithic Premium",
-  "Implant Prosthetics",
-  "DMLS Crown & Bridge",
-  "DMLS Full Metal",
-  "E-Max CAD",
-  "E-Max Veneer CAD",
-  "Precision Attachments",
-  "Night Guard",
-  "Bleaching Tray",
+  { name: "Zirconia Classic", price: 1000 },
+  { name: "Zirconia Monolithic Classic", price: 1200 },
+  { name: "Zirconia Premium", price: 1800 },
+  { name: "Zirconia Monolithic Premium", price: 2000 },
+  { name: "Zirconia Premium Multilayered", price: 3000 },
+  { name: "Zirconia Monolithic Multilayered", price: 4500 },
+
+  { name: "Cement Retained Zirconia Classic Per Unit", price: 1600 },
+  { name: "Cement Retained Zirconia Premium Per Unit", price: 2600 },
+
+  { name: "DMLS Crown & Bridge", price: 650 },
+  { name: "DMLS Crown & Bridge Premium", price: 800 },
+
+  { name: "E-Max CAD Per Unit", price: 2500 },
+  { name: "E-Max Veneer CAD Per Unit", price: 2700 },
+
+  { name: "Night Guard", price: 900 },
+  { name: "Bleaching Tray U/L", price: 600 },
+
+  { name: "Aligners per arch", price: 1200 },
 ];
 
 const shades = [
@@ -79,6 +89,16 @@ export default function OrderModal({ open, onClose }: Props) {
   const [paymentMode, setPaymentMode] = useState("postpaid");
 
   const [amount, setAmount] = useState(1000);
+  const [quantity, setQuantity] = useState(1);
+  const handleProductChange = (selectedProduct: string) => {
+    setProduct(selectedProduct);
+
+    const selected = products.find((p) => p.name === selectedProduct);
+
+    if (selected) {
+      setAmount(selected.price);
+    }
+  };
 
   if (!open) return null;
 
@@ -133,180 +153,142 @@ export default function OrderModal({ open, onClose }: Props) {
         selectedTeeth,
         notes,
 
-        // PAYMENT DATA
-
-        amount,
+        amount: amount * quantity,
+        quantity,
 
         paymentMode,
-
         paymentStatus: "pending",
       };
 
-      const response = await fetch(`${API_URL}/api/orders`, {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(orderData),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        // PAY LATER FLOW
-
-        if (paymentMode === "postpaid") {
-          alert("Order Submitted Successfully");
-
-          resetForm();
-
-          return;
-        }
-
-        // PAY NOW FLOW
-
-        const razorpayResponse = await fetch(`${API_URL}/api/payment/create-order`, {
+      // PAY LATER
+      if (paymentMode === "postpaid") {
+        const response = await fetch(`${API_URL}/api/orders`, {
           method: "POST",
-
           headers: {
             "Content-Type": "application/json",
           },
-
-          body: JSON.stringify({
-            amount,
-            orderId: data.order.orderId,
-          }),
+          body: JSON.stringify(orderData),
         });
 
-        const razorpayData = await razorpayResponse.json();
+        const data = await response.json();
 
-        const options = {
-          key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        if (data.success) {
+          alert("Order Submitted Successfully");
+          resetForm();
+        } else {
+          alert(data.message || "Failed to submit order");
+        }
 
-          amount: razorpayData.razorpayOrder.amount,
+        return;
+      }
 
-          currency: "INR",
+      // PAY NOW
+      const razorpayResponse = await fetch(`${API_URL}/api/payment/create-order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: amount * quantity,
+        }),
+      });
 
-          name: "3D Digital Dental Lab",
+      const razorpayData = await razorpayResponse.json();
 
-          description: "Dental Order Payment",
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
 
-          image: "/assets/logo.webp",
+        amount: razorpayData.razorpayOrder.amount,
 
-          order_id: razorpayData.razorpayOrder.id,
+        currency: "INR",
 
-          // config: {
-          //   display: {
-          //     blocks: {
-          //       upi: {
-          //         name: "UPI",
+        name: "3D Digital Dental Lab",
 
-          //         instruments: [
-          //           {
-          //             method: "upi",
-          //           },
-          //         ],
-          //       },
+        description: "Dental Order Payment",
 
-          //       cards: {
-          //         name: "Cards",
+        image: "/assets/logo.webp",
 
-          //         instruments: [
-          //           {
-          //             method: "card",
-          //           },
-          //         ],
-          //       },
+        order_id: razorpayData.razorpayOrder.id,
 
-          //       netbanking: {
-          //         name: "Netbanking",
+        prefill: {
+          name,
+          contact: phone,
+          email: finalClinicEmail || "",
+        },
 
-          //         instruments: [
-          //           {
-          //             method: "netbanking",
-          //           },
-          //         ],
-          //       },
+        theme: {
+          color: "#0f172a",
+        },
 
-          //       wallet: {
-          //         name: "Wallet",
+        handler: async function (response: any) {
+          const verifyResponse = await fetch(`${API_URL}/api/payment/verify`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
 
-          //         instruments: [
-          //           {
-          //             method: "wallet",
-          //           },
-          //         ],
-          //       },
-          //     },
+              razorpay_payment_id: response.razorpay_payment_id,
 
-          //     sequence: ["block.upi", "block.cards", "block.netbanking", "block.wallet"],
+              razorpay_signature: response.razorpay_signature,
 
-          //     preferences: {
-          //       show_default_blocks: true,
-          //     },
-          //   },
-          // },
+              paymentMethod: "Online",
+            }),
+          });
 
-          prefill: {
-            name: name,
-            contact: phone,
-            email: finalClinicEmail || "",
-          },
+          const verifyData = await verifyResponse.json();
 
-          theme: {
-            color: "#0f172a",
-          },
-
-          handler: async function (response: any) {
-            const verifyResponse = await fetch(`${API_URL}/api/payment/verify`, {
+          if (verifyData.success) {
+            const saveOrderResponse = await fetch(`${API_URL}/api/orders`, {
               method: "POST",
-
               headers: {
                 "Content-Type": "application/json",
               },
-
               body: JSON.stringify({
-                orderId: data.order.orderId,
+                ...orderData,
 
-                razorpay_order_id: response.razorpay_order_id,
+                paymentStatus: "paid",
 
-                razorpay_payment_id: response.razorpay_payment_id,
+                paymentDetails: {
+                  razorpayOrderId: response.razorpay_order_id,
 
-                razorpay_signature: response.razorpay_signature,
+                  razorpayPaymentId: response.razorpay_payment_id,
 
-                paymentMethod: "Online",
+                  razorpaySignature: response.razorpay_signature,
+
+                  paidAt: new Date(),
+
+                  paymentMethod: "Online",
+                },
               }),
             });
 
-            const verifyData = await verifyResponse.json();
+            const saveOrderData = await saveOrderResponse.json();
 
-            if (verifyData.success) {
-              alert("Payment Successful");
-
+            if (saveOrderData.success) {
+              alert("Payment Successful & Order Created");
               resetForm();
             } else {
-              alert("Payment Verification Failed");
+              alert("Payment successful but order save failed");
             }
+          } else {
+            alert("Payment Verification Failed");
+          }
+        },
+
+        modal: {
+          ondismiss: function () {
+            console.log("Payment popup closed");
           },
+        },
+      };
 
-          modal: {
-            ondismiss: function () {
-              console.log("Payment popup closed");
-            },
-          },
-        };
+      const rzp = new window.Razorpay(options);
 
-        const rzp = new window.Razorpay(options);
-
-        rzp.open();
-      } else {
-        alert(data.message || "Failed to submit order");
-      }
+      rzp.open();
     } catch (error) {
       console.log(error);
-
       alert("Something went wrong");
     } finally {
       setLoading(false);
@@ -432,14 +414,14 @@ export default function OrderModal({ open, onClose }: Props) {
 
             <select
               value={product}
-              onChange={(e) => setProduct(e.target.value)}
+              onChange={(e) => handleProductChange(e.target.value)}
               className="w-full h-[52px] border border-gray-300 rounded-lg px-4"
             >
               <option value="">Select Product</option>
 
               {products.map((item) => (
-                <option key={item} value={item}>
-                  {item}
+                <option key={item.name} value={item.name}>
+                  {item.name}
                 </option>
               ))}
             </select>
@@ -634,12 +616,13 @@ export default function OrderModal({ open, onClose }: Props) {
             </div>
 
             <div className="mt-5">
-              <label className="block mb-2 text-[15px] font-medium text-gray-700">Amount</label>
+              <label className="block mb-2 font-medium">Quantity / Units</label>
 
               <input
                 type="number"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
+                min="1"
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
                 className="w-full h-[52px] border border-gray-300 rounded-lg px-4"
               />
             </div>
@@ -660,7 +643,7 @@ export default function OrderModal({ open, onClose }: Props) {
               {loading
                 ? "Processing..."
                 : paymentMode === "prepaid"
-                  ? `Pay ₹${amount}`
+                  ? `Pay ₹${amount * quantity}`
                   : "Submit Order"}
             </button>
           </div>

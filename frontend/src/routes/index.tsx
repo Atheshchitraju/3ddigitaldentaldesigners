@@ -34,6 +34,7 @@ import logo24 from "@/assets/sculptura-logo.webp";
 import logo25 from "@/assets/smileDentallogo.webp";
 import logo26 from "@/assets/white-pearls-logo.webp";
 import logo27 from "@/assets/sailajalogo.webp";
+import logo28 from "@/assets/maDentallogo.webp";
 
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
@@ -72,6 +73,7 @@ import sculpturaBanner from "@/assets/sculptura-banner.webp";
 import smileDentalBanner from "@/assets/smileDentalBanner.webp";
 import whitePearlsBanner from "@/assets/white-pearls-banner.webp";
 import sailajaBanner from "@/assets/sailajaBanner.webp";
+import maDentalBanner from "@/assets/maDentalBanner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -389,6 +391,15 @@ const clients = [
     banner: sailajaBanner,
     description:
       "Smile Dental Clinic is a modern dental care center providing smile designing, aligners, veneers, implant planning, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry solutions.",
+  },
+  {
+    id: "ma-dental-piler",
+    name: "MA Dental",
+    location: "Kotapalli Circle, Piler, Andhra Pradesh",
+    logo: logo28,
+    banner: maDentalBanner,
+    description:
+      "MA Dental is a modern dental clinic providing smile designing, aligners, veneers, implant planning, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry solutions.",
   },
 ];
 

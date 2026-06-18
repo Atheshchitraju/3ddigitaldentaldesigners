@@ -29,6 +29,7 @@ import sculpturaDoctor from "@/assets/sculptura-doctor.webp";
 import smileDentalDoctor from "@/assets/smileDentalDoctor.webp";
 import whitePearlsDoctor from "@/assets/white-pearls-doctor.webp";
 import sailajaDoctor from "@/assets/sailajaDoctor.webp";
+import maDentalDoctor from "@/assets/maDentalDoctor.webp";
 
 export const Route = createFileRoute("/clinics/")({
   component: ClinicsPage,
@@ -261,6 +262,14 @@ export const clinics = [
     email: "dr.shilubds@gmail.com",
     whatsapp: "9148630602",
     logo: sailajaDoctor,
+  },
+  {
+    name: "MA Dental",
+    slug: "ma-dental-piler",
+    location: "Kotapalli Circle, Piler, Andhra Pradesh",
+    email: "dr.bhanu4all@gmail.com",
+    whatsapp: "9515299307",
+    logo: maDentalDoctor,
   },
 ];
 
