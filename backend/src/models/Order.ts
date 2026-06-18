@@ -77,6 +77,11 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+    quantity: {
+      type: Number,
+      default: 1,
+    },
+
     paymentMode: {
       type: String,
       enum: ["prepaid", "postpaid"],

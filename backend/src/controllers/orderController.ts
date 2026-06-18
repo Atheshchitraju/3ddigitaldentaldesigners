@@ -18,8 +18,12 @@ export const createOrder = async (req: Request, res: Response) => {
       notes,
 
       amount,
+      quantity,
+
       paymentMode,
       paymentStatus,
+
+      paymentDetails,
     } = req.body;
 
     const orderId = `ORD-${Date.now()}`;
@@ -36,8 +40,12 @@ export const createOrder = async (req: Request, res: Response) => {
       notes,
 
       amount,
+      quantity,
+
       paymentMode,
       paymentStatus,
+
+      paymentDetails,
 
       orderId,
     });
@@ -71,6 +79,12 @@ ${product}
 
 🎨 Shade:
 ${shade || "Not Selected"}
+
+💰 Amount:
+₹${amount * quantity}
+
+📦 Quantity:
+${quantity}
 
 We will notify you once production begins.`,
         );
@@ -112,6 +126,12 @@ ${selectedTeeth?.length ? selectedTeeth.join(", ") : "Not Provided"}
 
 📝 Notes:
 ${notes || "No Notes"}
+
+💰 Amount:
+₹${amount * quantity}
+
+📦 Quantity:
+${quantity}
 
 ━━━━━━━━━━━━━━━
 

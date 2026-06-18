@@ -11,6 +11,7 @@ import caseRoutes from "./routes/caseRoutes";
 import orderRoutes from "./routes/orderRoutes";
 import authRoutes from "./routes/authRoutes";
 import paymentRoutes from "./routes/paymentRoutes";
+import deviceRoutes from "./routes/deviceRoutes";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/api/orders", orderRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/device", deviceRoutes);
 
 const PORT = process.env.PORT || 5000;
 
