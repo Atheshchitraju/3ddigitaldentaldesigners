@@ -14,6 +14,7 @@ import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as EquipmentRouteImport } from './routes/equipment'
 import { Route as DesignersRouteImport } from './routes/designers'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BookScannerRouteImport } from './routes/book-scanner'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShadeIndexRouteImport } from './routes/shade/index'
@@ -46,6 +47,11 @@ const DesignersRoute = DesignersRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookScannerRoute = BookScannerRouteImport.update({
+  id: '/book-scanner',
+  path: '/book-scanner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -92,6 +98,7 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/book-scanner': typeof BookScannerRoute
   '/contact': typeof ContactRoute
   '/designers': typeof DesignersRoute
   '/equipment': typeof EquipmentRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/book-scanner': typeof BookScannerRoute
   '/contact': typeof ContactRoute
   '/designers': typeof DesignersRoute
   '/equipment': typeof EquipmentRoute
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/book-scanner': typeof BookScannerRoute
   '/contact': typeof ContactRoute
   '/designers': typeof DesignersRoute
   '/equipment': typeof EquipmentRoute
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/book-scanner'
     | '/contact'
     | '/designers'
     | '/equipment'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/book-scanner'
     | '/contact'
     | '/designers'
     | '/equipment'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/book-scanner'
     | '/contact'
     | '/designers'
     | '/equipment'
@@ -186,6 +198,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BookScannerRoute: typeof BookScannerRoute
   ContactRoute: typeof ContactRoute
   DesignersRoute: typeof DesignersRoute
   EquipmentRoute: typeof EquipmentRoute
@@ -234,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book-scanner': {
+      id: '/book-scanner'
+      path: '/book-scanner'
+      fullPath: '/book-scanner'
+      preLoaderRoute: typeof BookScannerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -298,6 +318,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BookScannerRoute: BookScannerRoute,
   ContactRoute: ContactRoute,
   DesignersRoute: DesignersRoute,
   EquipmentRoute: EquipmentRoute,

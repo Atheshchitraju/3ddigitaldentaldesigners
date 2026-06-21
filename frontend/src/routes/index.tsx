@@ -479,6 +479,8 @@ const cinematicServices = [
 function Index() {
   const [active, setActive] = useState(0);
 
+  const [showScannerModal, setShowScannerModal] = useState(false);
+
   const nextSlide = () => {
     setActive((prev) => (prev + 1) % clients.length);
   };
@@ -834,6 +836,52 @@ function Index() {
           </div>
         </div> 
         */}
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="py-16 bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+            <div className="grid lg:grid-cols-2 gap-8 items-center p-8 md:p-12">
+              <div>
+                <span className="inline-block px-4 py-2 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">
+                  📡 Scanner On Demand
+                </span>
+
+                <h2 className="mt-4 text-4xl md:text-5xl font-bold text-gray-900">
+                  Need an Intraoral Scanner?
+                </h2>
+
+                <p className="mt-5 text-lg text-gray-600 leading-8">
+                  Don't own a scanner yet? We bring our scanner and trained operator directly to
+                  your clinic.
+                </p>
+
+                <div className="mt-6 space-y-3">
+                  <div>✅ Same Day Availability</div>
+                  <div>✅ Trained Scanner Operator</div>
+                  <div>✅ Digital Impression Support</div>
+                  <div>✅ Available Across Bengaluru</div>
+                </div>
+
+                <button
+                  onClick={() => setShowScannerModal(true)}
+                  className="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition"
+                >
+                  Book Scanner Now
+                </button>
+              </div>
+
+              <div className="flex justify-center">
+                <div className="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-3xl p-12 text-center text-white w-full">
+                  <div className="text-7xl mb-4">📡</div>
+
+                  <h3 className="text-3xl font-bold">Scanner Booking Service</h3>
+
+                  <p className="mt-4 text-blue-100">On-demand scanner support for clinics.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1254,7 +1302,50 @@ function Index() {
           </div>
         </div>
       </section>
+      {showScannerModal && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-lg">
+            <h2 className="text-2xl font-bold mb-6">Book Scanner Request</h2>
 
+            <div className="space-y-4">
+              <input
+                type="text"
+                placeholder="Doctor Name"
+                className="w-full border p-3 rounded-xl"
+              />
+
+              <input
+                type="text"
+                placeholder="Clinic Name"
+                className="w-full border p-3 rounded-xl"
+              />
+
+              <input
+                type="text"
+                placeholder="Phone Number"
+                className="w-full border p-3 rounded-xl"
+              />
+
+              <input type="date" className="w-full border p-3 rounded-xl" />
+
+              <textarea placeholder="Remarks" className="w-full border p-3 rounded-xl" rows={4} />
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowScannerModal(false)}
+                  className="flex-1 border rounded-xl py-3"
+                >
+                  Cancel
+                </button>
+
+                <button className="flex-1 bg-blue-600 text-white rounded-xl py-3">
+                  Submit Request
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* HERO */}
     </PageShell>
   );

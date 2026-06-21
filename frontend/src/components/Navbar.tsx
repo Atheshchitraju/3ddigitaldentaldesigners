@@ -3,9 +3,14 @@ import { useEffect, useState } from "react";
 import logo from "@/assets/3D.webp";
 import OrderModal from "@/components/OrderModal";
 
+// const links = [
+//   { to: "/", label: "Home" },
+//   { to: "/clinics", label: "Clinics" },
+//   { to: "/portfolio", label: "Portfolio" },
+//   { to: "/about", label: "About" },
+// ] as const;
 const links = [
   { to: "/", label: "Home" },
-  { to: "/clinics", label: "Clinics" },
   { to: "/portfolio", label: "Portfolio" },
   { to: "/about", label: "About" },
 ] as const;
@@ -69,9 +74,27 @@ export function Navbar() {
               </div>
             </div>
           </Link>
+          {/* Highlight Buttons */}
+          <div className="hidden lg:flex items-center gap-3 ml-8">
+            <Link
+              to="/clinics"
+              preload="intent"
+              className="px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white font-semibold shadow-lg hover:scale-105 transition-all duration-200"
+            >
+              🏥 Clinics
+            </Link>
+
+            <Link
+              to="/book-scanner"
+              preload="intent"
+              className="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-lg hover:scale-105 transition-all duration-200"
+            >
+              📡 Book Scanner
+            </Link>
+          </div>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-1 ml-auto">
             {links.map((l) =>
               l.to === "/clinics" ? (
                 <Link
@@ -98,6 +121,12 @@ export function Navbar() {
             )}
 
             {/* Dentists Dropdown */}
+            {/* <button
+              onClick={() => setShowScannerModal(true)}
+              className="ml-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-lg hover:scale-105 transition-all duration-200 animate-pulse"
+            >
+              📡 Book Scanner
+            </button> */}
             <div className="relative">
               <button
                 onClick={() => setDentistsOpen(!dentistsOpen)}
@@ -163,29 +192,38 @@ export function Navbar() {
         {open && (
           <div className="lg:hidden px-4 pb-4">
             <div className="glass mt-3 rounded-3xl p-4 flex flex-col gap-1 shadow-2xl border border-white/10 backdrop-blur-xl">
-              {links.map((l) =>
-                l.to === "/clinics" ? (
-                  <Link
-                    key={l.to}
-                    to={l.to}
-                    preload="intent"
-                    onClick={() => setOpen(false)}
-                    className="mx-2 my-1 px-4 py-3 text-sm font-semibold rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white shadow-md"
-                  >
-                    {l.label}
-                  </Link>
-                ) : (
-                  <Link
-                    key={l.to}
-                    to={l.to}
-                    preload="intent"
-                    onClick={() => setOpen(false)}
-                    className="px-4 py-3 text-sm font-medium rounded-xl hover:bg-white/10 transition-colors"
-                  >
-                    {l.label}
-                  </Link>
-                ),
-              )}
+              {/* Highlight Actions */}
+              <Link
+                to="/clinics"
+                preload="intent"
+                onClick={() => setOpen(false)}
+                className="mx-2 my-1 px-4 py-3 text-sm font-semibold rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-500 text-white shadow-md text-center"
+              >
+                🏥 Clinics
+              </Link>
+
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  setShowScannerModal(true);
+                }}
+                className="mx-2 my-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-md"
+              >
+                📡 Book Scanner
+              </button>
+
+              {/* Normal Menu */}
+              {links.map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  preload="intent"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 text-sm font-medium rounded-xl hover:bg-white/10 transition-colors"
+                >
+                  {l.label}
+                </Link>
+              ))}
 
               <div className="border-t border-white/10 my-2 pt-2">
                 <div className="px-4 py-2 text-xs uppercase tracking-wider text-gray-400">
@@ -218,7 +256,6 @@ export function Navbar() {
           </div>
         )}
       </header>
-
       <OrderModal open={openOrder} onClose={() => setOpenOrder(false)} />
     </>
   );
