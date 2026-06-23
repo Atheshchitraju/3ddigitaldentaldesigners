@@ -865,12 +865,13 @@ function Index() {
                   <div>✅ Available Across Bengaluru</div>
                 </div>
 
-                <button
-                  onClick={() => setShowScannerModal(true)}
-                  className="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition"
+                <Link
+                  to="/book-scanner"
+                  preload="intent"
+                  className="inline-flex mt-8 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-semibold text-lg transition"
                 >
-                  Book Scanner Now
-                </button>
+                  📡 Book Scanner Now
+                </Link>
               </div>
 
               <div className="flex justify-center">

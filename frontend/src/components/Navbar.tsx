@@ -202,15 +202,14 @@ export function Navbar() {
                 🏥 Clinics
               </Link>
 
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  setShowScannerModal(true);
-                }}
-                className="mx-2 my-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-md"
+              <Link
+                to="/book-scanner"
+                preload="intent"
+                onClick={() => setOpen(false)}
+                className="mx-2 my-1 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold shadow-md text-center"
               >
                 📡 Book Scanner
-              </button>
+              </Link>
 
               {/* Normal Menu */}
               {links.map((l) => (
