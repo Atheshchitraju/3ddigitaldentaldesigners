@@ -3,15 +3,27 @@ import mongoose from "mongoose";
 const bookingSchema = new mongoose.Schema(
   {
     clinicName: String,
+
     clinicAddress: String,
 
+    doctorName: String,
+
+    city: String,
+
+    phone: String,
+
     scannerId: String,
+
     scannerLocation: String,
 
     bookingDate: String,
+
     bookingTime: String,
 
-    phone: String,
+    isRegistered: {
+      type: Boolean,
+      default: true,
+    },
 
     status: {
       type: String,
@@ -23,7 +35,4 @@ const bookingSchema = new mongoose.Schema(
   },
 );
 
-export default mongoose.model(
-  "Booking",
-  bookingSchema,
-);
+export default mongoose.model("Booking", bookingSchema);

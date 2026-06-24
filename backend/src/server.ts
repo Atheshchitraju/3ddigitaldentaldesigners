@@ -13,6 +13,7 @@ import authRoutes from "./routes/authRoutes";
 import paymentRoutes from "./routes/paymentRoutes";
 import deviceRoutes from "./routes/deviceRoutes";
 import bookingRoutes from "./routes/bookingRoutes";
+import clinicRoutes from "./routes/clinicRoutes";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/device", deviceRoutes);
 
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/clinics", clinicRoutes);
 
 const PORT = process.env.PORT || 5000;
 
