@@ -285,9 +285,19 @@ function BookScanner() {
   const [searchClinic, setSearchClinic] = useState("");
 
   const [selectedClinic, setSelectedClinic] = useState<Clinic | null>(null);
+  const [clinics, setClinics] = useState<Clinic[]>([]);
 
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [showNewClinicForm, setShowNewClinicForm] = useState(false);
+
+  const [newClinic, setNewClinic] = useState({
+    clinicName: "",
+    doctorName: "",
+    phone: "",
+    address: "",
+    city: "",
+  });
 
   const filteredClinics = clinics.filter((clinic) =>
     clinic.name.toLowerCase().includes(searchClinic.toLowerCase()),
@@ -297,6 +307,12 @@ function BookScanner() {
     fetch("https://threeddigitaldentaldesigners.onrender.com/api/device")
       .then((res) => res.json())
       .then((data) => setDevices(data))
+      .catch((err) => console.error(err));
+  }, []);
+  useEffect(() => {
+    fetch("https://threeddigitaldentaldesigners.onrender.com/api/clinics")
+      .then((res) => res.json())
+      .then((data) => setClinics(data))
       .catch((err) => console.error(err));
   }, []);
 
@@ -419,6 +435,71 @@ function BookScanner() {
       alert("Server error");
     }
   };
+  const bookNewClinic = async () => {
+    if (!newClinic.clinicName || !newClinic.doctorName || !newClinic.phone) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "https://threeddigitaldentaldesigners.onrender.com/api/bookings",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            clinicName: newClinic.clinicName,
+            doctorName: newClinic.doctorName,
+            phone: newClinic.phone,
+            clinicAddress: newClinic.address,
+            city: newClinic.city,
+
+            bookingDate: selectedDate,
+            bookingTime: selectedTime,
+
+            isRegistered: false,
+            status: "Pending",
+          }),
+        },
+      );
+
+      if (response.ok) {
+        await fetch("https://threeddigitaldentaldesigners.onrender.com/api/clinics", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: newClinic.clinicName,
+            address: newClinic.address,
+            phone: newClinic.phone,
+            doctorName: newClinic.doctorName,
+            city: newClinic.city,
+            latitude: 0,
+            longitude: 0,
+            isApproved: false,
+          }),
+        });
+
+        alert("Clinic registration request submitted");
+
+        setNewClinic({
+          clinicName: "",
+          doctorName: "",
+          phone: "",
+          address: "",
+          city: "",
+        });
+
+        setShowNewClinicForm(false);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Server error");
+    }
+  };
 
   return (
     <div className="min-h-screen pt-32 px-4 md:px-6">
@@ -431,7 +512,7 @@ function BookScanner() {
 
         <div className="grid lg:grid-cols-5 gap-6">
           <div className="lg:col-span-2 bg-white rounded-3xl p-6 shadow-lg border">
-            <h2 className="text-2xl font-semibold mb-6">Find Nearest Scanner</h2>
+            <h2 className="text-2xl font-semibold mb-6">Find Nearest IntraOral Scanner</h2>
 
             <div className="relative mb-4">
               <input
@@ -442,24 +523,109 @@ function BookScanner() {
                 className="w-full border rounded-xl p-3"
               />
 
-              {searchClinic.length > 0 &&
-                selectedClinic?.name !== searchClinic &&
-                filteredClinics.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 bg-white border rounded-xl shadow-lg max-h-60 overflow-auto z-50">
-                    {filteredClinics.map((clinic) => (
-                      <div
-                        key={clinic.id}
-                        onClick={() => {
-                          setSelectedClinic(clinic);
-                          setSearchClinic(clinic.name);
-                        }}
-                        className="cursor-pointer p-3 hover:bg-gray-100"
+              {searchClinic.length > 0 && selectedClinic?.name !== searchClinic && (
+                <div className="absolute top-full left-0 right-0 bg-white border rounded-xl shadow-lg max-h-60 overflow-auto z-50">
+                  {filteredClinics.map((clinic) => (
+                    <div
+                      key={clinic.id}
+                      onClick={() => {
+                        setSelectedClinic(clinic);
+                        setSearchClinic(clinic.name);
+                      }}
+                      className="cursor-pointer p-3 hover:bg-gray-100"
+                    >
+                      {clinic.name}
+                    </div>
+                  ))}
+
+                  {filteredClinics.length === 0 && (
+                    <div className="p-3 border-t">
+                      <button
+                        type="button"
+                        onClick={() => setShowNewClinicForm(true)}
+                        className="text-blue-600 font-semibold"
                       >
-                        {clinic.name}
-                      </div>
-                    ))}
-                  </div>
-                )}
+                        + Register New Clinic
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+              {showNewClinicForm && (
+                <div className="mt-4 space-y-3 rounded-xl border p-4 bg-gray-50">
+                  <input
+                    type="text"
+                    placeholder="Clinic Name"
+                    value={newClinic.clinicName}
+                    onChange={(e) =>
+                      setNewClinic({
+                        ...newClinic,
+                        clinicName: e.target.value,
+                      })
+                    }
+                    className="w-full border rounded-lg p-2"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Doctor Name"
+                    value={newClinic.doctorName}
+                    onChange={(e) =>
+                      setNewClinic({
+                        ...newClinic,
+                        doctorName: e.target.value,
+                      })
+                    }
+                    className="w-full border rounded-lg p-2"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Phone Number"
+                    value={newClinic.phone}
+                    onChange={(e) =>
+                      setNewClinic({
+                        ...newClinic,
+                        phone: e.target.value,
+                      })
+                    }
+                    className="w-full border rounded-lg p-2"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Address"
+                    value={newClinic.address}
+                    onChange={(e) =>
+                      setNewClinic({
+                        ...newClinic,
+                        address: e.target.value,
+                      })
+                    }
+                    className="w-full border rounded-lg p-2"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="City"
+                    value={newClinic.city}
+                    onChange={(e) =>
+                      setNewClinic({
+                        ...newClinic,
+                        city: e.target.value,
+                      })
+                    }
+                    className="w-full border rounded-lg p-2"
+                  />
+
+                  <button
+                    onClick={bookNewClinic}
+                    className="w-full bg-green-600 text-white p-3 rounded-xl"
+                  >
+                    Submit Clinic Request
+                  </button>
+                </div>
+              )}
             </div>
 
             {selectedClinic && (
@@ -578,10 +744,7 @@ function BookScanner() {
 
             <p>Status: {nearestScanner.status}</p>
 
-            <button
-              onClick={bookScanner}
-              className="mt-4 rounded-xl bg-green-600 px-5 py-3 text-white"
-            >
+            <button className="mt-4 rounded-xl bg-green-600 px-5 py-3 text-white">
               Book This Scanner
             </button>
           </div>

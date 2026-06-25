@@ -201,7 +201,35 @@ function AdminOrdersPage() {
             <p className="text-gray-500 mt-2">Manage all clinic orders and workflow</p>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => navigate({ to: "/admin/orders" })}
+              className="bg-blue-600 text-white px-5 py-3 rounded-xl font-medium"
+            >
+              Orders
+            </button>
+
+            <button
+              onClick={() => navigate({ to: "/admin/bookings" })}
+              className="bg-purple-600 text-white px-5 py-3 rounded-xl font-medium"
+            >
+              Scanner Bookings
+            </button>
+
+            <button
+              onClick={() => navigate({ to: "/admin/scanners" })}
+              className="bg-cyan-600 text-white px-5 py-3 rounded-xl font-medium"
+            >
+              Active Scanners
+            </button>
+
+            <button
+              onClick={() => navigate({ to: "/admin/clinics" })}
+              className="bg-orange-600 text-white px-5 py-3 rounded-xl font-medium"
+            >
+              Clinics
+            </button>
+
             <button
               onClick={exportToExcel}
               className="bg-green-600 text-white px-5 py-3 rounded-xl font-medium"

@@ -23,6 +23,8 @@ import { Route as ClinicsIdRouteImport } from './routes/clinics/$id'
 import { Route as AdminScannersRouteImport } from './routes/admin/scanners'
 import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminClinicsRouteImport } from './routes/admin/clinics'
+import { Route as AdminBookingsRouteImport } from './routes/admin/bookings'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -94,6 +96,16 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminClinicsRoute = AdminClinicsRouteImport.update({
+  id: '/admin/clinics',
+  path: '/admin/clinics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminBookingsRoute = AdminBookingsRouteImport.update({
+  id: '/admin/bookings',
+  path: '/admin/bookings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -104,6 +116,8 @@ export interface FileRoutesByFullPath {
   '/equipment': typeof EquipmentRoute
   '/portfolio': typeof PortfolioRoute
   '/services': typeof ServicesRoute
+  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/clinics': typeof AdminClinicsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/scanners': typeof AdminScannersRoute
@@ -120,6 +134,8 @@ export interface FileRoutesByTo {
   '/equipment': typeof EquipmentRoute
   '/portfolio': typeof PortfolioRoute
   '/services': typeof ServicesRoute
+  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/clinics': typeof AdminClinicsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/scanners': typeof AdminScannersRoute
@@ -137,6 +153,8 @@ export interface FileRoutesById {
   '/equipment': typeof EquipmentRoute
   '/portfolio': typeof PortfolioRoute
   '/services': typeof ServicesRoute
+  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/clinics': typeof AdminClinicsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/scanners': typeof AdminScannersRoute
@@ -155,6 +173,8 @@ export interface FileRouteTypes {
     | '/equipment'
     | '/portfolio'
     | '/services'
+    | '/admin/bookings'
+    | '/admin/clinics'
     | '/admin/login'
     | '/admin/orders'
     | '/admin/scanners'
@@ -171,6 +191,8 @@ export interface FileRouteTypes {
     | '/equipment'
     | '/portfolio'
     | '/services'
+    | '/admin/bookings'
+    | '/admin/clinics'
     | '/admin/login'
     | '/admin/orders'
     | '/admin/scanners'
@@ -187,6 +209,8 @@ export interface FileRouteTypes {
     | '/equipment'
     | '/portfolio'
     | '/services'
+    | '/admin/bookings'
+    | '/admin/clinics'
     | '/admin/login'
     | '/admin/orders'
     | '/admin/scanners'
@@ -204,6 +228,8 @@ export interface RootRouteChildren {
   EquipmentRoute: typeof EquipmentRoute
   PortfolioRoute: typeof PortfolioRoute
   ServicesRoute: typeof ServicesRoute
+  AdminBookingsRoute: typeof AdminBookingsRoute
+  AdminClinicsRoute: typeof AdminClinicsRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminScannersRoute: typeof AdminScannersRoute
@@ -312,6 +338,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/clinics': {
+      id: '/admin/clinics'
+      path: '/admin/clinics'
+      fullPath: '/admin/clinics'
+      preLoaderRoute: typeof AdminClinicsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/bookings': {
+      id: '/admin/bookings'
+      path: '/admin/bookings'
+      fullPath: '/admin/bookings'
+      preLoaderRoute: typeof AdminBookingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -324,6 +364,8 @@ const rootRouteChildren: RootRouteChildren = {
   EquipmentRoute: EquipmentRoute,
   PortfolioRoute: PortfolioRoute,
   ServicesRoute: ServicesRoute,
+  AdminBookingsRoute: AdminBookingsRoute,
+  AdminClinicsRoute: AdminClinicsRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminScannersRoute: AdminScannersRoute,
