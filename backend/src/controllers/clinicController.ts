@@ -83,3 +83,27 @@ export const rejectClinic = async (req: Request, res: Response) => {
     });
   }
 };
+export const updateClinicLocation = async (req: Request, res: Response) => {
+  try {
+    const { latitude, longitude } = req.body;
+
+    const clinic = await Clinic.findByIdAndUpdate(
+      req.params.id,
+      {
+        latitude,
+        longitude,
+      },
+      {
+        new: true,
+      },
+    );
+
+    res.json(clinic);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to update location",
+    });
+  }
+};

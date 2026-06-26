@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import API_URL from "../../config/api";
+import ClinicLocationModal from "../../components/ClinicLocationModal";
 
 export const Route = createFileRoute("/admin/clinics")({
   component: AdminClinicsPage,
@@ -10,6 +11,14 @@ function AdminClinicsPage() {
   const navigate = useNavigate();
 
   const [clinics, setClinics] = useState<any[]>([]);
+  const [locations, setLocations] = useState<{
+    [key: string]: {
+      latitude: string;
+      longitude: string;
+    };
+  }>({});
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [selectedClinic, setSelectedClinic] = useState<any>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
@@ -27,11 +36,22 @@ function AdminClinicsPage() {
 
   const fetchClinics = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/clinics/`);
+      const response = await fetch(`${API_URL}/api/clinics/all`);
 
       const data = await response.json();
 
       setClinics(data);
+
+      const locationData: any = {};
+
+      data.forEach((clinic: any) => {
+        locationData[clinic._id] = {
+          latitude: clinic.latitude?.toString() || "",
+          longitude: clinic.longitude?.toString() || "",
+        };
+      });
+
+      setLocations(locationData);
     } catch (error) {
       console.log(error);
     }
@@ -65,6 +85,26 @@ function AdminClinicsPage() {
       await fetch(`${API_URL}/api/clinics/reject/${id}`, {
         method: "DELETE",
       });
+
+      fetchClinics();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const saveLocation = async (id: string) => {
+    try {
+      await fetch(`${API_URL}/api/clinics/location/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          latitude: Number(locations[id].latitude),
+          longitude: Number(locations[id].longitude),
+        }),
+      });
+
+      alert("Location saved");
 
       fetchClinics();
     } catch (error) {
@@ -173,9 +213,41 @@ function AdminClinicsPage() {
 
                     <td className="p-4">{clinic.address}</td>
 
-                    <td className="p-4">{clinic.latitude}</td>
+                    <td className="p-4">
+                      <input
+                        type="number"
+                        step="any"
+                        value={locations[clinic._id]?.latitude || ""}
+                        onChange={(e) =>
+                          setLocations({
+                            ...locations,
+                            [clinic._id]: {
+                              ...locations[clinic._id],
+                              latitude: e.target.value,
+                            },
+                          })
+                        }
+                        className="w-32 border rounded-lg px-2 py-1"
+                      />
+                    </td>
 
-                    <td className="p-4">{clinic.longitude}</td>
+                    <td className="p-4">
+                      <input
+                        type="number"
+                        step="any"
+                        value={locations[clinic._id]?.longitude || ""}
+                        onChange={(e) =>
+                          setLocations({
+                            ...locations,
+                            [clinic._id]: {
+                              ...locations[clinic._id],
+                              longitude: e.target.value,
+                            },
+                          })
+                        }
+                        className="w-32 border rounded-lg px-2 py-1"
+                      />
+                    </td>
 
                     <td className="p-4">
                       <span
@@ -194,7 +266,24 @@ function AdminClinicsPage() {
                     </td>
 
                     <td className="p-4">
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          onClick={() => {
+                            setSelectedClinic(clinic);
+                            setShowLocationModal(true);
+                          }}
+                          className="bg-blue-600 text-white px-3 py-2 rounded-lg"
+                        >
+                          📍 Set Location
+                        </button>
+
+                        <button
+                          onClick={() => saveLocation(clinic._id)}
+                          className="bg-indigo-600 text-white px-3 py-2 rounded-lg"
+                        >
+                          Save Location
+                        </button>
+
                         {!clinic.isApproved && (
                           <button
                             onClick={() => approveClinic(clinic._id)}
@@ -218,6 +307,15 @@ function AdminClinicsPage() {
             </table>
           </div>
         </div>
+        <ClinicLocationModal
+          open={showLocationModal}
+          clinic={selectedClinic}
+          onClose={() => {
+            setShowLocationModal(false);
+            setSelectedClinic(null);
+          }}
+          onSaved={fetchClinics}
+        />
       </div>
     </div>
   );
