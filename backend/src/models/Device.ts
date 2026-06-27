@@ -1,34 +1,67 @@
 import mongoose from "mongoose";
 
-const deviceSchema = new mongoose.Schema({
-  deviceId: {
-    type: String,
-    required: true,
-    unique: true,
+const deviceSchema = new mongoose.Schema(
+  {
+    deviceId: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+
+    clinicName: {
+      type: String,
+      default: "",
+    },
+
+    operatorName: {
+      type: String,
+      default: "",
+    },
+
+    phone: {
+      type: String,
+      default: "",
+    },
+
+    latitude: {
+      type: Number,
+      default: 0,
+    },
+
+    longitude: {
+      type: Number,
+      default: 0,
+    },
+
+    city: {
+      type: String,
+      default: "",
+    },
+
+    battery: {
+      type: Number,
+      default: 100,
+    },
+
+    speed: {
+      type: Number,
+      default: 0,
+    },
+
+    status: {
+      type: String,
+      enum: ["Available", "Assigned", "On The Way", "Reached", "Offline"],
+      default: "Available",
+    },
+
+    lastSeen: {
+      type: Date,
+      default: Date.now,
+    },
   },
-
-  clinicName: {
-    type: String,
-    default: "",
+  {
+    timestamps: true,
   },
-
-  latitude: Number,
-
-  longitude: Number,
-
-  city: String,
-
-  battery: Number,
-
-  status: {
-    type: String,
-    default: "Available",
-  },
-
-  lastSeen: {
-    type: Date,
-    default: Date.now,
-  },
-});
+);
 
 export default mongoose.model("Device", deviceSchema);

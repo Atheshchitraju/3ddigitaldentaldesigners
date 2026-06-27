@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema(
   {
+    clinicId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Clinic",
+    },
+
     clinicName: String,
 
     clinicAddress: String,
@@ -16,18 +21,45 @@ const bookingSchema = new mongoose.Schema(
 
     scannerLocation: String,
 
+    operatorName: {
+      type: String,
+      default: "",
+    },
+
+    operatorPhone: {
+      type: String,
+      default: "",
+    },
+
     bookingDate: String,
 
     bookingTime: String,
 
-    isRegistered: {
-      type: Boolean,
-      default: true,
+    priority: {
+      type: String,
+      enum: ["Normal", "Emergency"],
+      default: "Normal",
     },
 
     status: {
       type: String,
+      enum: ["Pending", "Assigned", "On The Way", "Reached", "Completed", "Cancelled"],
       default: "Pending",
+    },
+
+    eta: {
+      type: Number,
+      default: 0,
+    },
+
+    distance: {
+      type: Number,
+      default: 0,
+    },
+
+    isRegistered: {
+      type: Boolean,
+      default: true,
     },
   },
   {
