@@ -30,6 +30,8 @@ import smileDentalDoctor from "@/assets/smileDentalDoctor.webp";
 import whitePearlsDoctor from "@/assets/white-pearls-doctor.webp";
 import sailajaDoctor from "@/assets/sailajaDoctor.webp";
 import maDentalDoctor from "@/assets/maDentalDoctor.webp";
+import toothCompertsDoctor from "@/assets/toothComfertsDoctor.webp";
+import ayeshaDentalDoctor from "@/assets/ayeshaDentalDoctor.webp";
 
 export const Route = createFileRoute("/clinics/")({
   component: ClinicsPage,
@@ -270,6 +272,22 @@ export const clinics = [
     email: "dr.bhanu4all@gmail.com",
     whatsapp: "9515299307",
     logo: maDentalDoctor,
+  },
+  {
+    name: "Tooth Comforts",
+    slug: "tooth-comforts",
+    location: "Uttarahalli, Bengaluru, Karnataka",
+    email: "haridrshri@gmail.com",
+    whatsapp: "9886373263",
+    logo: toothCompertsDoctor,
+  },
+  {
+    name: "Ayesha Dental Clinic",
+    slug: "ayesha-dental-clinic",
+    location: "Bommanahalli, Bengaluru",
+    email: "modinnadaf061974@gmail.com",
+    whatsapp: "9886373263",
+    logo: ayeshaDentalDoctor,
   },
 ];
 

@@ -35,6 +35,8 @@ import logo25 from "@/assets/smileDentallogo.webp";
 import logo26 from "@/assets/white-pearls-logo.webp";
 import logo27 from "@/assets/sailajalogo.webp";
 import logo28 from "@/assets/maDentallogo.webp";
+import logo29 from "@/assets/toothComfertslogo.webp";
+import logo30 from "@/assets/ayeshaDentallogo.webp";
 
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
@@ -74,6 +76,8 @@ import smileDentalBanner from "@/assets/smileDentalBanner.webp";
 import whitePearlsBanner from "@/assets/white-pearls-banner.webp";
 import sailajaBanner from "@/assets/sailajaBanner.webp";
 import maDentalBanner from "@/assets/maDentalBanner.webp";
+import toothCompertsBanner from "@/assets/toothComfertsBanner.webp";
+import ayeshaDentalBanner from "@/assets/ayeshaDentalBanner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -400,6 +404,24 @@ const clients = [
     banner: maDentalBanner,
     description:
       "MA Dental is a modern dental clinic providing smile designing, aligners, veneers, implant planning, cosmetic dentistry, full mouth rehabilitation, and advanced digital dentistry solutions.",
+  },
+  {
+    id: "tooth-comforts",
+    name: "Tooth Comforts",
+    location: "Uttarahalli, Bengaluru",
+    logo: logo29,
+    banner: toothCompertsBanner,
+    description:
+      "Tooth Comforts is a modern multi-speciality dental clinic providing advanced prosthodontics, smile designing, implant planning, veneers, aligners, cosmetic dentistry, full mouth rehabilitation, and digital dentistry solutions with over 30 years of clinical experience.",
+  },
+  {
+    id: "ayesha-dental-clinic",
+    name: "AYESHA DENTAL CLINIC",
+    location: "Bommanahalli, Bengaluru",
+    logo: logo30,
+    banner: ayeshaDentalBanner,
+    description:
+      "AYESHA DENTAL CLINIC is a modern multi-speciality dental clinic located in Bommanahalli, Bengaluru. Established in 2000, the clinic specializes in smile designing, aligners, veneers, implant planning, cosmetic dentistry, prosthodontics, full mouth rehabilitation, digital smile planning, and advanced digital dentistry with over 25 years of clinical excellence.",
   },
 ];
 

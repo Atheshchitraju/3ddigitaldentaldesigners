@@ -33,6 +33,8 @@ import smileDentalBanner from "../../assets/smileDentalBanner.webp";
 import whitePearlsBanner from "../../assets/white-pearls-banner.webp";
 import sailajaBanner from "@/assets/sailajaBanner.webp";
 import maDentalBanner from "@/assets/maDentalBanner.webp";
+import toothCompertsBanner from "@/assets/toothComfertsBanner.webp";
+import ayeshaDentalBanner from "@/assets/ayeshaDentalBanner.webp";
 /* =========================
    DOCTORS
 ========================= */
@@ -66,6 +68,8 @@ import smileDentalDoctor from "../../assets/smileDentalDoctor.webp";
 import whitePearlsDoctor from "../../assets/white-pearls-doctor.webp";
 import sailajaDoctor from "../../assets/sailajaDoctor.webp";
 import maDentalDoctor from "../../assets/maDentalDoctor.webp";
+import toothCompertsDoctor from "../../assets/toothComfertsDoctor.webp";
+import ayeshaDentalDoctor from "../../assets/ayeshaDentalDoctor.webp";
 
 /* =========================
    GALLERY
@@ -179,6 +183,18 @@ import maDental1 from "../../assets/maDental1.webp";
 import maDental2 from "../../assets/maDental2.webp";
 import maDental3 from "../../assets/maDental3.webp";
 import maDental4 from "../../assets/maDental4.webp";
+
+import toothComperts1 from "../../assets/toothcomferts1.webp";
+import toothComperts2 from "../../assets/toothcomferts2.webp";
+import toothComperts3 from "../../assets/toothcomferts3.webp";
+import toothComperts4 from "../../assets/toothcomferts4.webp";
+import toothComperts5 from "../../assets/toothcomferts5.webp";
+
+import ayeshaDental1 from "@/assets/ayeshaDental1.webp";
+import ayeshaDental2 from "@/assets/ayeshaDental2.webp";
+import ayeshaDental3 from "@/assets/ayeshaDental3.webp";
+import ayeshaDental4 from "@/assets/ayeshaDental4.webp";
+import ayeshaDental5 from "@/assets/ayeshaDental5.webp";
 
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
@@ -1903,6 +1919,130 @@ const clinics = [
 
         additionalInfo:
           "Medical Registration No: A9402 | Established in 2021 | Advanced Digital Dentistry Specialist",
+      },
+    ],
+  },
+  {
+    id: "tooth-comforts",
+
+    name: "Tooth Comforts",
+
+    logo: toothCompertsDoctor,
+
+    banner: toothCompertsBanner,
+
+    description:
+      "Tooth Comforts is a trusted multi-speciality dental clinic in Uttarahalli, Bengaluru, established in 2001. Led by Dr. Srihari, the clinic specializes in smile designing, implant planning, prosthodontics, cosmetic dentistry, aligners, veneers, and advanced digital dentistry with more than 30 years of clinical expertise.",
+
+    location: "Uttarahalli, Bengaluru",
+
+    phone: "+91 9886373263",
+
+    email: "haridrshri@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62222.99254277607!2d77.4807562486328!3d12.911768500000006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae3fd727955e91%3A0x8ad9280bc4e44970!2sTooth%20Comforts.%20Sri%20Dental%20Care!5e0!3m2!1sen!2sin!4v1782556898900!5m2!1sen!2sin",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [toothComperts1, toothComperts2, toothComperts3, toothComperts4, toothComperts5],
+
+    doctors: [
+      {
+        name: "Dr. Srihari",
+
+        role: "BDS",
+
+        image: toothCompertsDoctor,
+
+        experience: "30+ Years Experience",
+
+        phone: "9886373263",
+
+        email: "haridrshri@gmail.com",
+
+        specialization: "Prosthodontics, Implantology, Cosmetic Dentistry, General Dentistry",
+
+        clinicName: "Tooth Comforts",
+
+        address: "Uttarahalli, Bengaluru, Karnataka - 560061",
+
+        website: "",
+
+        additionalInfo: "Medical Registration No: 123456 | Established in 2001",
+      },
+    ],
+  },
+  {
+    id: "ayesha-dental-clinic",
+
+    name: "AYESHA DENTAL CLINIC",
+
+    logo: ayeshaDentalDoctor,
+
+    banner: ayeshaDentalBanner,
+
+    description:
+      "AYESHA DENTAL CLINIC is a modern multi-speciality dental clinic located in Bommanahalli, Bengaluru. Established in 2000, the clinic offers comprehensive dental care including smile designing, aligners, veneers, implant planning, cosmetic dentistry, prosthodontics, digital smile planning and advanced digital dentistry.",
+
+    location: "Bommanahalli, Bengaluru",
+
+    phone: "+91 9342235245",
+
+    email: "modinnadaf061974@gmail.com",
+
+   map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5499.887213071553!2d77.62682459337242!3d12.90723623386373!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1530f527d175%3A0x6d6346c3a06a6005!2sAyesha%20Dental%20Clinic!5e0!3m2!1sen!2sin!4v1782560098664!5m2!1sen!2sin",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [ayeshaDental1, ayeshaDental2, ayeshaDental3, ayeshaDental4, ayeshaDental5],
+
+    doctors: [
+      {
+        name: "Dr. Modinsab Nadaf",
+
+        role: "BDS",
+
+        image: ayeshaDentalDoctor,
+
+        experience: "25+ Years Experience",
+
+        phone: "9342235245",
+
+        email: "modinnadaf061974@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry",
+
+        clinicName: "AYESHA DENTAL CLINIC",
+
+        address:
+          "69/5A, 1st Floor, Above RK Photo Studio, Next to SLV Laser, Off Begur Road, Bommanahalli, Bengaluru - 560068",
+
+        website: "",
+
+        additionalInfo: "Medical Registration No: 8367-A | Established in 2000",
       },
     ],
   },

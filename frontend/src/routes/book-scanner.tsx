@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from "react-leaflet";
+import logo from "../assets/3D.webp";
 
 export const Route = createFileRoute("/book-scanner")({
   component: BookScanner,
@@ -260,6 +261,22 @@ const clinics: Clinic[] = [
     longitude: 78.570909,
     phone: "+91 9515299307",
   },
+  {
+    id: "tooth-comforts",
+    name: "Tooth Comforts",
+    address: "Uttarahalli, Bengaluru",
+    latitude: 12.911769,
+    longitude: 77.480756,
+    phone: "+91 9886373263",
+  },
+  {
+    id: "ayesha-dental-clinic",
+    name: "AYESHA DENTAL CLINIC",
+    address: "Bommanahalli, Bengaluru",
+    latitude: 12.907236,
+    longitude: 77.626825,
+    phone: "+91 9342235245",
+  },
 ];
 function ChangeMapView({ lat, lng }: { lat: number; lng: number }) {
   const map = useMap();
@@ -281,6 +298,12 @@ function BookScanner() {
   } | null>(null);
 
   const [nearestScanner, setNearestScanner] = useState<Device | null>(null);
+  const navigate = useNavigate();
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+
+  const [showAnimation, setShowAnimation] = useState(false);
+
+  const [bookingDetails, setBookingDetails] = useState<any>(null);
 
   const [searchClinic, setSearchClinic] = useState("");
 
@@ -401,6 +424,11 @@ function BookScanner() {
       return;
     }
 
+    if (!selectedDate || !selectedTime) {
+      alert("Please select booking date and time");
+      return;
+    }
+
     try {
       const response = await fetch(
         "https://threeddigitaldentaldesigners.onrender.com/api/bookings",
@@ -425,48 +453,41 @@ function BookScanner() {
         },
       );
 
-      if (response.ok) {
-        alert("Scanner booked successfully");
-      } else {
+      if (!response.ok) {
         alert("Booking failed");
+        return;
       }
+
+      const booking = await response.json();
+
+      setBookingDetails({
+        scanner: nearestScanner,
+        booking,
+      });
+
+      setShowAnimation(true);
+
+      setTimeout(() => {
+        setShowAnimation(false);
+
+        setBookingSuccess(true);
+      }, 2000);
     } catch (error) {
       console.error(error);
       alert("Server error");
     }
   };
   const bookNewClinic = async () => {
-    if (!newClinic.clinicName || !newClinic.doctorName || !newClinic.phone) {
+    if (!newClinic.clinicName || !newClinic.doctorName || !newClinic.phone || !newClinic.address) {
       alert("Please fill all required fields");
       return;
     }
 
     try {
-      const response = await fetch(
-        "https://threeddigitaldentaldesigners.onrender.com/api/bookings",
+      // Register clinic only once
+      const clinicResponse = await fetch(
+        "https://threeddigitaldentaldesigners.onrender.com/api/clinics",
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            clinicName: newClinic.clinicName,
-            doctorName: newClinic.doctorName,
-            phone: newClinic.phone,
-            clinicAddress: newClinic.address,
-            city: newClinic.city,
-
-            bookingDate: selectedDate,
-            bookingTime: selectedTime,
-
-            isRegistered: false,
-            status: "Pending",
-          }),
-        },
-      );
-
-      if (response.ok) {
-        await fetch("https://threeddigitaldentaldesigners.onrender.com/api/clinics", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -481,26 +502,199 @@ function BookScanner() {
             longitude: 0,
             isApproved: false,
           }),
-        });
+        },
+      );
 
-        alert("Clinic registration request submitted");
-
-        setNewClinic({
-          clinicName: "",
-          doctorName: "",
-          phone: "",
-          address: "",
-          city: "",
-        });
-
-        setShowNewClinicForm(false);
+      if (!clinicResponse.ok) {
+        alert("Failed to register clinic");
+        return;
       }
+
+      const createdClinic = await clinicResponse.json();
+
+      const clinic: Clinic = {
+        id: createdClinic._id,
+        name: createdClinic.name,
+        address: createdClinic.address,
+        latitude: createdClinic.latitude,
+        longitude: createdClinic.longitude,
+        phone: createdClinic.phone,
+      };
+
+      // Add newly registered clinic to dropdown
+      setClinics((prev) => [...prev, clinic]);
+
+      // Automatically select clinic
+      setSelectedClinic(clinic);
+
+      // Fill search box
+      setSearchClinic(clinic.name);
+
+      // Reset form
+      setNewClinic({
+        clinicName: "",
+        doctorName: "",
+        phone: "",
+        address: "",
+        city: "",
+      });
+
+      setShowNewClinicForm(false);
+
+      alert(
+        "✅ Clinic registered successfully.\n\nNow select date & time and click Find Nearest Scanner.",
+      );
     } catch (error) {
       console.error(error);
       alert("Server error");
     }
   };
+  if (showAnimation) {
+    return (
+      <div className="fixed inset-0 bg-gradient-to-br from-white via-blue-50 to-white flex flex-col items-center justify-center z-[9999]">
+        <img src={logo} alt="3D Digital Dental Designers" className="w-44 animate-bounce" />
 
+        <h1 className="mt-8 text-4xl font-bold text-blue-700">Booking Your Scanner</h1>
+
+        <p className="mt-3 text-lg text-gray-500">
+          Please wait while we assign the nearest scanner...
+        </p>
+
+        <div className="w-80 h-3 bg-gray-200 rounded-full overflow-hidden mt-10">
+          <div
+            className="h-full bg-blue-600 rounded-full"
+            style={{
+              animation: "loadingBar 2s linear forwards",
+            }}
+          />
+        </div>
+
+        <style>{`
+        @keyframes loadingBar{
+          from{width:0%;}
+          to{width:100%;}
+        }
+      `}</style>
+      </div>
+    );
+  }
+  if (bookingSuccess && bookingDetails) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center p-6">
+        <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden">
+          {/* Header */}
+
+          <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-10 text-center text-white">
+            <img src={logo} className="w-32 mx-auto mb-5 animate-bounce" />
+
+            <div className="text-7xl mb-4">✅</div>
+
+            <h1 className="text-4xl font-bold">Scanner Booked Successfully</h1>
+
+            <p className="mt-3 text-blue-100">Our scanner will reach your clinic shortly.</p>
+          </div>
+
+          {/* Booking Details */}
+
+          <div className="p-8 space-y-5">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="bg-gray-50 rounded-2xl p-4">
+                <p className="text-gray-500">Scanner ID</p>
+
+                <h2 className="text-2xl font-bold">{bookingDetails.scanner.deviceId}</h2>
+              </div>
+
+              <div className="bg-gray-50 rounded-2xl p-4">
+                <p className="text-gray-500">Battery</p>
+
+                <h2 className="text-2xl font-bold text-green-600">
+                  {bookingDetails.scanner.battery}%
+                </h2>
+              </div>
+
+              <div className="bg-gray-50 rounded-2xl p-4">
+                <p className="text-gray-500">Current Location</p>
+
+                <h2 className="text-xl font-semibold">{bookingDetails.scanner.city}</h2>
+              </div>
+
+              <div className="bg-gray-50 rounded-2xl p-4">
+                <p className="text-gray-500">Status</p>
+
+                <h2 className="text-xl font-semibold text-green-600">Assigned</h2>
+              </div>
+            </div>
+
+            <hr />
+
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-gray-500">Clinic</span>
+
+                <strong>{selectedClinic?.name}</strong>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="text-gray-500">Booking Date</span>
+
+                <strong>{selectedDate}</strong>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="text-gray-500">Booking Time</span>
+
+                <strong>{selectedTime}</strong>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4 pt-5">
+              <a
+                href={`tel:${bookingDetails.scanner.phone || selectedClinic?.phone}`}
+                className="bg-green-600 hover:bg-green-700 transition text-white text-center py-4 rounded-2xl font-bold text-lg"
+              >
+                📞 Call Scanner
+              </a>
+
+              <button
+                onClick={() =>
+                  navigate({
+                    to: "/tracking/$bookingId",
+                    params: {
+                      bookingId: bookingDetails.booking._id,
+                    },
+                  })
+                }
+                className="bg-blue-600 hover:bg-blue-700 transition text-white py-4 rounded-2xl font-bold text-lg"
+              >
+                📍 Track Scanner
+              </button>
+            </div>
+
+            <button
+              onClick={() => {
+                setBookingSuccess(false);
+
+                setBookingDetails(null);
+
+                setNearestScanner(null);
+
+                setSelectedClinic(null);
+
+                setSearchClinic("");
+
+                setSelectedDate("");
+
+                setSelectedTime("");
+              }}
+              className="w-full mt-5 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 py-4 rounded-2xl font-bold"
+            >
+              Book Another Scanner
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen pt-32 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
@@ -744,7 +938,10 @@ function BookScanner() {
 
             <p>Status: {nearestScanner.status}</p>
 
-            <button className="mt-4 rounded-xl bg-green-600 px-5 py-3 text-white">
+            <button
+              onClick={bookScanner}
+              className="mt-4 rounded-xl bg-green-600 px-5 py-3 text-white"
+            >
               Book This Scanner
             </button>
           </div>

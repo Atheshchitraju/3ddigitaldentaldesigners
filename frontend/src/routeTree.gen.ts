@@ -19,6 +19,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShadeIndexRouteImport } from './routes/shade/index'
 import { Route as ClinicsIndexRouteImport } from './routes/clinics/index'
+import { Route as TrackingBookingIdRouteImport } from './routes/tracking/$bookingId'
 import { Route as ClinicsIdRouteImport } from './routes/clinics/$id'
 import { Route as AdminScannersRouteImport } from './routes/admin/scanners'
 import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
@@ -76,6 +77,11 @@ const ClinicsIndexRoute = ClinicsIndexRouteImport.update({
   path: '/clinics/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrackingBookingIdRoute = TrackingBookingIdRouteImport.update({
+  id: '/tracking/$bookingId',
+  path: '/tracking/$bookingId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClinicsIdRoute = ClinicsIdRouteImport.update({
   id: '/clinics/$id',
   path: '/clinics/$id',
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/scanners': typeof AdminScannersRoute
   '/clinics/$id': typeof ClinicsIdRoute
+  '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
   '/shade/': typeof ShadeIndexRoute
 }
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/scanners': typeof AdminScannersRoute
   '/clinics/$id': typeof ClinicsIdRoute
+  '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics': typeof ClinicsIndexRoute
   '/shade': typeof ShadeIndexRoute
 }
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/scanners': typeof AdminScannersRoute
   '/clinics/$id': typeof ClinicsIdRoute
+  '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
   '/shade/': typeof ShadeIndexRoute
 }
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/scanners'
     | '/clinics/$id'
+    | '/tracking/$bookingId'
     | '/clinics/'
     | '/shade/'
   fileRoutesByTo: FileRoutesByTo
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/scanners'
     | '/clinics/$id'
+    | '/tracking/$bookingId'
     | '/clinics'
     | '/shade'
   id:
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/scanners'
     | '/clinics/$id'
+    | '/tracking/$bookingId'
     | '/clinics/'
     | '/shade/'
   fileRoutesById: FileRoutesById
@@ -234,6 +246,7 @@ export interface RootRouteChildren {
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminScannersRoute: typeof AdminScannersRoute
   ClinicsIdRoute: typeof ClinicsIdRoute
+  TrackingBookingIdRoute: typeof TrackingBookingIdRoute
   ClinicsIndexRoute: typeof ClinicsIndexRoute
   ShadeIndexRoute: typeof ShadeIndexRoute
 }
@@ -310,6 +323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClinicsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tracking/$bookingId': {
+      id: '/tracking/$bookingId'
+      path: '/tracking/$bookingId'
+      fullPath: '/tracking/$bookingId'
+      preLoaderRoute: typeof TrackingBookingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/clinics/$id': {
       id: '/clinics/$id'
       path: '/clinics/$id'
@@ -370,6 +390,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminOrdersRoute: AdminOrdersRoute,
   AdminScannersRoute: AdminScannersRoute,
   ClinicsIdRoute: ClinicsIdRoute,
+  TrackingBookingIdRoute: TrackingBookingIdRoute,
   ClinicsIndexRoute: ClinicsIndexRoute,
   ShadeIndexRoute: ShadeIndexRoute,
 }
