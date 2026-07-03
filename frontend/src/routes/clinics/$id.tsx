@@ -35,6 +35,7 @@ import sailajaBanner from "@/assets/sailajaBanner.webp";
 import maDentalBanner from "@/assets/maDentalBanner.webp";
 import toothCompertsBanner from "@/assets/toothComfertsBanner.webp";
 import ayeshaDentalBanner from "@/assets/ayeshaDentalBanner.webp";
+import lathaBanner from "@/assets/lathaBanner.webp";
 /* =========================
    DOCTORS
 ========================= */
@@ -70,6 +71,7 @@ import sailajaDoctor from "../../assets/sailajaDoctor.webp";
 import maDentalDoctor from "../../assets/maDentalDoctor.webp";
 import toothCompertsDoctor from "../../assets/toothComfertsDoctor.webp";
 import ayeshaDentalDoctor from "../../assets/ayeshaDentalDoctor.webp";
+import lathaDoctor from "../../assets/lathaDoctor.webp";
 
 /* =========================
    GALLERY
@@ -195,6 +197,19 @@ import ayeshaDental2 from "@/assets/ayeshaDental2.webp";
 import ayeshaDental3 from "@/assets/ayeshaDental3.webp";
 import ayeshaDental4 from "@/assets/ayeshaDental4.webp";
 import ayeshaDental5 from "@/assets/ayeshaDental5.webp";
+
+import latha1 from "@/assets/latha1.webp";
+import latha2 from "@/assets/latha2.webp";
+import latha3 from "@/assets/latha3.webp";
+import latha4 from "@/assets/latha4.webp";
+import latha5 from "@/assets/latha5.webp";
+import latha6 from "@/assets/latha6.webp";
+import latha7 from "@/assets/latha7.webp";
+import latha8 from "@/assets/latha8.webp";
+import latha9 from "@/assets/latha9.webp";
+import latha10 from "@/assets/latha10.webp";
+import latha11 from "@/assets/latha11.webp";
+import latha12 from "@/assets/latha12.webp";
 
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
@@ -2001,7 +2016,7 @@ const clinics = [
 
     email: "modinnadaf061974@gmail.com",
 
-   map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5499.887213071553!2d77.62682459337242!3d12.90723623386373!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1530f527d175%3A0x6d6346c3a06a6005!2sAyesha%20Dental%20Clinic!5e0!3m2!1sen!2sin!4v1782560098664!5m2!1sen!2sin",
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5499.887213071553!2d77.62682459337242!3d12.90723623386373!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1530f527d175%3A0x6d6346c3a06a6005!2sAyesha%20Dental%20Clinic!5e0!3m2!1sen!2sin!4v1782560098664!5m2!1sen!2sin",
 
     services: [
       "Smile Design",
@@ -2043,6 +2058,81 @@ const clinics = [
         website: "",
 
         additionalInfo: "Medical Registration No: 8367-A | Established in 2000",
+      },
+    ],
+  },
+  {
+    id: "latha-dental-care-centre",
+
+    name: "Latha Dental Care Centre",
+
+    logo: lathaDoctor,
+
+    banner: lathaBanner,
+
+    description:
+      "Latha Dental Care Centre is a modern multi-speciality dental clinic located in BTM 1st Stage, Bengaluru. Established in 2010 and led by Dr. Latha G (MDS), the clinic provides advanced dental care including smile designing, aligners, veneers, implant planning, cosmetic dentistry, prosthodontics, digital smile planning, and comprehensive digital dentistry solutions.",
+
+    location: "BTM 1st Stage, Bengaluru",
+
+    phone: "+91 9731107222",
+
+    email: "lathagldc@gmail.com",
+
+    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7777.60082309728!2d77.61367127491742!3d12.920545887390166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15dedaf80419%3A0x7bbc964345853cf9!2sLatha%20Dental%20care%20and%20implant%20center!5e0!3m2!1sen!2sin!4v1783057902528!5m2!1sen!2sin",
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [
+      latha1,
+      latha2,
+      latha3,
+      latha4,
+      latha5,
+      latha6,
+      latha7,
+      latha8,
+      latha9,
+      latha10,
+      latha11,
+      latha12,
+    ],
+
+    doctors: [
+      {
+        name: "Dr. Latha G",
+
+        role: "MDS",
+
+        image: lathaDoctor,
+
+        experience: "19+ Years Experience",
+
+        phone: "9731107222",
+
+        email: "lathagldc@gmail.com",
+
+        specialization:
+          "Prosthodontics, Orthodontics, Endodontics, Implantology, Cosmetic Dentistry, General Dentistry",
+
+        clinicName: "Latha Dental Care Centre",
+
+        address:
+          "45/1, 1st Main, 4th Cross, Chocolate Factory Road, Tavarekere, BTM 1st Stage, Bengaluru, Karnataka - 560029",
+
+        website: "",
+
+        additionalInfo: "Medical Registration No:  | Established in 2010",
       },
     ],
   },

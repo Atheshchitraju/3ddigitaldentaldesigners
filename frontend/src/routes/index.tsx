@@ -37,6 +37,7 @@ import logo27 from "@/assets/sailajalogo.webp";
 import logo28 from "@/assets/maDentallogo.webp";
 import logo29 from "@/assets/toothComfertslogo.webp";
 import logo30 from "@/assets/ayeshaDentallogo.webp";
+import logo31 from "@/assets/lathalogo.webp";
 
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
@@ -78,6 +79,7 @@ import sailajaBanner from "@/assets/sailajaBanner.webp";
 import maDentalBanner from "@/assets/maDentalBanner.webp";
 import toothCompertsBanner from "@/assets/toothComfertsBanner.webp";
 import ayeshaDentalBanner from "@/assets/ayeshaDentalBanner.webp";
+import lathaBanner from "@/assets/lathaBanner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -422,6 +424,15 @@ const clients = [
     banner: ayeshaDentalBanner,
     description:
       "AYESHA DENTAL CLINIC is a modern multi-speciality dental clinic located in Bommanahalli, Bengaluru. Established in 2000, the clinic specializes in smile designing, aligners, veneers, implant planning, cosmetic dentistry, prosthodontics, full mouth rehabilitation, digital smile planning, and advanced digital dentistry with over 25 years of clinical excellence.",
+  },
+  {
+    id: "latha-dental-care-centre",
+    name: "Latha Dental Care Centre",
+    location: "Bengaluru",
+    logo: logo31,
+    banner: lathaBanner,
+    description:
+      "Latha Dental Care Centre offers comprehensive dental care with 19 years of clinical excellence, providing advanced restorative, cosmetic, implant, orthodontic, pediatric, and digital dentistry solutions for patients of all ages.",
   },
 ];
 

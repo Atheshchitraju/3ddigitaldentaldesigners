@@ -32,6 +32,7 @@ import sailajaDoctor from "@/assets/sailajaDoctor.webp";
 import maDentalDoctor from "@/assets/maDentalDoctor.webp";
 import toothCompertsDoctor from "@/assets/toothComfertsDoctor.webp";
 import ayeshaDentalDoctor from "@/assets/ayeshaDentalDoctor.webp";
+import latahDoctor from "@/assets/lathaDoctor.webp";
 
 export const Route = createFileRoute("/clinics/")({
   component: ClinicsPage,
@@ -286,8 +287,16 @@ export const clinics = [
     slug: "ayesha-dental-clinic",
     location: "Bommanahalli, Bengaluru",
     email: "modinnadaf061974@gmail.com",
-    whatsapp: "9886373263",
+    whatsapp: "9342235245",
     logo: ayeshaDentalDoctor,
+  },
+  {
+    name: "Latha Dental Care Centre",
+    slug: "latha-dental-care-centre",
+    location: "BTM 1st Stage, Bengaluru",
+    email: "lathagldc@gmail.com",
+    whatsapp: "9731107222",
+    logo: latahDoctor,
   },
 ];
 

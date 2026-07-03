@@ -155,15 +155,6 @@ type SelectedProduct = {
   warranty?: string;
 };
 
-function archStyle(idx: number, count: number, curve: "up" | "down") {
-  const mid = (count - 1) / 2;
-  const distFromMid = idx - mid;
-  const lift = Math.pow(Math.abs(distFromMid) / mid, 2) * 10;
-  const rotate = distFromMid * (curve === "up" ? 2.6 : -2.6);
-  const translateY = curve === "up" ? lift : -lift;
-  return { transform: `translateY(${translateY}px) rotate(${rotate}deg)` };
-}
-
 export default function OrderModal({ open, onClose }: Props) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -405,29 +396,6 @@ export default function OrderModal({ open, onClose }: Props) {
   const inputClass =
     "w-full h-[48px] sm:h-[50px] border border-slate-300 rounded-lg px-4 text-[15px] text-slate-800 placeholder:text-slate-400 bg-white outline-none transition focus:border-slate-500 focus:ring-4 focus:ring-slate-500/10";
 
-  const renderToothRow = (teeth: number[], curve: "up" | "down") => (
-    <div className="flex justify-center items-end gap-1 sm:gap-1.5">
-      {teeth.map((tooth, idx) => {
-        const selected = selectedTeeth.includes(tooth);
-        return (
-          <button
-            key={tooth}
-            type="button"
-            onClick={() => toggleTooth(tooth)}
-            style={archStyle(idx, teeth.length, curve)}
-            className={`relative w-7 h-9 sm:w-10 sm:h-12 rounded-t-lg rounded-b-md border text-[10px] sm:text-[12px] font-semibold transition-all duration-150 shrink-0 ${
-              selected
-                ? "bg-slate-800 border-slate-800 text-white shadow-md scale-105"
-                : "bg-white border-slate-300 text-slate-500 hover:border-slate-500 hover:text-slate-800"
-            }`}
-          >
-            {tooth}
-          </button>
-        );
-      })}
-    </div>
-  );
-
   return (
     <div className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 md:p-6 overflow-y-auto">
       <div className="relative bg-white w-full sm:max-w-5xl sm:rounded-2xl rounded-t-3xl shadow-2xl h-[100dvh] sm:h-auto sm:max-h-[92vh] overflow-hidden border border-slate-200 flex flex-col">
@@ -438,7 +406,7 @@ export default function OrderModal({ open, onClose }: Props) {
               Place a New Order
             </h2>
             <p className="text-slate-300/80 text-xs sm:text-sm mt-1">
-              Our team confirms every order within one business day.
+              Our team confirms every order .
             </p>
           </div>
 
@@ -711,56 +679,167 @@ export default function OrderModal({ open, onClose }: Props) {
               </div>
             </section>
 
-            {/* TOOTH ARCH */}
+            {/* TOOTH ARCH - QUADRANT VIEW */}
             <section>
               <SectionHeading icon={<Check className="w-4 h-4" />} title="Tooth Numbers (FDI)" />
               <p className="text-slate-500 text-xs sm:text-sm -mt-3 mb-4">
                 Tap teeth to select or deselect.
               </p>
 
-              <div className="bg-slate-50 border border-slate-200 rounded-2xl px-2 sm:px-8 py-5 sm:py-7 overflow-x-auto">
-                <div className="min-w-[420px] sm:min-w-0">
-                  <div className="flex justify-between text-[10px] sm:text-[11px] tracking-wide font-medium text-slate-400 mb-2 sm:mb-3 px-2">
-                    <span>RIGHT</span>
-                    <span>UPPER ARCH</span>
-                    <span>LEFT</span>
-                  </div>
-                  <div className="flex justify-center gap-1 sm:gap-3">
-                    {renderToothRow(upperRight, "up")}
-                    <div className="w-px bg-slate-300 self-stretch mx-0.5 sm:mx-1" />
-                    {renderToothRow(upperLeft, "up")}
-                  </div>
+              <div className="bg-white border border-slate-200 rounded-xl sm:rounded-2xl p-3 sm:p-8 overflow-visible">
+                {/* UPPER JAW (Quadrants 1 & 2) */}
+                <div className="mb-6 sm:mb-10">
+                  <h4 className="text-xs sm:text-sm font-semibold text-slate-700 mb-4 text-center uppercase tracking-wide">
+                    Upper Jaw
+                  </h4>
 
-                  <div className="my-4 sm:my-6 border-t border-dashed border-slate-300" />
+                  <div className="flex justify-center items-end gap-2 sm:gap-4">
+                    {/* LEFT QUADRANT (21-28) */}
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="text-xs font-semibold text-slate-600 uppercase">Left</span>
+                      <div className="flex gap-0 sm:gap-1 flex-wrap justify-center">
+                        {[21, 22, 23, 24, 25, 26, 27, 28].map((tooth) => (
+                          <div key={tooth} className="flex justify-center">
+                            <ToothButton
+                              tooth={tooth}
+                              selected={selectedTeeth.includes(tooth)}
+                              onClick={() => toggleTooth(tooth)}
+                              position="upper"
+                              isMobile={false}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
-                  <div className="flex justify-center gap-1 sm:gap-3">
-                    {renderToothRow(lowerRight, "down")}
-                    <div className="w-px bg-slate-300 self-stretch mx-0.5 sm:mx-1" />
-                    {renderToothRow(lowerLeft, "down")}
+                    {/* CENTER SEPARATOR */}
+                    <div className="h-24 sm:h-32 w-1 bg-gradient-to-b from-slate-300 to-slate-400 rounded-full mx-1 sm:mx-4" />
+
+                    {/* RIGHT QUADRANT (18-11) */}
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="text-xs font-semibold text-slate-600 uppercase">Right</span>
+                      <div className="flex gap-0 sm:gap-1 flex-wrap justify-center">
+                        {[18, 17, 16, 15, 14, 13, 12, 11].map((tooth) => (
+                          <div key={tooth} className="flex justify-center">
+                            <ToothButton
+                              tooth={tooth}
+                              selected={selectedTeeth.includes(tooth)}
+                              onClick={() => toggleTooth(tooth)}
+                              position="upper"
+                              isMobile={false}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between text-[10px] sm:text-[11px] tracking-wide font-medium text-slate-400 mt-2 sm:mt-3 px-2">
-                    <span>RIGHT</span>
-                    <span>LOWER ARCH</span>
-                    <span>LEFT</span>
+                </div>
+
+                {/* HORIZONTAL SEPARATOR */}
+                <div className="flex gap-4 sm:gap-8 justify-center items-center mb-6 sm:mb-10">
+                  <div className="flex-1 h-1 bg-gradient-to-r from-slate-200 to-slate-300 rounded-full" />
+                  <span className="text-xs font-semibold text-slate-400 uppercase px-2">
+                    Midline
+                  </span>
+                  <div className="flex-1 h-1 bg-gradient-to-r from-slate-300 to-slate-200 rounded-full" />
+                </div>
+
+                {/* LOWER JAW (Quadrants 3 & 4) */}
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-slate-700 mb-4 text-center uppercase tracking-wide">
+                    Lower Jaw
+                  </h4>
+
+                  <div className="flex justify-center items-start gap-2 sm:gap-4">
+                    {/* LEFT QUADRANT (31-38) */}
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="text-xs font-semibold text-slate-600 uppercase">Left</span>
+                      <div className="flex gap-0 sm:gap-1 flex-wrap justify-center">
+                        {[31, 32, 33, 34, 35, 36, 37, 38].map((tooth) => (
+                          <div key={tooth} className="flex justify-center">
+                            <ToothButton
+                              tooth={tooth}
+                              selected={selectedTeeth.includes(tooth)}
+                              onClick={() => toggleTooth(tooth)}
+                              position="lower"
+                              isMobile={false}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* CENTER SEPARATOR */}
+                    <div className="h-24 sm:h-32 w-1 bg-gradient-to-b from-slate-400 to-slate-300 rounded-full mx-1 sm:mx-4" />
+
+                    {/* RIGHT QUADRANT (48-41) */}
+                    <div className="flex flex-col items-center gap-2">
+                      <span className="text-xs font-semibold text-slate-600 uppercase">Right</span>
+                      <div className="flex gap-0 sm:gap-1 flex-wrap justify-center">
+                        {[48, 47, 46, 45, 44, 43, 42, 41].map((tooth) => (
+                          <div key={tooth} className="flex justify-center">
+                            <ToothButton
+                              tooth={tooth}
+                              selected={selectedTeeth.includes(tooth)}
+                              onClick={() => toggleTooth(tooth)}
+                              position="lower"
+                              isMobile={false}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* QUADRANT LEGEND */}
+                <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-200">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
+                    <div className="p-2 rounded-lg bg-slate-50">
+                      <div className="font-semibold text-slate-700">Quad 2</div>
+                      <div className="text-slate-500 text-[10px]">Upper Left</div>
+                      <div className="text-slate-600 font-medium">21-28</div>
+                    </div>
+                    <div className="p-2 rounded-lg bg-slate-50">
+                      <div className="font-semibold text-slate-700">Quad 1</div>
+                      <div className="text-slate-500 text-[10px]">Upper Right</div>
+                      <div className="text-slate-600 font-medium">18-11</div>
+                    </div>
+                    <div className="p-2 rounded-lg bg-slate-50">
+                      <div className="font-semibold text-slate-700">Quad 3</div>
+                      <div className="text-slate-500 text-[10px]">Lower Left</div>
+                      <div className="text-slate-600 font-medium">31-38</div>
+                    </div>
+                    <div className="p-2 rounded-lg bg-slate-50">
+                      <div className="font-semibold text-slate-700">Quad 4</div>
+                      <div className="text-slate-500 text-[10px]">Lower Right</div>
+                      <div className="text-slate-600 font-medium">48-41</div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {selectedTeeth.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {selectedTeeth
-                    .sort((a, b) => a - b)
-                    .map((t) => (
-                      <span
-                        key={t}
-                        className="inline-flex items-center gap-1 text-xs font-medium bg-slate-800 text-white px-3 py-2 rounded-full"
-                      >
-                        {t}
-                        <button onClick={() => toggleTooth(t)} className="hover:opacity-70 ml-1">
-                          <X className="w-3 h-3" />
-                        </button>
-                      </span>
-                    ))}
+                <div className="mt-4 sm:mt-5">
+                  <p className="text-xs font-medium text-slate-600 mb-2 sm:mb-3">Selected teeth:</p>
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                    {selectedTeeth
+                      .sort((a, b) => a - b)
+                      .map((t) => (
+                        <span
+                          key={t}
+                          className="inline-flex items-center gap-1 sm:gap-1.5 text-xs font-medium bg-slate-800 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-full"
+                        >
+                          #{t}
+                          <button
+                            onClick={() => toggleTooth(t)}
+                            className="hover:opacity-70 transition"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))}
+                  </div>
                 </div>
               )}
             </section>
@@ -961,6 +1040,147 @@ export default function OrderModal({ open, onClose }: Props) {
         )}
       </div>
     </div>
+  );
+}
+
+function ToothButton({
+  tooth,
+  selected,
+  onClick,
+  position,
+  isMobile = false,
+}: {
+  tooth: number;
+  selected: boolean;
+  onClick: () => void;
+  position: "upper" | "lower";
+  isMobile?: boolean;
+}) {
+  // Responsive sizing
+  const width = "max(32px, 6vw)"; // Mobile: 32px, scales with viewport
+  const height = "max(48px, 9vw)";
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="relative inline-flex items-center justify-center transition-all duration-200 group shrink-0"
+      style={{
+        width: width,
+        height: height,
+        minWidth: "32px",
+        minHeight: "48px",
+        maxWidth: "48px",
+        maxHeight: "64px",
+      }}
+    >
+      {/* Realistic Tooth SVG */}
+      <svg
+        viewBox="0 0 40 60"
+        className="w-full h-full absolute"
+        style={{
+          filter: selected
+            ? "drop-shadow(0 4px 8px rgba(15, 23, 42, 0.25))"
+            : "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))",
+        }}
+      >
+        {/* Tooth Gradient Definitions */}
+        {position === "upper" ? (
+          <defs>
+            <linearGradient id={`grad-upper-${tooth}`} x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop
+                offset="0%"
+                style={{ stopColor: selected ? "#1e293b" : "#f8fafc", stopOpacity: 1 }}
+              />
+              <stop
+                offset="100%"
+                style={{ stopColor: selected ? "#0f172a" : "#e2e8f0", stopOpacity: 1 }}
+              />
+            </linearGradient>
+          </defs>
+        ) : (
+          <defs>
+            <linearGradient id={`grad-lower-${tooth}`} x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop
+                offset="0%"
+                style={{ stopColor: selected ? "#1e293b" : "#f8fafc", stopOpacity: 1 }}
+              />
+              <stop
+                offset="100%"
+                style={{ stopColor: selected ? "#0f172a" : "#e2e8f0", stopOpacity: 1 }}
+              />
+            </linearGradient>
+          </defs>
+        )}
+
+        {position === "upper" ? (
+          // Upper teeth shape
+          <path
+            d="M 8 5 Q 5 8 5 15 L 5 45 Q 5 52 10 55 Q 15 58 20 58 Q 25 58 30 55 Q 35 52 35 45 L 35 15 Q 35 8 32 5 Z"
+            fill={`url(#grad-upper-${tooth})`}
+            stroke={selected ? "#0f172a" : "#cbd5e1"}
+            strokeWidth="1.5"
+          />
+        ) : (
+          // Lower teeth shape
+          <path
+            d="M 8 5 Q 5 8 5 15 L 5 45 Q 5 52 10 55 Q 15 58 20 58 Q 25 58 30 55 Q 35 52 35 45 L 35 15 Q 35 8 32 5 Z"
+            fill={`url(#grad-lower-${tooth})`}
+            stroke={selected ? "#0f172a" : "#cbd5e1"}
+            strokeWidth="1.5"
+          />
+        )}
+
+        {/* Tooth highlight/shine */}
+        {!selected && <ellipse cx="14" cy="12" rx="4" ry="3" fill="white" opacity="0.6" />}
+
+        {/* Tooth ridge/texture */}
+        {!selected && (
+          <>
+            <line x1="20" y1="5" x2="20" y2="50" stroke="rgba(0,0,0,0.05)" strokeWidth="0.5" />
+            <line x1="12" y1="5" x2="12" y2="50" stroke="rgba(0,0,0,0.03)" strokeWidth="0.5" />
+            <line x1="28" y1="5" x2="28" y2="50" stroke="rgba(0,0,0,0.03)" strokeWidth="0.5" />
+          </>
+        )}
+      </svg>
+
+      {/* Tooth number - centered and readable */}
+      <span
+        className={`relative z-10 font-bold text-[10px] sm:text-xs transition-all duration-200 ${
+          selected ? "text-white" : "text-slate-700"
+        }`}
+        style={{
+          textShadow: !selected ? "0 1px 2px rgba(255,255,255,0.8)" : "none",
+          fontWeight: 700,
+          lineHeight: "1",
+        }}
+      >
+        {tooth}
+      </span>
+
+      {/* Hover effect ring */}
+      {!selected && (
+        <div
+          className="absolute inset-0 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+          style={{
+            border: "2px solid rgba(100, 116, 139, 0.4)",
+            pointerEvents: "none",
+          }}
+        />
+      )}
+
+      {/* Selection ring */}
+      {selected && (
+        <div
+          className="absolute inset-0 rounded"
+          style={{
+            border: "2px solid rgba(255, 255, 255, 0.8)",
+            pointerEvents: "none",
+            boxShadow: "inset 0 0 0 1px rgba(15, 23, 42, 0.5)",
+          }}
+        />
+      )}
+    </button>
   );
 }
 

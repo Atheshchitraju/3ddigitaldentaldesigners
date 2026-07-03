@@ -7,6 +7,10 @@ export const Route = createFileRoute("/book-scanner")({
   component: BookScanner,
 });
 
+/* ------------------------------------------------------------------ */
+/*  Types                                                              */
+/* ------------------------------------------------------------------ */
+
 interface Device {
   _id: string;
   deviceId: string;
@@ -17,6 +21,7 @@ interface Device {
   battery: number;
   status: string;
   lastSeen: string;
+  phone?: string;
 }
 
 interface Clinic {
@@ -26,6 +31,147 @@ interface Clinic {
   latitude: number;
   longitude: number;
   phone: string;
+}
+
+/**
+ * A Booking represents a "Scanner Visit" — the central appointment record.
+ * A scanner + operator are resources assigned to it, not the other way round.
+ */
+type BookingStatus =
+  | "Queued"
+  | "Pending"
+  | "Assigned"
+  | "On the Way"
+  | "Reached"
+  | "Scanning"
+  | "Completed"
+  | "Cancelled";
+
+interface Booking {
+  _id: string;
+  clinicName: string;
+  clinicAddress: string;
+  phone: string;
+  scannerId: string | null;
+  scannerLocation: string | null;
+  bookingDate: string;
+  bookingTime: string;
+  status: BookingStatus;
+  queuePosition: number | null;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Constants & helpers                                                */
+/* ------------------------------------------------------------------ */
+
+const ONLINE_THRESHOLD_MS = 120000; // 2 minutes
+
+function isOnline(lastSeen: string) {
+  return Date.now() - new Date(lastSeen).getTime() < ONLINE_THRESHOLD_MS;
+}
+
+function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371;
+
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+/** Bookings that still occupy a scanner slot (not cancelled/completed). */
+function getActiveSlotBookings(bookings: Booking[], date: string, time: string) {
+  return bookings.filter(
+    (b) =>
+      b.bookingDate === date &&
+      b.bookingTime === time &&
+      b.status !== "Cancelled" &&
+      b.status !== "Completed",
+  );
+}
+
+function getTodayStr() {
+  return new Date().toISOString().split("T")[0];
+}
+
+/**
+ * A "pre-booking" is any booking made for a future date (e.g. tomorrow).
+ * For pre-bookings we don't require the scanner to be online right now —
+ * it just needs to exist. It will be dispatched on the scheduled day.
+ */
+function isPreBookingDate(date: string) {
+  if (!date) return false;
+  return date > getTodayStr();
+}
+
+/**
+ * The pool of scanners that can be considered for a given date.
+ * - Today (real-time dispatch): only scanners currently online. An
+ *   offline scanner can't be sent out right now, so it isn't offered as
+ *   an alternative even if it technically has no booking yet.
+ * - Future dates (pre-booking): every registered scanner counts, since a
+ *   scanner doesn't need to be online today to be reserved for tomorrow.
+ */
+function getScannerPool(devices: Device[], date: string) {
+  return isPreBookingDate(date) ? devices : devices.filter((d) => isOnline(d.lastSeen));
+}
+
+type SlotStatus = "Available" | "Booked" | "Queue";
+
+interface SlotAvailability {
+  /** Scanners eligible for this date (online-only for today, all for pre-booking). */
+  pool: Device[];
+  /** Scanners in the pool not yet assigned to this exact date + time. */
+  freeScanners: Device[];
+  status: SlotStatus;
+  /** How many requests are already queued past capacity, if status is "Queue". */
+  queueCount: number;
+}
+
+/**
+ * Single source of truth for "is this slot bookable, and with which scanner?"
+ * Used by both the time-slot grid (for status/colour) and the
+ * find-nearest-scanner flow (for actually picking a free scanner), so the
+ * two can never disagree with each other.
+ *
+ * - Available: at least one eligible scanner is still unassigned for this
+ *   date + time (e.g. scanner 1 is booked, scanner 2 is free -> Available,
+ *   and scanner 2 is the one offered).
+ * - Booked: every eligible scanner is already assigned to this exact slot.
+ * - Queue: more requests exist for this slot than there are eligible
+ *   scanners, so any further request joins a queue instead.
+ */
+function getSlotAvailability(
+  devices: Device[],
+  bookings: Booking[],
+  date: string,
+  time: string,
+): SlotAvailability {
+  const pool = getScannerPool(devices, date);
+  const slotBookings = getActiveSlotBookings(bookings, date, time);
+  const assignedScannerIds = new Set(slotBookings.map((b) => b.scannerId).filter(Boolean));
+  const freeScanners = pool.filter((scanner) => !assignedScannerIds.has(scanner.deviceId));
+
+  let status: SlotStatus = "Available";
+  let queueCount = 0;
+
+  if (pool.length > 0 && freeScanners.length === 0) {
+    if (slotBookings.length > pool.length) {
+      status = "Queue";
+      queueCount = slotBookings.length - pool.length;
+    } else {
+      status = "Booked";
+    }
+  }
+
+  return { pool, freeScanners, status, queueCount };
 }
 
 const clinics: Clinic[] = [
@@ -278,6 +424,7 @@ const clinics: Clinic[] = [
     phone: "+91 9342235245",
   },
 ];
+
 function ChangeMapView({ lat, lng }: { lat: number; lng: number }) {
   const map = useMap();
 
@@ -289,6 +436,7 @@ function ChangeMapView({ lat, lng }: { lat: number; lng: number }) {
 
   return null;
 }
+
 function BookScanner() {
   const [devices, setDevices] = useState<Device[]>([]);
 
@@ -298,12 +446,18 @@ function BookScanner() {
   } | null>(null);
 
   const [nearestScanner, setNearestScanner] = useState<Device | null>(null);
+  const [queuePosition, setQueuePosition] = useState<number | null>(null);
+
   const navigate = useNavigate();
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
   const [showAnimation, setShowAnimation] = useState(false);
 
-  const [bookingDetails, setBookingDetails] = useState<any>(null);
+  const [bookingDetails, setBookingDetails] = useState<{
+    scanner: Device | null;
+    booking: Booking;
+    queuePosition: number | null;
+  } | null>(null);
 
   const [searchClinic, setSearchClinic] = useState("");
 
@@ -312,6 +466,7 @@ function BookScanner() {
 
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [bookings, setBookings] = useState<Booking[]>([]);
   const [showNewClinicForm, setShowNewClinicForm] = useState(false);
 
   const [newClinic, setNewClinic] = useState({
@@ -338,6 +493,12 @@ function BookScanner() {
       .then((data) => setClinics(data))
       .catch((err) => console.error(err));
   }, []);
+  useEffect(() => {
+    fetch("https://threeddigitaldentaldesigners.onrender.com/api/bookings")
+      .then((res) => res.json())
+      .then((data) => setBookings(data))
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -352,22 +513,15 @@ function BookScanner() {
       },
     );
   }, []);
-  function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
-    const R = 6371;
 
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
-
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-
-    return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-  }
-
+  /**
+   * Looks at the scanner pool for the chosen date (online-only for today,
+   * every registered scanner for future "pre-booking" dates), works out
+   * which of them are already committed to the chosen date/time, and
+   * either:
+   *  - assigns the nearest scanner that is still free for that slot, or
+   *  - puts the visit in a queue and reports the clinic's queue position.
+   */
   const findNearestScanner = () => {
     if (!selectedDate || !selectedTime) {
       alert("Please select date and time");
@@ -385,19 +539,38 @@ function BookScanner() {
       return;
     }
 
-    const activeScanners = devices.filter(
-      (scanner) => Date.now() - new Date(scanner.lastSeen).getTime() < 120000,
+    const { pool, freeScanners, status, queueCount } = getSlotAvailability(
+      devices,
+      bookings,
+      selectedDate,
+      selectedTime,
     );
 
-    if (activeScanners.length === 0) {
-      alert("No scanners available");
+    // No eligible scanners at all (pre-booking: none registered; same-day:
+    // none online) -> straight into the queue.
+    if (pool.length === 0) {
+      setNearestScanner(null);
+      setQueuePosition(getActiveSlotBookings(bookings, selectedDate, selectedTime).length + 1);
       return;
     }
 
-    let nearest = activeScanners[0];
+    // Every eligible scanner is already committed for this slot -> queue.
+    // (With a single scanner, this means the very next request for the same
+    // slot is queued — that scanner is fully booked. With a second scanner
+    // that's still free, we never reach this branch — see below.)
+    if (status === "Booked" || status === "Queue") {
+      setNearestScanner(null);
+      setQueuePosition(queueCount + 1);
+      return;
+    }
+
+    // At least one scanner is free for this slot — pick the closest one to
+    // the clinic. (2-scanner example: scanner 1 already booked, scanner 2
+    // free -> scanner 2 is the only candidate and gets offered here.)
+    let nearest = freeScanners[0];
     let shortestDistance = Infinity;
 
-    activeScanners.forEach((scanner) => {
+    freeScanners.forEach((scanner) => {
       const distance = getDistance(
         selectedClinic.latitude,
         selectedClinic.longitude,
@@ -412,14 +585,16 @@ function BookScanner() {
     });
 
     setNearestScanner(nearest);
+    setQueuePosition(null);
   };
+
   const bookScanner = async () => {
     if (!selectedClinic) {
       alert("Please select a clinic");
       return;
     }
 
-    if (!nearestScanner) {
+    if (!nearestScanner && queuePosition === null) {
       alert("Please find nearest scanner first");
       return;
     }
@@ -428,6 +603,8 @@ function BookScanner() {
       alert("Please select booking date and time");
       return;
     }
+
+    const isQueued = queuePosition !== null;
 
     try {
       const response = await fetch(
@@ -442,27 +619,32 @@ function BookScanner() {
             clinicAddress: selectedClinic.address,
             phone: selectedClinic.phone,
 
-            scannerId: nearestScanner.deviceId,
-            scannerLocation: nearestScanner.city,
+            scannerId: nearestScanner?.deviceId ?? null,
+            scannerLocation: nearestScanner?.city ?? null,
 
             bookingDate: selectedDate,
             bookingTime: selectedTime,
 
-            status: "Pending",
+            status: isQueued ? "Queued" : "Assigned",
+            queuePosition: isQueued ? queuePosition : null,
           }),
         },
       );
 
       if (!response.ok) {
-        alert("Booking failed");
+        const data = await response.json();
+
+        alert(data.message);
+
         return;
       }
 
-      const booking = await response.json();
+      const booking: Booking = await response.json();
 
       setBookingDetails({
         scanner: nearestScanner,
         booking,
+        queuePosition: isQueued ? queuePosition : null,
       });
 
       setShowAnimation(true);
@@ -579,51 +761,90 @@ function BookScanner() {
     );
   }
   if (bookingSuccess && bookingDetails) {
+    const isQueued = bookingDetails.queuePosition !== null;
+    const isPreBooked = !isQueued && isPreBookingDate(bookingDetails.booking.bookingDate);
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center p-6">
         <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden">
           {/* Header */}
 
-          <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-10 text-center text-white">
+          <div
+            className={`p-10 text-center text-white ${
+              isQueued
+                ? "bg-gradient-to-r from-yellow-500 to-orange-500"
+                : isPreBooked
+                  ? "bg-gradient-to-r from-purple-600 to-indigo-500"
+                  : "bg-gradient-to-r from-blue-600 to-cyan-500"
+            }`}
+          >
             <img src={logo} className="w-32 mx-auto mb-5 animate-bounce" />
 
-            <div className="text-7xl mb-4">✅</div>
+            <div className="text-7xl mb-4">{isQueued ? "🕒" : isPreBooked ? "📅" : "✅"}</div>
 
-            <h1 className="text-4xl font-bold">Scanner Booked Successfully</h1>
+            <h1 className="text-4xl font-bold">
+              {isQueued
+                ? "Visit Added to Queue"
+                : isPreBooked
+                  ? "Scanner Pre-Booked Successfully"
+                  : "Scanner Booked Successfully"}
+            </h1>
 
-            <p className="mt-3 text-blue-100">Our scanner will reach your clinic shortly.</p>
+            <p className="mt-3 text-blue-100">
+              {isQueued
+                ? "All nearby scanners are busy for this slot. You'll be assigned automatically as soon as one is free."
+                : isPreBooked
+                  ? `Your scanner is reserved for ${bookingDetails.booking.bookingDate} at ${bookingDetails.booking.bookingTime}. It will reach your clinic at the scheduled time.`
+                  : "Our scanner will reach your clinic shortly."}
+            </p>
           </div>
 
           {/* Booking Details */}
 
           <div className="p-8 space-y-5">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-gray-50 rounded-2xl p-4">
-                <p className="text-gray-500">Scanner ID</p>
-
-                <h2 className="text-2xl font-bold">{bookingDetails.scanner.deviceId}</h2>
-              </div>
-
-              <div className="bg-gray-50 rounded-2xl p-4">
-                <p className="text-gray-500">Battery</p>
-
-                <h2 className="text-2xl font-bold text-green-600">
-                  {bookingDetails.scanner.battery}%
+            {isQueued ? (
+              <div className="rounded-2xl border border-yellow-300 bg-yellow-50 p-6 text-center">
+                <p className="text-gray-600">Your Queue Position</p>
+                <h2 className="text-5xl font-bold text-yellow-600">
+                  {bookingDetails.queuePosition}
                 </h2>
+                <p className="mt-2 text-sm text-gray-500">
+                  Admin will assign the next available scanner to this visit.
+                </p>
               </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="bg-gray-50 rounded-2xl p-4">
+                    <p className="text-gray-500">Scanner ID</p>
 
-              <div className="bg-gray-50 rounded-2xl p-4">
-                <p className="text-gray-500">Current Location</p>
+                    <h2 className="text-2xl font-bold">{bookingDetails.scanner?.deviceId}</h2>
+                  </div>
 
-                <h2 className="text-xl font-semibold">{bookingDetails.scanner.city}</h2>
-              </div>
+                  <div className="bg-gray-50 rounded-2xl p-4">
+                    <p className="text-gray-500">Battery</p>
 
-              <div className="bg-gray-50 rounded-2xl p-4">
-                <p className="text-gray-500">Status</p>
+                    <h2 className="text-2xl font-bold text-green-600">
+                      {bookingDetails.scanner?.battery}%
+                    </h2>
+                  </div>
 
-                <h2 className="text-xl font-semibold text-green-600">Assigned</h2>
-              </div>
-            </div>
+                  <div className="bg-gray-50 rounded-2xl p-4">
+                    <p className="text-gray-500">Current Location</p>
+
+                    <h2 className="text-xl font-semibold">{bookingDetails.scanner?.city}</h2>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-2xl p-4">
+                    <p className="text-gray-500">Status</p>
+
+                    <h2 className="text-xl font-semibold text-green-600">
+                      {isPreBooked ? "📅 Pre-Booked" : bookingDetails.booking.status}
+                    </h2>
+                  </div>
+                </div>
+              </>
+            )}
 
             <hr />
 
@@ -649,10 +870,10 @@ function BookScanner() {
 
             <div className="grid md:grid-cols-2 gap-4 pt-5">
               <a
-                href={`tel:${bookingDetails.scanner.phone || selectedClinic?.phone}`}
+                href={`tel:${bookingDetails.scanner?.phone || selectedClinic?.phone}`}
                 className="bg-green-600 hover:bg-green-700 transition text-white text-center py-4 rounded-2xl font-bold text-lg"
               >
-                📞 Call Scanner
+                📞 {isQueued ? "Call Support" : "Call Scanner"}
               </a>
 
               <button
@@ -664,9 +885,15 @@ function BookScanner() {
                     },
                   })
                 }
-                className="bg-blue-600 hover:bg-blue-700 transition text-white py-4 rounded-2xl font-bold text-lg"
+                disabled={isQueued || isPreBooked}
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition text-white py-4 rounded-2xl font-bold text-lg"
               >
-                📍 Track Scanner
+                📍{" "}
+                {isQueued
+                  ? "Tracking Unavailable"
+                  : isPreBooked
+                    ? "Tracking Starts on Visit Day"
+                    : "Track Scanner"}
               </button>
             </div>
 
@@ -677,6 +904,7 @@ function BookScanner() {
                 setBookingDetails(null);
 
                 setNearestScanner(null);
+                setQueuePosition(null);
 
                 setSelectedClinic(null);
 
@@ -695,6 +923,16 @@ function BookScanner() {
       </div>
     );
   }
+  const timeSlots: string[] = [];
+
+  for (let hour = 9; hour <= 18; hour++) {
+    for (let minute = 0; minute < 60; minute += 30) {
+      timeSlots.push(`${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`);
+    }
+  }
+
+  const preBooking = isPreBookingDate(selectedDate);
+
   return (
     <div className="min-h-screen pt-32 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
@@ -833,12 +1071,25 @@ function BookScanner() {
                     <p>{nearestScanner.city}</p>
 
                     <p className="font-semibold">
-                      {Date.now() - new Date(nearestScanner.lastSeen).getTime() < 120000
-                        ? "🟢 Online"
-                        : "🔴 Offline"}
+                      {preBooking
+                        ? `📅 Reserved for ${selectedDate}`
+                        : isOnline(nearestScanner.lastSeen)
+                          ? "🟢 Online"
+                          : "🔴 Offline"}
                     </p>
                   </div>
                 )}
+
+                {queuePosition !== null && (
+                  <div className="mb-4 rounded-xl border border-yellow-300 bg-yellow-50 p-4">
+                    <h3 className="font-bold text-yellow-700">🕒 All Nearby Scanners Busy</h3>
+                    <p>
+                      Your visit will be <strong>Queue Position {queuePosition}</strong> for this
+                      slot.
+                    </p>
+                  </div>
+                )}
+
                 <h3 className="font-bold">{selectedClinic.name}</h3>
 
                 <p>{selectedClinic.address}</p>
@@ -851,22 +1102,76 @@ function BookScanner() {
               type="date"
               min={new Date().toISOString().split("T")[0]}
               value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
+              onChange={(e) => {
+                setSelectedDate(e.target.value);
+                setSelectedTime("");
+                setNearestScanner(null);
+                setQueuePosition(null);
+              }}
               className="w-full border rounded-xl p-3 mb-4"
             />
 
-            <input
-              type="time"
-              value={selectedTime}
-              onChange={(e) => setSelectedTime(e.target.value)}
-              className="w-full border rounded-xl p-3 mb-6"
-            />
+            {preBooking && (
+              <div className="mb-4 rounded-xl border border-purple-300 bg-purple-50 p-3 text-sm text-purple-700 font-semibold">
+                📅 Pre-Booking — every registered scanner is available for this date, even if it
+                isn't online right now. It will be dispatched on the scheduled day.
+              </div>
+            )}
+
+            <div className="mb-6">
+              <h3 className="font-semibold mb-3">Available Time Slots</h3>
+
+              <div className="grid grid-cols-2 gap-2 max-h-72 overflow-y-auto">
+                {timeSlots.map((slot) => {
+                  // Same shared logic used by "Find Nearest Scanner": a
+                  // slot only turns Booked once every eligible scanner is
+                  // assigned. A free 2nd scanner keeps it Available.
+                  const { status, queueCount: queue } = getSlotAvailability(
+                    devices,
+                    bookings,
+                    selectedDate,
+                    slot,
+                  );
+
+                  return (
+                    <button
+                      key={slot}
+                      disabled={status === "Booked"}
+                      onClick={() => {
+                        setSelectedTime(slot);
+                        setNearestScanner(null);
+                        setQueuePosition(null);
+                      }}
+                      className={`rounded-xl p-3 border text-sm font-semibold transition
+
+          ${
+            selectedTime === slot
+              ? "bg-blue-600 text-white border-blue-600"
+              : status === "Available"
+                ? "bg-green-50 border-green-300 text-green-700 hover:bg-green-100"
+                : status === "Booked"
+                  ? "bg-red-50 border-red-300 text-red-600 cursor-not-allowed"
+                  : "bg-yellow-50 border-yellow-300 text-yellow-700"
+          }`}
+                    >
+                      <div>{slot}</div>
+
+                      <div className="text-xs mt-1">
+                        {status === "Available" && "🟢 Available"}
+                        {status === "Booked" && "🔴 Booked"}
+                        {status === "Queue" && `🟡 Queue (${queue})`}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
             <button
               onClick={findNearestScanner}
-              disabled={!selectedClinic}
+              disabled={!selectedClinic || !selectedDate || !selectedTime}
               className="w-full bg-blue-600 disabled:bg-gray-400 text-white py-3 rounded-xl font-semibold"
             >
-              Find Nearest Scanner
+              {preBooking ? "Find Scanner for Pre-Booking" : "Find Nearest Scanner"}
             </button>
           </div>
 
@@ -903,9 +1208,8 @@ function BookScanner() {
                 </Marker>
               )}
 
-              {devices
-                .filter((device) => Date.now() - new Date(device.lastSeen).getTime() < 120000)
-                .map((device) => (
+              {(preBooking ? devices : devices.filter((device) => isOnline(device.lastSeen))).map(
+                (device) => (
                   <Marker key={device._id} position={[device.latitude, device.longitude]}>
                     <Popup>
                       <div>
@@ -913,37 +1217,74 @@ function BookScanner() {
                         <br />
                         {device.city}
                         <br />
-                        {Date.now() - new Date(device.lastSeen).getTime() < 120000
-                          ? "🟢 Online"
-                          : "🔴 Offline"}
+                        {isOnline(device.lastSeen) ? "🟢 Online" : "🔴 Offline"}
                         <br />
                         Battery: {device.battery}%
                       </div>
                     </Popup>
                   </Marker>
-                ))}
+                ),
+              )}
             </MapContainer>
           </div>
         </div>
 
-        {nearestScanner && (
-          <div className="mt-8 rounded-3xl border border-green-300 bg-green-50 p-5">
-            <h2 className="text-xl font-bold text-green-700">⭐ Nearest Scanner Found</h2>
+        {(nearestScanner || queuePosition !== null) && (
+          <div
+            className={`mt-8 rounded-3xl border p-5 ${
+              queuePosition !== null
+                ? "border-yellow-300 bg-yellow-50"
+                : "border-green-300 bg-green-50"
+            }`}
+          >
+            {nearestScanner ? (
+              <>
+                <h2 className="text-xl font-bold text-green-700">
+                  {preBooking ? "📅 Scanner Reserved for Pre-Booking" : "⭐ Nearest Scanner Found"}
+                </h2>
 
-            <p className="mt-2">Device: {nearestScanner.deviceId}</p>
+                <p className="mt-2">Device: {nearestScanner.deviceId}</p>
 
-            <p>Clinic: {nearestScanner.clinicName}</p>
+                <p>Clinic: {nearestScanner.clinicName}</p>
 
-            <p>City: {nearestScanner.city}</p>
+                <p>City: {nearestScanner.city}</p>
 
-            <p>Status: {nearestScanner.status}</p>
+                <p>Status: {nearestScanner.status}</p>
 
-            <button
-              onClick={bookScanner}
-              className="mt-4 rounded-xl bg-green-600 px-5 py-3 text-white"
-            >
-              Book This Scanner
-            </button>
+                {preBooking && (
+                  <p className="mt-1 text-sm text-purple-700">
+                    This scanner is pre-booked for {selectedDate} at {selectedTime} — it doesn't
+                    need to be online today.
+                  </p>
+                )}
+
+                <button
+                  onClick={bookScanner}
+                  className="mt-4 rounded-xl bg-green-600 px-5 py-3 text-white"
+                >
+                  {preBooking ? "Confirm Pre-Booking" : "Book This Scanner"}
+                </button>
+              </>
+            ) : (
+              <>
+                <h2 className="text-xl font-bold text-yellow-700">
+                  🕒 All Scanners Busy — Queue Position {queuePosition}
+                </h2>
+
+                <p className="mt-2 text-gray-600">
+                  {preBooking
+                    ? "Every registered scanner is already pre-booked for this slot. You'll still get a confirmed visit slot; a scanner will be assigned automatically as soon as one frees up."
+                    : "You'll still get a confirmed visit slot; a scanner will be assigned to it automatically as soon as one becomes free."}
+                </p>
+
+                <button
+                  onClick={bookScanner}
+                  className="mt-4 rounded-xl bg-yellow-500 px-5 py-3 text-white font-semibold"
+                >
+                  Join Queue
+                </button>
+              </>
+            )}
           </div>
         )}
         <div className="mt-8">
@@ -951,7 +1292,7 @@ function BookScanner() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {devices.map((device) => {
-              const isOnline = Date.now() - new Date(device.lastSeen).getTime() < 120000;
+              const online = isOnline(device.lastSeen);
 
               return (
                 <div key={device._id} className="bg-white border rounded-2xl p-5 shadow-md">
@@ -963,7 +1304,7 @@ function BookScanner() {
 
                   <p>Battery: {device.battery}%</p>
 
-                  <p className="font-semibold">{isOnline ? "🟢 Online" : "🔴 Offline"}</p>
+                  <p className="font-semibold">{online ? "🟢 Online" : "🔴 Offline"}</p>
 
                   <p className="text-sm text-gray-500">
                     Last Seen: {new Date(device.lastSeen).toLocaleString()}
