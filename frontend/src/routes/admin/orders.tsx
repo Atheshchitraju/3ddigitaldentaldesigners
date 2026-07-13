@@ -124,6 +124,10 @@ function AdminOrdersPage() {
 
       DoctorName: order.name,
 
+      PatientName: order.patientName,
+
+      PatientAge: order.patientAge,
+
       Phone: order.phone,
 
       Clinic: order.clinic,
@@ -176,8 +180,8 @@ function AdminOrdersPage() {
     const matchesSearch =
       order.orderId?.toLowerCase().includes(search.toLowerCase()) ||
       order.product?.toLowerCase().includes(search.toLowerCase()) ||
-      order.name?.toLowerCase().includes(search.toLowerCase());
-
+      order.name?.toLowerCase().includes(search.toLowerCase()) ||
+      order.patientName?.toLowerCase().includes(search.toLowerCase());
     const matchesStatus = statusFilter === "All" ? true : order.status === statusFilter;
 
     const matchesClinic = clinicFilter === "All" ? true : order.clinic === clinicFilter;
@@ -355,6 +359,12 @@ function AdminOrdersPage() {
 
                   <th className="text-left p-4 font-semibold">Doctor Name</th>
 
+                  <th className="text-left p-4 font-semibold">Patient Name</th>
+
+                  <th className="text-left p-4 font-semibold">Age</th>
+
+                  <th className="text-left p-4 font-semibold">Phone</th>
+
                   <th className="text-left p-4 font-semibold">Phone</th>
 
                   <th className="text-left p-4 font-semibold">Clinic</th>
@@ -396,7 +406,11 @@ function AdminOrdersPage() {
                   >
                     <td className="p-4 font-medium">{order.orderId}</td>
 
-                    <td className="p-4">{order.name || "-"}</td>
+                    <td className="p-4 font-medium">{order.name || "-"}</td>
+
+                    <td className="p-4 font-semibold text-blue-700">{order.patientName || "-"}</td>
+
+                    <td className="p-4">{order.patientAge || "-"}</td>
 
                     <td className="p-4">{order.phone || "-"}</td>
 
