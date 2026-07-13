@@ -158,6 +158,8 @@ type SelectedProduct = {
 export default function OrderModal({ open, onClose }: Props) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [patientName, setPatientName] = useState("");
+  const [patientAge, setPatientAge] = useState("");
 
   const [selectedClinic, setSelectedClinic] = useState("");
   const [customClinic, setCustomClinic] = useState("");
@@ -263,7 +265,14 @@ export default function OrderModal({ open, onClose }: Props) {
   };
 
   const submitOrder = async () => {
-    if (!name || !phone || selectedProducts.length === 0 || !selectedClinic) {
+    if (
+      !name ||
+      !phone ||
+      !patientName ||
+      !patientAge ||
+      selectedProducts.length === 0 ||
+      !selectedClinic
+    ) {
       showToast(
         "error",
         "Please fill in name, phone, clinic and select at least one product before submitting.",
@@ -283,6 +292,8 @@ export default function OrderModal({ open, onClose }: Props) {
       const orderData = {
         name,
         phone,
+        patientName,
+        patientAge,
         clinic: finalClinicName,
         clinicEmail: finalClinicEmail,
         clinicWhatsapp: finalClinicPhone,
@@ -450,6 +461,35 @@ export default function OrderModal({ open, onClose }: Props) {
                       className={inputClass}
                     />
                   </div>
+                </Field>
+              </div>
+            </section>
+
+            {/* PATIENT DETAILS */}
+            <section>
+              <SectionHeading icon={<User className="w-4 h-4" />} title="Patient Details" />
+
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+                <Field label="Patient Name" required>
+                  <input
+                    type="text"
+                    value={patientName}
+                    onChange={(e) => setPatientName(e.target.value)}
+                    placeholder="Enter Patient Name"
+                    className={inputClass}
+                  />
+                </Field>
+
+                <Field label="Patient Age" required>
+                  <input
+                    type="number"
+                    min="1"
+                    max="120"
+                    value={patientAge}
+                    onChange={(e) => setPatientAge(e.target.value)}
+                    placeholder="Enter Age"
+                    className={inputClass}
+                  />
                 </Field>
               </div>
             </section>

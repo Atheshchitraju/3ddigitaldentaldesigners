@@ -1,5 +1,6 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { Phone, MessageCircle } from "lucide-react";
+import { useMemo, useState } from "react";
 /* =========================
    BANNERS
 ========================= */
@@ -229,8 +230,37 @@ const clinics = [
     location: "HSR Layout, Bengaluru",
     phone: "+91 9591111177",
     email: "jasasthetic@gmail.com",
-    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.8047997650115!2d77.64372107983766!3d12.920264054877379!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae14815a26548b%3A0x9c84d0d7b3d64c71!2sJas%20Dental%20HSR%20LAYOUT!5e0!3m2!1sen!2sin!4v1778756659686!5m2!1sen!2sin",
+    branches: [
+      {
+        id: "jas-hsr",
+        name: "HSR Layout Branch",
+        address: "HSR Layout, Bengaluru",
+        phone: "+91 9591111177",
+        latitude: 12.919426,
+        longitude: 77.64602,
+        map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.817848170092!2d77.64602047512199!3d12.919425987391179!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae14815a26548b%3A0x9c84d0d7b3d64c71!2sJAS%20DENTAL%20HSR%20LAYOUT!5e0!3m2!1sen!2sin!4v1783309657577!5m2!1sen!2sin",
+      },
 
+      {
+        id: "jas-btm",
+        name: "BTM Layout Branch",
+        address: "BTM Layout, Bengaluru",
+        phone: "+91 9591111177",
+        latitude: 12.905667,
+        longitude: 77.605866,
+        map: "https://www.google.com/maps/embed?pb=!3m2!1sen!2sin!4v1783309715244!5m2!1sen!2sin!6m8!1m7!1sO48Gaw_Xd2D3v4mW__Jdsg!2m2!1d12.90566703654973!2d77.60586617645086!3f168.40102!4f0!5f0.7820865974627469",
+      },
+
+      {
+        id: "jas-jakkasandra",
+        name: "Jakkasandra Branch",
+        address: "Jakkasandra, Bengaluru",
+        phone: "+91 9591111177",
+        latitude: 12.924634,
+        longitude: 77.638336,
+        map: "https://www.google.com/maps/embed?pb=!3m2!1sen!2sin!4v1783309753392!5m2!1sen!2sin!6m8!1m7!1sRsKIATo6hgF3svQ9UBHcug!2m2!1d12.92463440372963!2d77.63833634195831!3f41.732723!4f0!5f0.7820865974627469",
+      },
+    ],
     services: [
       "Smile Designing",
       "Dental Implants",
@@ -2142,6 +2172,7 @@ function ClinicPage() {
   const { id } = useParams({ strict: false });
 
   const clinic = clinics.find((c) => c.id === id);
+  const [selectedBranchIndex, setSelectedBranchIndex] = useState(0);
 
   if (!clinic) {
     return (
@@ -2348,28 +2379,38 @@ function ClinicPage() {
         )}
       </section>
       {/* MAP SECTION */}
-      {clinic.map && (
-        <section className="mt-20 sm:mt-28">
-          <div className="text-center mb-10 sm:mb-14">
-            <h2 className="text-3xl sm:text-4xl font-bold">Visit Our Clinic</h2>
-
-            <p className="text-gray-600 mt-4">Find us easily with Google Maps navigation.</p>
+      <div className="space-y-6">
+        {clinic.branches && clinic.branches.length > 0 && (
+          <div className="flex flex-wrap gap-3">
+            {clinic.branches.map((branch, index) => (
+              <button
+                key={branch.id}
+                onClick={() => setSelectedBranchIndex(index)}
+                className={`rounded-xl px-4 py-2 font-medium transition ${
+                  selectedBranchIndex === index
+                    ? "bg-purple-600 text-white"
+                    : "bg-gray-100 hover:bg-gray-200"
+                }`}
+              >
+                {branch.name}
+              </button>
+            ))}
           </div>
+        )}
 
-          <div className="overflow-hidden rounded-[32px] shadow-2xl border border-gray-200">
-            <iframe
-              src={clinic.map}
-              width="100%"
-              height="500"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="w-full"
-            ></iframe>
-          </div>
-        </section>
-      )}
+        <div className="overflow-hidden rounded-[32px] shadow-2xl border border-gray-200">
+          <iframe
+            src={clinic.branches ? clinic.branches[selectedBranchIndex].map : clinic.map}
+            width="100%"
+            height="500"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="w-full"
+          ></iframe>
+        </div>
+      </div>
       {/* FLOATING CONTACT WIDGET */}
       <div className="fixed bottom-6 right-6 z-50">
         <div className="bg-white rounded-2xl shadow-2xl p-4 border max-w-xs">
