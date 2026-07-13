@@ -115,12 +115,16 @@ export default function AdminOrders() {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse min-w-[1800px]">
+        <table className="w-full border-collapse min-w-[2200px]">
           <thead>
             <tr className="bg-gray-100">
               <th className="p-3 text-left">Order ID</th>
 
-              <th className="p-3 text-left">Patient</th>
+              <th className="p-3 text-left">Doctor</th>
+
+              <th className="p-3 text-left">Patient Name</th>
+
+              <th className="p-3 text-left">Age</th>
 
               <th className="p-3 text-left">Phone</th>
 
@@ -148,10 +152,14 @@ export default function AdminOrders() {
 
           <tbody>
             {orders.map((order: any) => (
-              <tr key={order._id} className="border-b">
+              <tr key={order._id} className="border-b hover:bg-gray-50">
                 <td className="p-3">{order.orderId}</td>
 
-                <td className="p-3">{order.name || "-"}</td>
+                <td className="p-3 font-medium">{order.name || "-"}</td>
+
+                <td className="p-3 font-semibold text-blue-700">{order.patientName || "-"}</td>
+
+                <td className="p-3">{order.patientAge || "-"}</td>
 
                 <td className="p-3">{order.phone || "-"}</td>
 
@@ -169,9 +177,9 @@ export default function AdminOrders() {
                   {Array.isArray(order.selectedTeeth) ? order.selectedTeeth.join(", ") : "-"}
                 </td>
 
-                <td className="p-3 max-w-[300px]">{order.notes || "-"}</td>
+                <td className="p-3 max-w-[300px] whitespace-pre-wrap">{order.notes || "-"}</td>
 
-                <td className="p-3">{order.status || "Pending"}</td>
+                <td className="p-3 font-semibold">{order.status || "Pending"}</td>
 
                 <td className="p-3">
                   <select
@@ -179,15 +187,13 @@ export default function AdminOrders() {
                     onChange={(e) => updateStatus(order.orderId, e.target.value)}
                     className="border p-2 rounded"
                   >
-                    <option value="Pending">Pending</option>
-
+                    <option value="Placed">Placed</option>
                     <option value="Accepted">Accepted</option>
-
+                    <option value="Designing">Designing</option>
                     <option value="Printing">Printing</option>
-
                     <option value="Completed">Completed</option>
-
                     <option value="Delivered">Delivered</option>
+                    <option value="Rejected">Rejected</option>
                   </select>
                 </td>
 
