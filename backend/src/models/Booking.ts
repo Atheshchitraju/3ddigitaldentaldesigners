@@ -20,6 +20,10 @@ const bookingSchema = new mongoose.Schema(
     scannerId: String,
 
     scannerLocation: String,
+    bookingId: {
+      type: String,
+      unique: true,
+    },
 
     operatorName: {
       type: String,

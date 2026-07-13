@@ -9,6 +9,8 @@ export const createOrder = async (req: Request, res: Response) => {
     const {
       name,
       phone,
+      patientName,
+      patientAge,
       clinic,
       clinicEmail,
       clinicWhatsapp,
@@ -31,6 +33,8 @@ export const createOrder = async (req: Request, res: Response) => {
     const order = await Order.create({
       name,
       phone,
+      patientName,
+      patientAge,
       clinic,
       clinicEmail,
       clinicWhatsapp,
@@ -69,7 +73,10 @@ Your order has been received successfully.
 ${orderId}
 
 👤 Patient:
-${name}
+${patientName}
+
+🎂 Age:
+${patientAge}
 
 🏥 Clinic:
 ${clinic}
@@ -279,7 +286,10 @@ export const updateOrderStatus = async (req: Request, res: Response) => {
 ${updatedOrder.orderId}
 
 👤 Patient Name:
-${updatedOrder.name}
+${updatedOrder.patientName}
+
+Age:
+${updatedOrder.patientAge}
 
 🏥 Clinic:
 ${updatedOrder.clinic}

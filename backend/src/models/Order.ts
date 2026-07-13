@@ -11,6 +11,15 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    patientName: {
+      type: String,
+      required: true,
+    },
+
+    patientAge: {
+      type: Number,
+      required: true,
+    },
 
     clinic: {
       type: String,

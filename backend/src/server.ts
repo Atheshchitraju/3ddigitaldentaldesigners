@@ -38,6 +38,12 @@ app.use("/api/device", deviceRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/clinics", clinicRoutes);
 
+app.get("/athesh-test", (req, res) => {
+  res.json({
+    message: "This is my LOCAL backend",
+    time: new Date(),
+  });
+});
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

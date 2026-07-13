@@ -3,15 +3,35 @@ import Booking from "../models/Booking";
 
 export const createBooking = async (req: Request, res: Response) => {
   try {
-    console.log("BODY:", req.body);
+    const { scannerId, bookingDate, bookingTime } = req.body;
 
-    const booking = await Booking.create(req.body);
+    const existing = await Booking.findOne({
+      scannerId,
+      bookingDate,
+      bookingTime,
+      status: {
+        $nin: ["Cancelled", "Completed"],
+      },
+    });
 
-    console.log("BOOKING CREATED:", booking);
+    if (existing) {
+      return res.status(400).json({
+        message: "Scanner already booked for this slot.",
+      });
+    }
+
+    const total = await Booking.countDocuments();
+
+    const bookingId = "SCN-" + new Date().getFullYear() + "-" + String(total + 1).padStart(5, "0");
+
+    const booking = await Booking.create({
+      ...req.body,
+      bookingId,
+    });
 
     res.status(201).json(booking);
   } catch (error: any) {
-    console.error("BOOKING ERROR:", error);
+    console.error(error);
 
     res.status(500).json({
       message: error.message,
@@ -48,6 +68,62 @@ export const getBookingById = async (req: Request, res: Response) => {
 
     res.status(500).json({
       message: "Server Error",
+    });
+  }
+};
+export const getAvailableSlots = async (req: Request, res: Response) => {
+  try {
+    const date = String(req.query.date || "");
+
+    console.log("Requested date:", date);
+
+    const bookings = await Booking.find({
+      bookingDate: date,
+      status: {
+        $nin: ["Cancelled", "Completed"],
+      },
+    } as any);
+
+    console.log("Bookings found:", bookings.length);
+
+    const totalScanners = 2;
+
+    const slots = [];
+
+    for (let hour = 9; hour <= 18; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const time =
+          `${hour.toString().padStart(2, "0")}:` + `${minute.toString().padStart(2, "0")}`;
+
+        const slotBookings = bookings.filter((b: any) => b.bookingTime === time);
+
+        let status = "Available";
+        let queue = 0;
+
+        if (slotBookings.length >= totalScanners) {
+          status = "Booked";
+        }
+
+        if (slotBookings.length > totalScanners) {
+          status = "Queue";
+          queue = slotBookings.length - totalScanners;
+        }
+
+        slots.push({
+          time,
+          status,
+          queue,
+        });
+      }
+    }
+
+    res.json(slots);
+  } catch (err) {
+    console.error("SLOTS API ERROR:", err);
+
+    res.status(500).json({
+      message: "Server Error",
+      error: err,
     });
   }
 };
