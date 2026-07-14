@@ -21,7 +21,9 @@ import {
   ChevronDown,
   ShieldCheck,
 } from "lucide-react";
-
+const clinicBranches: Record<string, string[]> = {
+  "Jas Dental": ["HSR Layout", "BTM Layout", "Jakkasandra"],
+};
 declare global {
   interface Window {
     Razorpay: any;
@@ -162,6 +164,7 @@ export default function OrderModal({ open, onClose }: Props) {
   const [patientAge, setPatientAge] = useState("");
 
   const [selectedClinic, setSelectedClinic] = useState("");
+  const [selectedBranch, setSelectedBranch] = useState("");
   const [customClinic, setCustomClinic] = useState("");
   const [customClinicEmail, setCustomClinicEmail] = useState("");
   const [customClinicPhone, setCustomClinicPhone] = useState("");
@@ -500,7 +503,10 @@ export default function OrderModal({ open, onClose }: Props) {
               <Field label="Select clinic" required>
                 <select
                   value={selectedClinic}
-                  onChange={(e) => setSelectedClinic(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedClinic(e.target.value);
+                    setSelectedBranch("");
+                  }}
                   className={inputClass}
                 >
                   <option value="">Choose clinic</option>
@@ -512,7 +518,25 @@ export default function OrderModal({ open, onClose }: Props) {
                   <option value="other">Other clinic</option>
                 </select>
               </Field>
+              {clinicBranches[clinicName] && (
+                <div className="mt-4">
+                  <Field label="Select Branch" required>
+                    <select
+                      value={selectedBranch}
+                      onChange={(e) => setSelectedBranch(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="">Choose Branch</option>
 
+                      {clinicBranches[clinicName].map((branch) => (
+                        <option key={branch} value={branch}>
+                          {branch}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                </div>
+              )}
               {selectedClinic === "other" && (
                 <div className="grid sm:grid-cols-3 gap-4 mt-4">
                   <input
