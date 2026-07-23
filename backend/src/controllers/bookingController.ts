@@ -12,7 +12,7 @@ export const createBooking = async (req: Request, res: Response) => {
       status: {
         $nin: ["Cancelled", "Completed"],
       },
-    });
+    }).lean();
 
     if (existing) {
       return res.status(400).json({
@@ -41,12 +41,25 @@ export const createBooking = async (req: Request, res: Response) => {
 
 export const getBookings = async (req: Request, res: Response) => {
   try {
-    const bookings = await Booking.find().sort({
-      createdAt: -1,
-    });
+    const filter: any = {};
+
+    if (req.query.date) {
+      filter.bookingDate = req.query.date;
+    }
+
+    if (req.query.status) {
+      filter.status = req.query.status;
+    }
+
+    const bookings = await Booking.find(filter)
+      .select("-__v")
+      .sort({ bookingTime: 1 })
+      .lean();
 
     res.json(bookings);
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       message: "Error fetching bookings",
     });
@@ -54,7 +67,9 @@ export const getBookings = async (req: Request, res: Response) => {
 };
 export const getBookingById = async (req: Request, res: Response) => {
   try {
-    const booking = await Booking.findById(req.params.id);
+    const booking = await Booking.findById(req.params.id)
+      .select("-__v")
+      .lean();
 
     if (!booking) {
       return res.status(404).json({
@@ -82,7 +97,9 @@ export const getAvailableSlots = async (req: Request, res: Response) => {
       status: {
         $nin: ["Cancelled", "Completed"],
       },
-    } as any);
+    })
+      .select("bookingTime")
+      .lean();
 
     console.log("Bookings found:", bookings.length);
 

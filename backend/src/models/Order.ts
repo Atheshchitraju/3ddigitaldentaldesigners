@@ -25,6 +25,10 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    branch: {
+      type: String,
+      default: "",
+    },
 
     clinicEmail: {
       type: String,
@@ -138,5 +142,37 @@ const orderSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+// ==========================
+// Performance Indexes
+// ==========================
+
+// Search orders by clinic
+orderSchema.index({ clinic: 1 });
+
+// Search by designer
+orderSchema.index({ designer: 1 });
+
+// Filter by order status
+orderSchema.index({ status: 1 });
+
+// Filter by payment status
+orderSchema.index({ paymentStatus: 1 });
+
+// Search by product
+orderSchema.index({ product: 1 });
+
+// Recent orders
+orderSchema.index({ createdAt: -1 });
+
+// Delivery tracking
+orderSchema.index({ deliveryDate: 1 });
+
+// Frequently used dashboard query
+orderSchema.index({
+  clinic: 1,
+  status: 1,
+  createdAt: -1,
+});
 
 export default mongoose.model("Order", orderSchema);

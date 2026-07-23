@@ -13,11 +13,15 @@ const deviceSchema = new mongoose.Schema(
       default: "",
     },
 
-    operatorName: {
+    branch: {
       type: String,
       default: "",
     },
 
+    operatorName: {
+      type: String,
+      default: "",
+    },
     phone: {
       type: String,
       default: "",
@@ -63,5 +67,27 @@ const deviceSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+// ==========================
+// Performance Indexes
+// ==========================
+
+// Fast lookup by city
+deviceSchema.index({ city: 1 });
+
+// Fast lookup by status
+deviceSchema.index({ status: 1 });
+
+// Frequently used query: available scanners in a city
+deviceSchema.index({
+  city: 1,
+  status: 1,
+});
+
+// Recent device updates
+deviceSchema.index({ lastSeen: -1 });
+
+// Recent records
+deviceSchema.index({ createdAt: -1 });
 
 export default mongoose.model("Device", deviceSchema);
