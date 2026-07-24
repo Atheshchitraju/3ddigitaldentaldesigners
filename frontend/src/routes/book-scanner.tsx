@@ -461,19 +461,26 @@ function BookScanner() {
   }, []);
 
   // #2 — devices only fetch once a clinic (and therefore a city) is selected.
-  const clinicCity = selectedClinic?.city ?? selectedClinic?.address ?? "";
-  useEffect(() => {
-    if (!selectedClinic || !clinicCity) { setDevices([]); setDevicesStatus("idle"); return; }
-    const cached = cache.devicesByCity.get(clinicCity);
-    if (cached && isFresh(cached.ts)) { setDevices(cached.data); setDevicesStatus("ready"); return; }
 
-    const controller = new AbortController();
+  useEffect(() => {
+    if (!selectedClinic) {
+      setDevices([]);
+      setDevicesStatus("idle");
+      return;
+    }
+
     setDevicesStatus("loading");
-    fetchJson<Device>(`${API_BASE}/device?city=${encodeURIComponent(clinicCity)}`)
-      .then((data) => { cache.devicesByCity.set(clinicCity, { data, ts: Date.now() }); setDevices(data); setDevicesStatus("ready"); })
-      .catch((err) => { if (err?.name !== "AbortError") { console.error(err); setDevicesStatus("error"); } });
-    return () => controller.abort();
-  }, [selectedClinic, clinicCity]);
+
+    fetchJson<Device>(`${API_BASE}/device`)
+      .then((data) => {
+        setDevices(data);
+        setDevicesStatus("ready");
+      })
+      .catch((err) => {
+        console.error(err);
+        setDevicesStatus("error");
+      });
+  }, [selectedClinic]);
 
   // #3 — bookings only fetch once a date is selected.
   useEffect(() => {
@@ -748,7 +755,7 @@ function BookScanner() {
             <button
               onClick={() => {
                 if (clinicsStatus === "error") { cache.clinics = null; setClinicsStatus("loading"); fetchJson<Clinic>(`${API_BASE}/clinics`).then((d) => { cache.clinics = { data: d, ts: Date.now() }; setClinics(d); setClinicsStatus("ready"); }).catch(() => setClinicsStatus("error")); }
-                if (devicesStatus === "error" && clinicCity) { cache.devicesByCity.delete(clinicCity); setDevicesStatus("loading"); fetchJson<Device>(`${API_BASE}/device?city=${encodeURIComponent(clinicCity)}`).then((d) => { cache.devicesByCity.set(clinicCity, { data: d, ts: Date.now() }); setDevices(d); setDevicesStatus("ready"); }).catch(() => setDevicesStatus("error")); }
+                if (devicesStatus === "error" && clinicCity) { cache.devicesByCity.delete(clinicCity); setDevicesStatus("loading"); fetchJson<Device>(`${API_BASE}/device`).then((d) => { cache.devicesByCity.set(clinicCity, { data: d, ts: Date.now() }); setDevices(d); setDevicesStatus("ready"); }).catch(() => setDevicesStatus("error")); }
                 if (bookingsStatus === "error" && selectedDate) { cache.bookingsByDate.delete(selectedDate); setBookingsStatus("loading"); fetchJson<Booking>(`${API_BASE}/bookings?date=${encodeURIComponent(selectedDate)}`).then((d) => { cache.bookingsByDate.set(selectedDate, { data: d, ts: Date.now() }); setBookings(d); setBookingsStatus("ready"); }).catch(() => setBookingsStatus("error")); }
               }}
               className="sm:ml-auto text-sm font-semibold rounded-xl px-4 py-2 text-white transition hover:opacity-90"
@@ -926,7 +933,9 @@ function BookScanner() {
         <div className="mt-10">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl md:text-2xl font-bold" style={{ color: COLORS.ink, fontFamily: "Manrope, sans-serif" }}>Active scanner agents</h2>
-            <span className="text-sm" style={{ color: COLORS.slate }}>{selectedClinic ? `${devices.length} near ${clinicCity || selectedClinic.name}` : "—"}</span>
+            <span className="text-sm" style={{ color: COLORS.slate }}>{selectedClinic
+              ? `${devices.length} scanners available`
+              : "—"}</span>
           </div>
           <ScannerAgentsList devices={devices} selectedClinic={selectedClinic} loading={devicesStatus === "loading"} />
         </div>

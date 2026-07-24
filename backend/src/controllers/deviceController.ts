@@ -51,17 +51,7 @@ export const updateDevice = async (req: Request, res: Response) => {
 
 export const getDevices = async (req: Request, res: Response) => {
   try {
-    const filter: any = {};
-
-    if (req.query.city) {
-      filter.city = req.query.city;
-    }
-
-    if (req.query.status) {
-      filter.status = req.query.status;
-    }
-
-    const devices = await Device.find(filter)
+    const devices = await Device.find({})
       .select(
         "deviceId clinicName branch city latitude longitude battery status lastSeen"
       )
