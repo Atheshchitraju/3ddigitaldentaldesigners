@@ -107,6 +107,7 @@ type ResourceStatus = "idle" | "loading" | "ready" | "error";
 // ---- Constants & helpers ----
 const ONLINE_THRESHOLD_MS = 120000; // 2 minutes
 const API_BASE = "https://threeddigitaldentaldesigners.onrender.com/api";
+// const API_BASE = "http://localhost:5000/api";
 
 const isOnline = (lastSeen: string) => Date.now() - new Date(lastSeen).getTime() < ONLINE_THRESHOLD_MS;
 
@@ -266,40 +267,101 @@ const TimeSlotGrid = memo(function TimeSlotGrid({ devices, bookings, selectedDat
 
 interface ScannerAgentsListProps { devices: Device[]; selectedClinic: Clinic | null; loading: boolean; }
 
-const ScannerAgentsList = memo(function ScannerAgentsList({ devices, selectedClinic, loading }: ScannerAgentsListProps) {
-  if (!selectedClinic)
-    return <SectionCard className="p-8 text-center"><p className="text-sm" style={{ color: COLORS.slate }}>Select a clinic above to see IntraOral scanners  near You.</p></SectionCard>;
-
+const ScannerAgentsList = memo(function ScannerAgentsList({
+  devices,
+  selectedClinic,
+  loading,
+}: ScannerAgentsListProps) {
   if (loading)
     return (
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Array.from({ length: 3 }).map((_, i) => <SectionCard key={i} className="p-5 h-32 animate-pulse" />)}
+        {Array.from({ length: 3 }).map((_, i) => (
+          <SectionCard key={i} className="p-5 h-32 animate-pulse" />
+        ))}
       </div>
     );
 
   if (devices.length === 0)
-    return <SectionCard className="p-8 text-center"><p className="text-sm" style={{ color: COLORS.slate }}>No scanners are registered near {selectedClinic.name} yet.</p></SectionCard>;
+    return (
+      <SectionCard className="p-8 text-center">
+        <p className="text-sm" style={{ color: COLORS.slate }}>
+          {selectedClinic
+            ? `No scanners are registered near ${selectedClinic.name} yet.`
+            : "No scanner agents available."}
+        </p>
+      </SectionCard>
+    );
 
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {devices.map((device) => {
         const online = isOnline(device.lastSeen);
+
         return (
           <SectionCard key={device._id} className="p-5">
             <div className="flex items-start justify-between">
-              <h3 className="font-bold text-base" style={{ color: COLORS.ink }}>{device.deviceId}</h3>
-              <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold"
-                style={{ background: online ? COLORS.availableBg : "#F2F4F7", color: online ? COLORS.available : "#667085" }}>
-                <span className="h-1.5 w-1.5 rounded-full" style={{ background: online ? COLORS.available : "#98A2B3" }} />
+              <h3
+                className="font-bold text-base"
+                style={{ color: COLORS.ink }}
+              >
+                {device.deviceId}
+              </h3>
+
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                style={{
+                  background: online
+                    ? COLORS.availableBg
+                    : "#F2F4F7",
+                  color: online
+                    ? COLORS.available
+                    : "#667085",
+                }}
+              >
+                <span
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{
+                    background: online
+                      ? COLORS.available
+                      : "#98A2B3",
+                  }}
+                />
                 {online ? "Online" : "Offline"}
               </span>
             </div>
-            <p className="text-sm mt-1.5" style={{ color: COLORS.slate }}>{device.clinicName}</p>
-            <p className="text-sm flex items-center gap-1.5 mt-0.5" style={{ color: COLORS.slate }}><IconPin className="h-3.5 w-3.5" /> {device.city}</p>
-            <div className="mt-3 flex items-center gap-1.5 text-sm" style={{ color: COLORS.ink }}>
-              <IconBattery level={device.battery} /><span className="font-semibold">{device.battery}%</span>
+
+            <p
+              className="text-sm mt-1.5"
+              style={{ color: COLORS.slate }}
+            >
+              {device.clinicName}
+            </p>
+
+            <p
+              className="text-sm flex items-center gap-1.5 mt-0.5"
+              style={{ color: COLORS.slate }}
+            >
+              <IconPin className="h-3.5 w-3.5" />
+              {device.city}
+            </p>
+
+            <div
+              className="mt-3 flex items-center gap-1.5 text-sm"
+              style={{ color: COLORS.ink }}
+            >
+              <IconBattery level={device.battery} />
+              <span className="font-semibold">
+                {device.battery}%
+              </span>
             </div>
-            <p className="text-xs mt-3" style={{ color: COLORS.slate }}>Last seen {new Date(device.lastSeen).toLocaleString()}</p>
+
+            <p
+              className="text-xs mt-3"
+              style={{ color: COLORS.slate }}
+            >
+              Last seen{" "}
+              {new Date(device.lastSeen).toLocaleString()}
+            </p>
           </SectionCard>
         );
       })}
@@ -463,12 +525,6 @@ function BookScanner() {
   // #2 — devices only fetch once a clinic (and therefore a city) is selected.
 
   useEffect(() => {
-    if (!selectedClinic) {
-      setDevices([]);
-      setDevicesStatus("idle");
-      return;
-    }
-
     setDevicesStatus("loading");
 
     fetchJson<Device>(`${API_BASE}/device`)
@@ -480,7 +536,7 @@ function BookScanner() {
         console.error(err);
         setDevicesStatus("error");
       });
-  }, [selectedClinic]);
+  }, []);
 
   // #3 — bookings only fetch once a date is selected.
   useEffect(() => {

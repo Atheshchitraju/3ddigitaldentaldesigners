@@ -24,6 +24,9 @@ export const createBooking = async (req: Request, res: Response) => {
 
     const bookingId = "SCN-" + new Date().getFullYear() + "-" + String(total + 1).padStart(5, "0");
 
+
+    
+
     const booking = await Booking.create({
       ...req.body,
       bookingId,

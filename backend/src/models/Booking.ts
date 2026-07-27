@@ -21,16 +21,15 @@ const bookingSchema = new mongoose.Schema(
 
     doctorName: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
 
     city: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
-
     phone: {
       type: String,
       required: true,
