@@ -14,6 +14,8 @@ import paymentRoutes from "./routes/paymentRoutes";
 import deviceRoutes from "./routes/deviceRoutes";
 import bookingRoutes from "./routes/bookingRoutes";
 import clinicRoutes from "./routes/clinicRoutes";
+import productionRoutes from "./routes/productionRoutes";
+
 
 const app = express();
 
@@ -37,6 +39,7 @@ app.use("/api/device", deviceRoutes);
 
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/clinics", clinicRoutes);
+app.use("/api/production", productionRoutes);
 
 app.get("/athesh-test", (req, res) => {
   res.json({

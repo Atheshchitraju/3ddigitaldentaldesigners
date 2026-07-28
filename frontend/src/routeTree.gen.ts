@@ -26,6 +26,7 @@ import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminClinicsRouteImport } from './routes/admin/clinics'
 import { Route as AdminBookingsRouteImport } from './routes/admin/bookings'
+import { Route as AdminProductionOrderIdRouteImport } from './routes/admin/production/$orderId'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -112,6 +113,11 @@ const AdminBookingsRoute = AdminBookingsRouteImport.update({
   path: '/admin/bookings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminProductionOrderIdRoute = AdminProductionOrderIdRouteImport.update({
+  id: '/admin/production/$orderId',
+  path: '/admin/production/$orderId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
   '/shade/': typeof ShadeIndexRoute
+  '/admin/production/$orderId': typeof AdminProductionOrderIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics': typeof ClinicsIndexRoute
   '/shade': typeof ShadeIndexRoute
+  '/admin/production/$orderId': typeof AdminProductionOrderIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
   '/shade/': typeof ShadeIndexRoute
+  '/admin/production/$orderId': typeof AdminProductionOrderIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/tracking/$bookingId'
     | '/clinics/'
     | '/shade/'
+    | '/admin/production/$orderId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/tracking/$bookingId'
     | '/clinics'
     | '/shade'
+    | '/admin/production/$orderId'
   id:
     | '__root__'
     | '/'
@@ -229,6 +240,7 @@ export interface FileRouteTypes {
     | '/tracking/$bookingId'
     | '/clinics/'
     | '/shade/'
+    | '/admin/production/$orderId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -249,6 +261,7 @@ export interface RootRouteChildren {
   TrackingBookingIdRoute: typeof TrackingBookingIdRoute
   ClinicsIndexRoute: typeof ClinicsIndexRoute
   ShadeIndexRoute: typeof ShadeIndexRoute
+  AdminProductionOrderIdRoute: typeof AdminProductionOrderIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -372,6 +385,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBookingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/production/$orderId': {
+      id: '/admin/production/$orderId'
+      path: '/admin/production/$orderId'
+      fullPath: '/admin/production/$orderId'
+      preLoaderRoute: typeof AdminProductionOrderIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -393,6 +413,7 @@ const rootRouteChildren: RootRouteChildren = {
   TrackingBookingIdRoute: TrackingBookingIdRoute,
   ClinicsIndexRoute: ClinicsIndexRoute,
   ShadeIndexRoute: ShadeIndexRoute,
+  AdminProductionOrderIdRoute: AdminProductionOrderIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

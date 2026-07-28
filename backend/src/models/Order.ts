@@ -136,6 +136,87 @@ const orderSchema = new mongoose.Schema(
         type: String,
       },
     },
+
+    production: {
+      currentStage: {
+        type: String,
+        enum: [
+          "Received",
+          "Designing",
+          "Printing",
+          "Ceramist",
+          "QC",
+          "Dispatch",
+          "Delivered",
+        ],
+        default: "Received",
+      },
+
+      designer: {
+        assignedTo: {
+          type: String,
+          default: "",
+        },
+        assignedAt: Date,
+        startedAt: Date,
+        completedAt: Date,
+      },
+
+      printing: {
+        assignedTo: {
+          type: String,
+          default: "",
+        },
+        startedAt: Date,
+        completedAt: Date,
+      },
+
+      ceramist: {
+        assignedTo: {
+          type: String,
+          default: "",
+        },
+        startedAt: Date,
+        completedAt: Date,
+      },
+
+      qc: {
+        approvedBy: {
+          type: String,
+          default: "",
+        },
+        approvedAt: Date,
+        remarks: {
+          type: String,
+          default: "",
+        },
+      },
+
+      dispatch: {
+        courier: {
+          type: String,
+          default: "",
+        },
+        trackingId: {
+          type: String,
+          default: "",
+        },
+        dispatchedAt: Date,
+      },
+
+      activity: [
+        {
+          stage: String,
+          action: String,
+          user: String,
+          note: String,
+          createdAt: {
+            type: Date,
+            default: Date.now,
+          },
+        },
+      ],
+    },
   },
 
   {
@@ -173,6 +254,16 @@ orderSchema.index({
   clinic: 1,
   status: 1,
   createdAt: -1,
+});
+
+// Production stage tracking
+orderSchema.index({
+  "production.currentStage": 1,
+});
+
+// Designer workload lookups
+orderSchema.index({
+  "production.designer.assignedTo": 1,
 });
 
 export default mongoose.model("Order", orderSchema);
