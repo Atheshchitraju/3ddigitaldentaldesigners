@@ -59,8 +59,8 @@ router.put("/:orderId/ceramist/complete", completeCeramist);
     QC
 ========================== */
 router.put("/:orderId/qc", assignQC);
-router.put("/:orderId/start", StartQC);
-router.put("/:orderId/completed", completeQC);
+router.put("/:orderId/qc/start", StartQC);
+router.put("/:orderId/qc/complete", completeQC);
 
 /* ==========================
    Dispatch
