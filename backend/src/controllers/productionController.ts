@@ -937,7 +937,7 @@ export const assignQC = async (req: Request, res: Response) => {
 /**
  * Start QC
  */
-export const startQC = async (req: Request, res: Response) => {
+export const StartQC = async (req: Request, res: Response) => {
   try {
     const { orderId } = req.params;
 

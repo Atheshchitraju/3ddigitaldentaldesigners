@@ -205,23 +205,49 @@ const orderSchema = new mongoose.Schema(
       },
 
       qc: {
-        assignedTo: String,
-        assignedAt: Date,
-        startedAt: Date,
-        completedAt: Date,
+        assignedTo: {
+          type: String,
+          default: "",
+        },
+        assignedAt: {
+          type: Date,
+          default: null,
+        },
+        startedAt: {
+          type: Date,
+          default: null,
+        },
+        completedAt: {
+          type: Date,
+          default: null,
+        },
       },
 
       dispatch: {
-        assignedTo: "",
-        assignedAt: null,
-        startedAt: null,
-        completedAt: null,
+        assignedTo: {
+          type: String,
+          default: "",
+        },
+        assignedAt: {
+          type: Date,
+          default: null,
+        },
+        startedAt: {
+          type: Date,
+          default: null,
+        },
+        completedAt: {
+          type: Date,
+          default: null,
+        },
       },
 
       delivery: {
-        deliveredAt: null,
+        deliveredAt: {
+          type: Date,
+          default: null,
+        },
       },
-
       activity: [
         {
           stage: String,
