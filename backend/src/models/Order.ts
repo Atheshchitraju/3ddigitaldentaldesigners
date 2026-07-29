@@ -69,7 +69,19 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
 
-      enum: ["Placed", "Accepted", "Designing", "Printing", "Completed", "Delivered", "Rejected"],
+      enum: [
+        "Placed",
+        "Accepted",
+        "Designing",
+        "Printing",
+        "Metalist",
+        "Ceramist",
+        "QC",
+        "Dispatch",
+        "Completed",
+        "Delivered",
+        "Rejected",
+      ],
 
       default: "Placed",
     },
@@ -144,6 +156,7 @@ const orderSchema = new mongoose.Schema(
           "Received",
           "Designing",
           "Printing",
+          "Metalist",
           "Ceramist",
           "QC",
           "Dispatch",
@@ -167,6 +180,16 @@ const orderSchema = new mongoose.Schema(
           type: String,
           default: "",
         },
+        assignedAt: Date,
+        startedAt: Date,
+        completedAt: Date,
+      },
+      metalist: {
+        assignedTo: {
+          type: String,
+          default: "",
+        },
+        assignedAt: Date,
         startedAt: Date,
         completedAt: Date,
       },
@@ -176,32 +199,27 @@ const orderSchema = new mongoose.Schema(
           type: String,
           default: "",
         },
+        assignedAt: Date,
         startedAt: Date,
         completedAt: Date,
       },
 
       qc: {
-        approvedBy: {
-          type: String,
-          default: "",
-        },
-        approvedAt: Date,
-        remarks: {
-          type: String,
-          default: "",
-        },
+        assignedTo: String,
+        assignedAt: Date,
+        startedAt: Date,
+        completedAt: Date,
       },
 
       dispatch: {
-        courier: {
-          type: String,
-          default: "",
-        },
-        trackingId: {
-          type: String,
-          default: "",
-        },
-        dispatchedAt: Date,
+        assignedTo: "",
+        assignedAt: null,
+        startedAt: null,
+        completedAt: null,
+      },
+
+      delivery: {
+        deliveredAt: null,
       },
 
       activity: [
@@ -264,6 +282,21 @@ orderSchema.index({
 // Designer workload lookups
 orderSchema.index({
   "production.designer.assignedTo": 1,
+});
+
+// Printing workload lookups
+orderSchema.index({
+  "production.printing.assignedTo": 1,
+});
+
+// Metalist workload lookups
+orderSchema.index({
+  "production.metalist.assignedTo": 1,
+});
+
+// Ceramist workload lookups
+orderSchema.index({
+  "production.ceramist.assignedTo": 1,
 });
 
 export default mongoose.model("Order", orderSchema);

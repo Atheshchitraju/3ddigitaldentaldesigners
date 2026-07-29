@@ -21,15 +21,28 @@ const FONT_MONO = "'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace";
 // Visual-only fallback mapping from the order's coarse `status` to a stage
 // in the workflow below. Used only for orders that don't yet have
 // `production.currentStage` populated (i.e. created before Sprint 2).
-const WORKFLOW_STAGES = ["Received", "Designing", "Printing", "Ceramist", "QC", "Dispatch", "Delivered"];
+const WORKFLOW_STAGES = [
+  "Received",
+  "Designing",
+  "Printing",
+  "Metalist",
+  "Ceramist",
+  "QC",
+  "Dispatch",
+  "Delivered",
+];
 
 const STATUS_TO_STAGE_INDEX: Record<string, number> = {
   Placed: 0,
   Accepted: 0,
   Designing: 1,
   Printing: 2,
-  Completed: 4,
-  Delivered: 6,
+  Metalist: 3,
+  Ceramist: 4,
+  QC: 5,
+  Dispatch: 6,
+  Completed: 5,
+  Delivered: 7,
   Rejected: 0,
 };
 
@@ -38,6 +51,10 @@ const STATUS_STYLES: Record<string, { bg: string; text: string; dot: string }> =
   Accepted: { bg: "bg-sky-50", text: "text-sky-700", dot: "bg-sky-500" },
   Designing: { bg: "bg-amber-50", text: "text-amber-700", dot: "bg-amber-500" },
   Printing: { bg: "bg-amber-50", text: "text-amber-700", dot: "bg-amber-500" },
+  Metalist: { bg: "bg-amber-50", text: "text-amber-700", dot: "bg-amber-500" },
+  Ceramist: { bg: "bg-amber-50", text: "text-amber-700", dot: "bg-amber-500" },
+  QC: { bg: "bg-violet-50", text: "text-violet-700", dot: "bg-violet-500" },
+  Dispatch: { bg: "bg-blue-50", text: "text-blue-700", dot: "bg-blue-500" },
   Completed: { bg: "bg-emerald-50", text: "text-emerald-700", dot: "bg-emerald-500" },
   Delivered: { bg: "bg-emerald-50", text: "text-emerald-700", dot: "bg-emerald-500" },
   Rejected: { bg: "bg-rose-50", text: "text-rose-700", dot: "bg-rose-500" },
@@ -51,6 +68,19 @@ const PRIORITY_STYLES: Record<string, { bg: string; text: string }> = {
 
 // Static for now — move to an Employees collection / API once that exists.
 const DESIGNERS = ["Rahul Kumar", "Mahesh", "Suresh", "Ajay"];
+const PRINTERS = ["Printer 1", "Printer 2", "Printer 3"];
+const METALISTS = ["Metalist 1", "Metalist 2", "Metalist 3"];
+const CERAMISTS = ["Ceramist 1", "Ceramist 2", "Ceramist 3"];
+const QC_EMPLOYEES = [
+  "QC 1",
+  "QC 2",
+  "QC 3",
+];
+const DISPATCHERS = [
+  "Dispatcher 1",
+  "Dispatcher 2",
+  "Dispatcher 3",
+];
 
 function statusStyle(status: string) {
   return STATUS_STYLES[status] ?? STATUS_STYLES.Placed;
@@ -146,23 +176,44 @@ function TimestampRow({ label, value }: { label: string; value?: string | null }
   );
 }
 
-// ── Designer Assignment (live) ─────────────────────────────────────────
-function DesignerAssignmentCard({
-  order,
-  orderId,
+// ── Generic Stage Assignment Card ───────────────────────────────────────
+// Designer/Printing/Metalist/Ceramist/Dispatch assignment cards all follow
+// the exact same shape (assign → start → complete). Rather than duplicate
+// the whole component per stage, the shared behaviour lives here and each
+// stage just supplies its labels, options, and API paths.
+function StageAssignmentCard({
+  eyebrow,
+  title,
+  optionLabel,
+  options,
+  stageData,
+  assignPath,
+  startPath,
+  completePath,
+  assignButtonLabel,
+  startButtonLabel,
+  completeButtonLabel,
   onRefresh,
 }: {
-  order: any;
-  orderId: string;
+  eyebrow: string;
+  title: string;
+  optionLabel: string;
+  options: string[];
+  stageData: { assignedTo?: string; assignedAt?: string; startedAt?: string; completedAt?: string };
+  assignPath: string;
+  startPath: string;
+  completePath: string;
+  assignButtonLabel: string;
+  startButtonLabel: string;
+  completeButtonLabel: string;
   onRefresh: () => Promise<void>;
 }) {
-  const designerInfo = order.production?.designer ?? {};
-  const assignedTo: string = designerInfo.assignedTo || order.designer || "";
-  const assignedAt = designerInfo.assignedAt;
-  const startedAt = designerInfo.startedAt;
-  const completedAt = designerInfo.completedAt;
+  const assignedTo = stageData.assignedTo || "";
+  const assignedAt = stageData.assignedAt;
+  const startedAt = stageData.startedAt;
+  const completedAt = stageData.completedAt;
 
-  const [designerName, setDesignerName] = useState("");
+  const [selected, setSelected] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -191,7 +242,7 @@ function DesignerAssignmentCard({
         return;
       }
 
-      setDesignerName("");
+      setSelected("");
       setSuccess(data.message || "Done.");
       await onRefresh();
 
@@ -207,33 +258,33 @@ function DesignerAssignmentCard({
   };
 
   const handleAssign = () => {
-    const trimmed = designerName.trim();
+    const trimmed = selected.trim();
     if (!trimmed) {
-      setError("Select a designer.");
+      setError(`Select a ${optionLabel.toLowerCase()}.`);
       return;
     }
-    callAction(`/api/production/${orderId}/designer`, { designer: trimmed });
+    callAction(assignPath, { [optionLabel.toLowerCase()]: trimmed });
   };
 
-  const handleStart = () => callAction(`/api/production/${orderId}/design/start`);
-  const handleComplete = () => callAction(`/api/production/${orderId}/design/complete`);
+  const handleStart = () => callAction(startPath);
+  const handleComplete = () => callAction(completePath);
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8">
-      <SectionHeading eyebrow="Assignment" title="Designer" />
+      <SectionHeading eyebrow={eyebrow} title={title} />
 
       {!assignedTo ? (
         <div className="space-y-3">
           <select
-            value={designerName}
-            onChange={(e) => setDesignerName(e.target.value)}
+            value={selected}
+            onChange={(e) => setSelected(e.target.value)}
             disabled={submitting}
             className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#1D5C5A]/25 focus:border-[#1D5C5A] disabled:opacity-50"
           >
-            <option value="">Select Designer</option>
-            {DESIGNERS.map((designer) => (
-              <option key={designer} value={designer}>
-                {designer}
+            <option value="">Select {optionLabel}</option>
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option}
               </option>
             ))}
           </select>
@@ -242,13 +293,13 @@ function DesignerAssignmentCard({
             disabled={submitting}
             className="w-full bg-[#1D5C5A] text-white text-sm font-medium py-2.5 rounded-xl hover:bg-[#174A48] transition-colors disabled:opacity-50"
           >
-            {submitting ? "Assigning…" : "Assign Designer"}
+            {submitting ? "Assigning…" : assignButtonLabel}
           </button>
         </div>
       ) : (
         <div className="space-y-5">
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-400">Designer</p>
+            <p className="text-[11px] font-medium uppercase tracking-wider text-slate-400">{optionLabel}</p>
             <p className="text-base font-semibold text-slate-900 mt-1" style={{ fontFamily: FONT_DISPLAY }}>
               {assignedTo}
             </p>
@@ -268,7 +319,7 @@ function DesignerAssignmentCard({
               disabled={submitting}
               className="w-full bg-[#1D5C5A] text-white text-sm font-medium py-2.5 rounded-xl hover:bg-[#174A48] transition-colors disabled:opacity-50"
             >
-              {submitting ? "Starting…" : "Start Design"}
+              {submitting ? "Starting…" : startButtonLabel}
             </button>
           )}
 
@@ -278,20 +329,320 @@ function DesignerAssignmentCard({
               disabled={submitting}
               className="w-full bg-emerald-600 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-emerald-700 transition-colors disabled:opacity-50"
             >
-              {submitting ? "Completing…" : "Complete Design"}
+              {submitting ? "Completing…" : completeButtonLabel}
             </button>
           )}
 
           {completedAt && (
             <div className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              Design completed
+              {title} completed
             </div>
           )}
         </div>
       )}
 
       {success && <p className="text-xs text-emerald-600 mt-3">{success}</p>}
+      {error && <p className="text-xs text-rose-600 mt-3">{error}</p>}
+    </div>
+  );
+}
+
+// ── Designer Assignment (live) ─────────────────────────────────────────
+function DesignerAssignmentCard({
+  order,
+  orderId,
+  onRefresh,
+}: {
+  order: any;
+  orderId: string;
+  onRefresh: () => Promise<void>;
+}) {
+  const designerInfo = order.production?.designer ?? {};
+  return (
+    <StageAssignmentCard
+      eyebrow="Assignment"
+      title="Designer"
+      optionLabel="Designer"
+      options={DESIGNERS}
+      stageData={{
+        assignedTo: designerInfo.assignedTo || order.designer || "",
+        assignedAt: designerInfo.assignedAt,
+        startedAt: designerInfo.startedAt,
+        completedAt: designerInfo.completedAt,
+      }}
+      assignPath={`/api/production/${orderId}/designer`}
+      startPath={`/api/production/${orderId}/design/start`}
+      completePath={`/api/production/${orderId}/design/complete`}
+      assignButtonLabel="Assign Designer"
+      startButtonLabel="Start Design"
+      completeButtonLabel="Complete Design"
+      onRefresh={onRefresh}
+    />
+  );
+}
+
+// ── Printing Assignment (live) ──────────────────────────────────────────
+function PrintingAssignmentCard({
+  order,
+  orderId,
+  onRefresh,
+}: {
+  order: any;
+  orderId: string;
+  onRefresh: () => Promise<void>;
+}) {
+  const printingInfo = order.production?.printing ?? {};
+  return (
+    <StageAssignmentCard
+      eyebrow="Assignment"
+      title="Printing"
+      optionLabel="Printer"
+      options={PRINTERS}
+      stageData={{
+        assignedTo: printingInfo.assignedTo || order.printer || "",
+        assignedAt: printingInfo.assignedAt,
+        startedAt: printingInfo.startedAt,
+        completedAt: printingInfo.completedAt,
+      }}
+      assignPath={`/api/production/${orderId}/printing`}
+      startPath={`/api/production/${orderId}/printing/start`}
+      completePath={`/api/production/${orderId}/printing/complete`}
+      assignButtonLabel="Assign Printer"
+      startButtonLabel="Start Printing"
+      completeButtonLabel="Complete Printing"
+      onRefresh={onRefresh}
+    />
+  );
+}
+
+// ── Metalist Assignment (live) ──────────────────────────────────────────
+function MetalistAssignmentCard({
+  order,
+  orderId,
+  onRefresh,
+}: {
+  order: any;
+  orderId: string;
+  onRefresh: () => Promise<void>;
+}) {
+  const metalInfo = order.production?.metalist ?? {};
+  return (
+    <StageAssignmentCard
+      eyebrow="Assignment"
+      title="Metalist"
+      optionLabel="Metalist"
+      options={METALISTS}
+      stageData={{
+        assignedTo: metalInfo.assignedTo,
+        assignedAt: metalInfo.assignedAt,
+        startedAt: metalInfo.startedAt,
+        completedAt: metalInfo.completedAt,
+      }}
+      assignPath={`/api/production/${orderId}/metalist`}
+      startPath={`/api/production/${orderId}/metalist/start`}
+      completePath={`/api/production/${orderId}/metalist/complete`}
+      assignButtonLabel="Assign Metalist"
+      startButtonLabel="Start Metal Work"
+      completeButtonLabel="Complete Metal Work"
+      onRefresh={onRefresh}
+    />
+  );
+}
+
+// ── Ceramist Assignment (live) ──────────────────────────────────────────
+function CeramistAssignmentCard({
+  order,
+  orderId,
+  onRefresh,
+}: {
+  order: any;
+  orderId: string;
+  onRefresh: () => Promise<void>;
+}) {
+  const ceramistInfo = order.production?.ceramist ?? {};
+  return (
+    <StageAssignmentCard
+      eyebrow="Assignment"
+      title="Ceramist"
+      optionLabel="Ceramist"
+      options={CERAMISTS}
+      stageData={{
+        assignedTo: ceramistInfo.assignedTo,
+        assignedAt: ceramistInfo.assignedAt,
+        startedAt: ceramistInfo.startedAt,
+        completedAt: ceramistInfo.completedAt,
+      }}
+      assignPath={`/api/production/${orderId}/ceramist`}
+      startPath={`/api/production/${orderId}/ceramist/start`}
+      completePath={`/api/production/${orderId}/ceramist/complete`}
+      assignButtonLabel="Assign Ceramist"
+      startButtonLabel="Start Ceramist Work"
+      completeButtonLabel="Complete Ceramist Work"
+      onRefresh={onRefresh}
+    />
+  );
+}
+
+// ── QC Assignment (live) ──────────────────────────────────────────
+function QCAssignmentCard({
+  order,
+  orderId,
+  onRefresh,
+}: {
+  order: any;
+  orderId: string;
+  onRefresh: () => Promise<void>;
+}) {
+  const qcInfo = order.production?.qc ?? {};
+
+  return (
+    <StageAssignmentCard
+      eyebrow="Assignment"
+      title="QC"
+      optionLabel="QC"
+      options={QC_EMPLOYEES}
+      stageData={{
+        assignedTo: qcInfo.assignedTo,
+        assignedAt: qcInfo.assignedAt,
+        startedAt: qcInfo.startedAt,
+        completedAt: qcInfo.completedAt,
+      }}
+      assignPath={`/api/production/${orderId}/qc`}
+      startPath={`/api/production/${orderId}/qc/start`}
+      completePath={`/api/production/${orderId}/qc/complete`}
+      assignButtonLabel="Assign QC"
+      startButtonLabel="Start QC"
+      completeButtonLabel="Complete QC"
+      onRefresh={onRefresh}
+    />
+  );
+}
+
+// ── Dispatch Assignment (live) ──────────────────────────────────────────
+function DispatchAssignmentCard({
+  order,
+  orderId,
+  onRefresh,
+}: {
+  order: any;
+  orderId: string;
+  onRefresh: () => Promise<void>;
+}) {
+  const dispatchInfo = order.production?.dispatch ?? {};
+
+  return (
+    <StageAssignmentCard
+      eyebrow="Assignment"
+      title="Dispatch"
+      optionLabel="Dispatcher"
+      options={DISPATCHERS}
+      stageData={{
+        assignedTo: dispatchInfo.assignedTo,
+        assignedAt: dispatchInfo.assignedAt,
+        startedAt: dispatchInfo.startedAt,
+        completedAt: dispatchInfo.completedAt,
+      }}
+      assignPath={`/api/production/${orderId}/dispatch`}
+      startPath={`/api/production/${orderId}/dispatch/start`}
+      completePath={`/api/production/${orderId}/dispatch/complete`}
+      assignButtonLabel="Assign Dispatcher"
+      startButtonLabel="Start Dispatch"
+      completeButtonLabel="Complete Dispatch"
+      onRefresh={onRefresh}
+    />
+  );
+}
+
+// ── Delivered (completion card) ─────────────────────────────────────────
+// Not a production stage — a final confirmation step that only unlocks
+// once Dispatch has been completed.
+function DeliveredCard({
+  order,
+  orderId,
+  onRefresh,
+}: {
+  order: any;
+  orderId: string;
+  onRefresh: () => Promise<void>;
+}) {
+  const dispatchCompleted = order.production?.dispatch?.completedAt;
+  const deliveredAt = order.production?.delivery?.deliveredAt;
+
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const markDelivered = async () => {
+    setSubmitting(true);
+    setError(null);
+    try {
+      const response = await fetch(`${API_URL}/api/production/${orderId}/delivered`, {
+        method: "PUT",
+      });
+      const data = await response.json();
+
+      if (!data.success) {
+        setError(data.message || "Something went wrong.");
+        return;
+      }
+
+      await onRefresh();
+    } catch (err) {
+      console.log(err);
+      setError("Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (!dispatchCompleted) {
+    return (
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8">
+        <SectionHeading eyebrow="Delivery" title="Delivery Confirmation" />
+        <div className="rounded-xl border border-dashed border-slate-200 px-5 py-6 text-center">
+          <p className="text-sm text-slate-400" style={{ fontFamily: FONT_BODY }}>
+            Complete Dispatch before marking this case as delivered.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8">
+      <SectionHeading eyebrow="Delivery" title="Delivery Confirmation" />
+
+      {deliveredAt ? (
+        <div className="space-y-5">
+          <div className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-700">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            Delivered Successfully
+          </div>
+          <div className="pt-3 border-t border-slate-100">
+            <TimestampRow label="Delivered At" value={deliveredAt} />
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-5">
+          <div className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            Dispatch Completed
+          </div>
+
+          <div className="pt-3 border-t border-slate-100">
+            <TimestampRow label="Delivered At" value={null} />
+          </div>
+
+          <button
+            onClick={markDelivered}
+            disabled={submitting}
+            className="w-full bg-emerald-600 text-white text-sm font-medium py-2.5 rounded-xl hover:bg-emerald-700 transition-colors disabled:opacity-50"
+          >
+            {submitting ? "Marking…" : "Mark as Delivered"}
+          </button>
+        </div>
+      )}
+
       {error && <p className="text-xs text-rose-600 mt-3">{error}</p>}
     </div>
   );
@@ -448,10 +799,15 @@ function ProductionPage() {
 
             {/* ── Quick Statistics strip ───────────────────────────── */}
             <div className="bg-white rounded-2xl border border-slate-200 mb-6 overflow-hidden">
-              <div className="grid grid-cols-2 sm:grid-cols-4 divide-y divide-slate-100 sm:divide-y-0 sm:divide-x sm:divide-slate-100">
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-9 divide-y divide-slate-100 sm:divide-y-0 sm:divide-x sm:divide-slate-100">
                 {[
                   { label: "Status", value: order.status },
                   { label: "Designer", value: order.production?.designer?.assignedTo || order.designer || "Not assigned" },
+                  { label: "Printer", value: order.production?.printing?.assignedTo || order.printer || "Not assigned" },
+                  { label: "Metalist", value: order.production?.metalist?.assignedTo || "Not assigned" },
+                  { label: "Ceramist", value: order.production?.ceramist?.assignedTo || "Not assigned" },
+                  { label: "QC", value: order.production?.qc?.assignedTo || "Not assigned" },
+                  { label: "Dispatcher", value: order.production?.dispatch?.assignedTo || "Not assigned" },
                   {
                     label: "Ordered",
                     value: order.createdAt
@@ -497,10 +853,10 @@ function ProductionPage() {
                       <div className="flex flex-col items-center w-20 shrink-0">
                         <span
                           className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 ${isComplete
-                              ? "bg-emerald-500 text-white"
-                              : isCurrent
-                                ? "bg-[#1D5C5A] text-white"
-                                : "bg-slate-100 text-slate-400 border border-slate-200"
+                            ? "bg-emerald-500 text-white"
+                            : isCurrent
+                              ? "bg-[#1D5C5A] text-white"
+                              : "bg-slate-100 text-slate-400 border border-slate-200"
                             }`}
                         >
                           {isComplete ? "✓" : index + 1}
@@ -536,10 +892,10 @@ function ProductionPage() {
                       <div className="flex items-center gap-3">
                         <span
                           className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 ${isComplete
-                              ? "bg-emerald-500 text-white"
-                              : isCurrent
-                                ? "bg-[#1D5C5A] text-white"
-                                : "bg-slate-100 text-slate-400 border border-slate-200"
+                            ? "bg-emerald-500 text-white"
+                            : isCurrent
+                              ? "bg-[#1D5C5A] text-white"
+                              : "bg-slate-100 text-slate-400 border border-slate-200"
                             }`}
                         >
                           {isComplete ? "✓" : index + 1}
@@ -563,34 +919,67 @@ function ProductionPage() {
               </div>
 
               <p className="text-xs text-slate-400 mt-6 pt-4 border-t border-slate-100">
-                Each stage will later include an assigned employee, start/end time, notes, and its own status.
+                Each production stage records its assigned employee and start/completion timestamps.
               </p>
             </div>
 
-            {/* ── Case Details + Designer Assignment ───────────────── */}
-            <div className="grid lg:grid-cols-3 gap-6 mb-6">
-              <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-6 sm:p-8">
-                <SectionHeading eyebrow="Case File" title="Patient & Case Details" />
-                <div className="divide-y divide-slate-100">
-                  <DetailRow label="Doctor" value={order.name} />
-                  <DetailRow label="Patient" value={order.patientName} />
-                  <DetailRow label="Age" value={order.patientAge} />
-                  <DetailRow label="Clinic" value={order.clinic} />
-                  <DetailRow label="Product" value={order.product} />
-                  <DetailRow label="Shade" value={order.shade} mono />
-                  <DetailRow
-                    label="Teeth"
-                    value={Array.isArray(order.selectedTeeth) ? order.selectedTeeth.join(", ") : "-"}
-                    mono
-                  />
-                  <DetailRow
-                    label="Designer"
-                    value={order.production?.designer?.assignedTo || order.designer || "Not assigned"}
-                  />
-                </div>
+            {/* ── Case Details ──────────────────────────────────────── */}
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 mb-6">
+              <SectionHeading eyebrow="Case File" title="Patient & Case Details" />
+              <div className="divide-y divide-slate-100">
+                <DetailRow label="Doctor" value={order.name} />
+                <DetailRow label="Patient" value={order.patientName} />
+                <DetailRow label="Age" value={order.patientAge} />
+                <DetailRow label="Clinic" value={order.clinic} />
+                <DetailRow label="Product" value={order.product} />
+                <DetailRow label="Shade" value={order.shade} mono />
+                <DetailRow
+                  label="Teeth"
+                  value={Array.isArray(order.selectedTeeth) ? order.selectedTeeth.join(", ") : "-"}
+                  mono
+                />
+                <DetailRow
+                  label="Designer"
+                  value={order.production?.designer?.assignedTo || order.designer || "Not assigned"}
+                />
+                <DetailRow
+                  label="Printer"
+                  value={order.production?.printing?.assignedTo || order.printer || "Not assigned"}
+                />
+                <DetailRow
+                  label="Metalist"
+                  value={order.production?.metalist?.assignedTo || "Not assigned"}
+                />
+                <DetailRow
+                  label="Ceramist"
+                  value={order.production?.ceramist?.assignedTo || "Not assigned"}
+                />
+                <DetailRow
+                  label="QC"
+                  value={order.production?.qc?.assignedTo || "Not assigned"}
+                />
+                <DetailRow
+                  label="Dispatcher"
+                  value={order.production?.dispatch?.assignedTo || "Not assigned"}
+                />
               </div>
+            </div>
 
+            {/* ── Stage Assignment Cards ───────────────────────────── */}
+            <div className="grid lg:grid-cols-6 gap-6 mb-6">
               <DesignerAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
+              <PrintingAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
+              <MetalistAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
+              <CeramistAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
+              <QCAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
+              <DispatchAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
+            </div>
+
+            {/* ── Delivery Confirmation ─────────────────────────────── */}
+            {/* Not a production stage — a final confirmation step, kept visually
+                separate from the manufacturing assignment cards above. */}
+            <div className="mb-6">
+              <DeliveredCard order={order} orderId={orderId} onRefresh={fetchOrder} />
             </div>
 
             {/* ── Internal Notes + Activity Log ────────────────────── */}
