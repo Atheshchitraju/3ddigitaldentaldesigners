@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Order from "../models/Order";
+import Employee from "../models/Employee";
 
 /**
  * Ensures order.production exists before it's read or written.
@@ -83,6 +84,64 @@ function addActivity(
   });
 }
 
+async function employeeAssigned(employeeName: string) {
+  if (!employeeName) return;
+
+  await Employee.findOneAndUpdate(
+    { name: employeeName },
+    {
+      $inc: {
+        assignedOrders: 1,
+      },
+      $set: {
+        workingStatus: "Busy",
+      },
+    }
+  );
+}
+
+async function employeeCompleted(employeeName: string) {
+  if (!employeeName) return;
+
+  await Employee.findOneAndUpdate(
+    { name: employeeName },
+    {
+      $inc: {
+        completedOrders: 1,
+      },
+    }
+  );
+}
+
+async function updateEmployeeWorkingStatus(
+  employeeName: string,
+  stageKey: string
+) {
+  if (!employeeName) return;
+
+  const pendingOrders = await Order.countDocuments({
+    [`production.${stageKey}.assignedTo`]: employeeName,
+    $or: [
+      {
+        [`production.${stageKey}.completedAt`]: null,
+      },
+      {
+        [`production.${stageKey}.completedAt`]: {
+          $exists: false,
+        },
+      },
+    ],
+  });
+
+  await Employee.findOneAndUpdate(
+    { name: employeeName },
+    {
+      workingStatus:
+        pendingOrders > 0 ? "Busy" : "Available",
+    }
+  );
+}
+
 // ─────────────────────────────────────────────────────────────────────────
 // Designer
 // ─────────────────────────────────────────────────────────────────────────
@@ -137,6 +196,8 @@ export const assignDesigner = async (req: Request, res: Response) => {
       designer,
       `${designer} assigned to this case`
     );
+
+    await employeeAssigned(designer);
 
     await order.save();
 
@@ -266,6 +327,15 @@ export const completeDesigning = async (req: Request, res: Response) => {
       "Design completed"
     );
 
+    await employeeCompleted(
+      production.designer.assignedTo
+    );
+
+    await updateEmployeeWorkingStatus(
+      production.designer.assignedTo,
+      "designer"
+    );
+
     await order.save();
 
     return res.status(200).json({
@@ -335,6 +405,8 @@ export const assignPrinter = async (req: Request, res: Response) => {
       printer,
       `${printer} assigned to this case`
     );
+
+    await employeeAssigned(printer);
 
     await order.save();
 
@@ -464,6 +536,15 @@ export const completePrinting = async (req: Request, res: Response) => {
       "Printing completed"
     );
 
+    await employeeCompleted(
+      production.printing.assignedTo
+    );
+
+    await updateEmployeeWorkingStatus(
+      production.printing.assignedTo,
+      "printing"
+    );
+
     await order.save();
 
     return res.status(200).json({
@@ -530,6 +611,8 @@ export const assignMetalist = async (req: Request, res: Response) => {
       metalist,
       `${metalist} assigned to this case`
     );
+
+    await employeeAssigned(metalist);
 
     await order.save();
 
@@ -659,6 +742,15 @@ export const completeMetalWork = async (req: Request, res: Response) => {
       "Metal work completed"
     );
 
+    await employeeCompleted(
+      production.metalist.assignedTo
+    );
+
+    await updateEmployeeWorkingStatus(
+      production.metalist.assignedTo,
+      "metalist"
+    );
+
     await order.save();
 
     return res.status(200).json({
@@ -725,6 +817,8 @@ export const assignCeramist = async (req: Request, res: Response) => {
       ceramist,
       `${ceramist} assigned to this case`
     );
+
+    await employeeAssigned(ceramist);
 
     await order.save();
 
@@ -854,6 +948,15 @@ export const completeCeramist = async (req: Request, res: Response) => {
       "Ceramist work completed"
     );
 
+    await employeeCompleted(
+      production.ceramist.assignedTo
+    );
+
+    await updateEmployeeWorkingStatus(
+      production.ceramist.assignedTo,
+      "ceramist"
+    );
+
     await order.save();
 
     return res.status(200).json({
@@ -918,6 +1021,8 @@ export const assignQC = async (req: Request, res: Response) => {
       qc,
       `${qc} assigned to this case`
     );
+
+    await employeeAssigned(qc);
 
     await order.save();
 
@@ -1041,6 +1146,15 @@ export const completeQC = async (req: Request, res: Response) => {
       "QC completed"
     );
 
+    await employeeCompleted(
+      production.qc.assignedTo
+    );
+
+    await updateEmployeeWorkingStatus(
+      production.qc.assignedTo,
+      "qc"
+    );
+
     await order.save();
 
     return res.status(200).json({
@@ -1105,6 +1219,8 @@ export const assignDispatch = async (req: Request, res: Response) => {
       dispatcher,
       `${dispatcher} assigned to this case`
     );
+
+    await employeeAssigned(dispatcher);
 
     await order.save();
 
@@ -1226,6 +1342,15 @@ export const completeDispatch = async (req: Request, res: Response) => {
       "Completed",
       production.dispatch.assignedTo,
       "Dispatch completed"
+    );
+
+    await employeeCompleted(
+      production.dispatch.assignedTo
+    );
+
+    await updateEmployeeWorkingStatus(
+      production.dispatch.assignedTo,
+      "dispatch"
     );
 
     await order.save();

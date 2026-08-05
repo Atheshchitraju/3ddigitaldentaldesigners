@@ -66,22 +66,6 @@ const PRIORITY_STYLES: Record<string, { bg: string; text: string }> = {
   Urgent: { bg: "bg-rose-50", text: "text-rose-700" },
 };
 
-// Static for now — move to an Employees collection / API once that exists.
-const DESIGNERS = ["Rahul Kumar", "Mahesh", "Suresh", "Ajay"];
-const PRINTERS = ["Printer 1", "Printer 2", "Printer 3"];
-const METALISTS = ["Metalist 1", "Metalist 2", "Metalist 3"];
-const CERAMISTS = ["Ceramist 1", "Ceramist 2", "Ceramist 3"];
-const QC_EMPLOYEES = [
-  "QC 1",
-  "QC 2",
-  "QC 3",
-];
-const DISPATCHERS = [
-  "Dispatcher 1",
-  "Dispatcher 2",
-  "Dispatcher 3",
-];
-
 function statusStyle(status: string) {
   return STATUS_STYLES[status] ?? STATUS_STYLES.Placed;
 }
@@ -230,9 +214,14 @@ function StageAssignmentCard({
     setError(null);
     setSuccess(null);
     try {
+      const token = localStorage.getItem("adminToken");
+
       const response = await fetch(`${API_URL}${path}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: body ? JSON.stringify(body) : undefined,
       });
       const data = await response.json();
@@ -353,10 +342,12 @@ function DesignerAssignmentCard({
   order,
   orderId,
   onRefresh,
+  employees,
 }: {
   order: any;
   orderId: string;
   onRefresh: () => Promise<void>;
+  employees: string[];
 }) {
   const designerInfo = order.production?.designer ?? {};
   return (
@@ -364,7 +355,7 @@ function DesignerAssignmentCard({
       eyebrow="Assignment"
       title="Designer"
       optionLabel="Designer"
-      options={DESIGNERS}
+      options={employees}
       stageData={{
         assignedTo: designerInfo.assignedTo || order.designer || "",
         assignedAt: designerInfo.assignedAt,
@@ -387,10 +378,12 @@ function PrintingAssignmentCard({
   order,
   orderId,
   onRefresh,
+  employees,
 }: {
   order: any;
   orderId: string;
   onRefresh: () => Promise<void>;
+  employees: string[];
 }) {
   const printingInfo = order.production?.printing ?? {};
   return (
@@ -398,7 +391,7 @@ function PrintingAssignmentCard({
       eyebrow="Assignment"
       title="Printing"
       optionLabel="Printer"
-      options={PRINTERS}
+      options={employees}
       stageData={{
         assignedTo: printingInfo.assignedTo || order.printer || "",
         assignedAt: printingInfo.assignedAt,
@@ -421,10 +414,12 @@ function MetalistAssignmentCard({
   order,
   orderId,
   onRefresh,
+  employees,
 }: {
   order: any;
   orderId: string;
   onRefresh: () => Promise<void>;
+  employees: string[];
 }) {
   const metalInfo = order.production?.metalist ?? {};
   return (
@@ -432,7 +427,7 @@ function MetalistAssignmentCard({
       eyebrow="Assignment"
       title="Metalist"
       optionLabel="Metalist"
-      options={METALISTS}
+      options={employees}
       stageData={{
         assignedTo: metalInfo.assignedTo,
         assignedAt: metalInfo.assignedAt,
@@ -455,10 +450,12 @@ function CeramistAssignmentCard({
   order,
   orderId,
   onRefresh,
+  employees,
 }: {
   order: any;
   orderId: string;
   onRefresh: () => Promise<void>;
+  employees: string[];
 }) {
   const ceramistInfo = order.production?.ceramist ?? {};
   return (
@@ -466,7 +463,7 @@ function CeramistAssignmentCard({
       eyebrow="Assignment"
       title="Ceramist"
       optionLabel="Ceramist"
-      options={CERAMISTS}
+      options={employees}
       stageData={{
         assignedTo: ceramistInfo.assignedTo,
         assignedAt: ceramistInfo.assignedAt,
@@ -489,10 +486,12 @@ function QCAssignmentCard({
   order,
   orderId,
   onRefresh,
+  employees,
 }: {
   order: any;
   orderId: string;
   onRefresh: () => Promise<void>;
+  employees: string[];
 }) {
   const qcInfo = order.production?.qc ?? {};
 
@@ -501,7 +500,7 @@ function QCAssignmentCard({
       eyebrow="Assignment"
       title="QC"
       optionLabel="QC"
-      options={QC_EMPLOYEES}
+      options={employees}
       stageData={{
         assignedTo: qcInfo.assignedTo,
         assignedAt: qcInfo.assignedAt,
@@ -524,10 +523,12 @@ function DispatchAssignmentCard({
   order,
   orderId,
   onRefresh,
+  employees,
 }: {
   order: any;
   orderId: string;
   onRefresh: () => Promise<void>;
+  employees: string[];
 }) {
   const dispatchInfo = order.production?.dispatch ?? {};
 
@@ -536,7 +537,7 @@ function DispatchAssignmentCard({
       eyebrow="Assignment"
       title="Dispatch"
       optionLabel="Dispatcher"
-      options={DISPATCHERS}
+      options={employees}
       stageData={{
         assignedTo: dispatchInfo.assignedTo,
         assignedAt: dispatchInfo.assignedAt,
@@ -576,8 +577,13 @@ function DeliveredCard({
     setSubmitting(true);
     setError(null);
     try {
+      const token = localStorage.getItem("adminToken");
+
       const response = await fetch(`${API_URL}/api/production/${orderId}/delivered`, {
         method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       const data = await response.json();
 
@@ -704,8 +710,18 @@ function ProductionPage() {
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  const [employees, setEmployees] = useState({
+    designers: [] as string[],
+    printers: [] as string[],
+    metalists: [] as string[],
+    ceramists: [] as string[],
+    qc: [] as string[],
+    dispatch: [] as string[],
+  });
+
   useEffect(() => {
     fetchOrder();
+    fetchEmployees();
   }, [orderId]);
 
   const fetchOrder = async () => {
@@ -722,6 +738,65 @@ function ProductionPage() {
     } catch (error) {
       console.log(error);
       setLoading(false);
+    }
+  };
+
+  const fetchEmployees = async () => {
+    try {
+      const token = localStorage.getItem("adminToken");
+
+      const response = await fetch(`${API_URL}/api/employees`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      console.log("Employees API:", data);
+
+      if (!data.success) return;
+
+      const list = data.employees;
+
+      setEmployees({
+        designers: list
+          .filter((e: any) => e.department === "Designer")
+          .map((e: any) => e.name),
+
+        printers: list
+          .filter((e: any) => e.department === "Printer")
+          .map((e: any) => e.name),
+
+        metalists: list
+          .filter((e: any) => e.department === "Metalist")
+          .map((e: any) => e.name),
+
+        ceramists: list
+          .filter((e: any) => e.department === "Ceramist")
+          .map((e: any) => e.name),
+
+        qc: list
+          .filter((e: any) => e.department === "QC")
+          .map((e: any) => e.name),
+
+        dispatch: list
+          .filter((e: any) => e.department === "Dispatch")
+          .map((e: any) => e.name),
+      });
+
+      console.log("Employees Loaded");
+      console.table(list);
+
+      console.log("Designers");
+      console.log(
+        list
+          .filter((e: any) => e.department === "Designer")
+          .map((e: any) => e.name)
+      );
+
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -967,12 +1042,12 @@ function ProductionPage() {
 
             {/* ── Stage Assignment Cards ───────────────────────────── */}
             <div className="grid lg:grid-cols-6 gap-6 mb-6">
-              <DesignerAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
-              <PrintingAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
-              <MetalistAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
-              <CeramistAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
-              <QCAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
-              <DispatchAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} />
+              <DesignerAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} employees={employees.designers} />
+              <PrintingAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} employees={employees.printers} />
+              <MetalistAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} employees={employees.metalists} />
+              <CeramistAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} employees={employees.ceramists} />
+              <QCAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} employees={employees.qc} />
+              <DispatchAssignmentCard order={order} orderId={orderId} onRefresh={fetchOrder} employees={employees.dispatch} />
             </div>
 
             {/* ── Delivery Confirmation ─────────────────────────────── */}

@@ -15,7 +15,9 @@ import deviceRoutes from "./routes/deviceRoutes";
 import bookingRoutes from "./routes/bookingRoutes";
 import clinicRoutes from "./routes/clinicRoutes";
 import productionRoutes from "./routes/productionRoutes";
-
+import employeeRoutes from "./routes/employeeRoutes";
+import employeeManagementRoutes from "./routes/employeeManagementRoutes";
+import employeeDashboardRoutes from "./routes/employeeDashboardRoutes";
 
 const app = express();
 
@@ -40,6 +42,19 @@ app.use("/api/device", deviceRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/clinics", clinicRoutes);
 app.use("/api/production", productionRoutes);
+app.use(
+  "/api/employee",
+  employeeRoutes
+);
+console.log("Employee Routes Loaded");
+app.use(
+  "/api/employees",
+  employeeManagementRoutes
+);
+app.use(
+  "/api/employee/dashboard",
+  employeeDashboardRoutes
+);
 
 app.get("/athesh-test", (req, res) => {
   res.json({

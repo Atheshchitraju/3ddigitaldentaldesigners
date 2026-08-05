@@ -20,10 +20,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShadeIndexRouteImport } from './routes/shade/index'
 import { Route as ClinicsIndexRouteImport } from './routes/clinics/index'
 import { Route as TrackingBookingIdRouteImport } from './routes/tracking/$bookingId'
+import { Route as EmployeeLoginRouteImport } from './routes/employee/login'
+import { Route as EmployeeDashboardRouteImport } from './routes/employee/dashboard'
 import { Route as ClinicsIdRouteImport } from './routes/clinics/$id'
 import { Route as AdminScannersRouteImport } from './routes/admin/scanners'
 import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminEmployeesRouteImport } from './routes/admin/employees'
 import { Route as AdminClinicsRouteImport } from './routes/admin/clinics'
 import { Route as AdminBookingsRouteImport } from './routes/admin/bookings'
 import { Route as AdminProductionOrderIdRouteImport } from './routes/admin/production/$orderId'
@@ -83,6 +86,16 @@ const TrackingBookingIdRoute = TrackingBookingIdRouteImport.update({
   path: '/tracking/$bookingId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmployeeLoginRoute = EmployeeLoginRouteImport.update({
+  id: '/employee/login',
+  path: '/employee/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeDashboardRoute = EmployeeDashboardRouteImport.update({
+  id: '/employee/dashboard',
+  path: '/employee/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClinicsIdRoute = ClinicsIdRouteImport.update({
   id: '/clinics/$id',
   path: '/clinics/$id',
@@ -101,6 +114,11 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminEmployeesRoute = AdminEmployeesRouteImport.update({
+  id: '/admin/employees',
+  path: '/admin/employees',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminClinicsRoute = AdminClinicsRouteImport.update({
@@ -130,10 +148,13 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/clinics': typeof AdminClinicsRoute
+  '/admin/employees': typeof AdminEmployeesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/scanners': typeof AdminScannersRoute
   '/clinics/$id': typeof ClinicsIdRoute
+  '/employee/dashboard': typeof EmployeeDashboardRoute
+  '/employee/login': typeof EmployeeLoginRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
   '/shade/': typeof ShadeIndexRoute
@@ -150,10 +171,13 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/clinics': typeof AdminClinicsRoute
+  '/admin/employees': typeof AdminEmployeesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/scanners': typeof AdminScannersRoute
   '/clinics/$id': typeof ClinicsIdRoute
+  '/employee/dashboard': typeof EmployeeDashboardRoute
+  '/employee/login': typeof EmployeeLoginRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics': typeof ClinicsIndexRoute
   '/shade': typeof ShadeIndexRoute
@@ -171,10 +195,13 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/clinics': typeof AdminClinicsRoute
+  '/admin/employees': typeof AdminEmployeesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/scanners': typeof AdminScannersRoute
   '/clinics/$id': typeof ClinicsIdRoute
+  '/employee/dashboard': typeof EmployeeDashboardRoute
+  '/employee/login': typeof EmployeeLoginRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
   '/shade/': typeof ShadeIndexRoute
@@ -193,10 +220,13 @@ export interface FileRouteTypes {
     | '/services'
     | '/admin/bookings'
     | '/admin/clinics'
+    | '/admin/employees'
     | '/admin/login'
     | '/admin/orders'
     | '/admin/scanners'
     | '/clinics/$id'
+    | '/employee/dashboard'
+    | '/employee/login'
     | '/tracking/$bookingId'
     | '/clinics/'
     | '/shade/'
@@ -213,10 +243,13 @@ export interface FileRouteTypes {
     | '/services'
     | '/admin/bookings'
     | '/admin/clinics'
+    | '/admin/employees'
     | '/admin/login'
     | '/admin/orders'
     | '/admin/scanners'
     | '/clinics/$id'
+    | '/employee/dashboard'
+    | '/employee/login'
     | '/tracking/$bookingId'
     | '/clinics'
     | '/shade'
@@ -233,10 +266,13 @@ export interface FileRouteTypes {
     | '/services'
     | '/admin/bookings'
     | '/admin/clinics'
+    | '/admin/employees'
     | '/admin/login'
     | '/admin/orders'
     | '/admin/scanners'
     | '/clinics/$id'
+    | '/employee/dashboard'
+    | '/employee/login'
     | '/tracking/$bookingId'
     | '/clinics/'
     | '/shade/'
@@ -254,10 +290,13 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   AdminBookingsRoute: typeof AdminBookingsRoute
   AdminClinicsRoute: typeof AdminClinicsRoute
+  AdminEmployeesRoute: typeof AdminEmployeesRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminScannersRoute: typeof AdminScannersRoute
   ClinicsIdRoute: typeof ClinicsIdRoute
+  EmployeeDashboardRoute: typeof EmployeeDashboardRoute
+  EmployeeLoginRoute: typeof EmployeeLoginRoute
   TrackingBookingIdRoute: typeof TrackingBookingIdRoute
   ClinicsIndexRoute: typeof ClinicsIndexRoute
   ShadeIndexRoute: typeof ShadeIndexRoute
@@ -343,6 +382,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackingBookingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/employee/login': {
+      id: '/employee/login'
+      path: '/employee/login'
+      fullPath: '/employee/login'
+      preLoaderRoute: typeof EmployeeLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/dashboard': {
+      id: '/employee/dashboard'
+      path: '/employee/dashboard'
+      fullPath: '/employee/dashboard'
+      preLoaderRoute: typeof EmployeeDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/clinics/$id': {
       id: '/clinics/$id'
       path: '/clinics/$id'
@@ -369,6 +422,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/employees': {
+      id: '/admin/employees'
+      path: '/admin/employees'
+      fullPath: '/admin/employees'
+      preLoaderRoute: typeof AdminEmployeesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/clinics': {
@@ -406,10 +466,13 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   AdminBookingsRoute: AdminBookingsRoute,
   AdminClinicsRoute: AdminClinicsRoute,
+  AdminEmployeesRoute: AdminEmployeesRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminScannersRoute: AdminScannersRoute,
   ClinicsIdRoute: ClinicsIdRoute,
+  EmployeeDashboardRoute: EmployeeDashboardRoute,
+  EmployeeLoginRoute: EmployeeLoginRoute,
   TrackingBookingIdRoute: TrackingBookingIdRoute,
   ClinicsIndexRoute: ClinicsIndexRoute,
   ShadeIndexRoute: ShadeIndexRoute,

@@ -21,9 +21,14 @@ export const authMiddleware = (
 
     console.log("TOKEN:", token);
 
-    jwt.verify(token, process.env.JWT_SECRET as string);
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    );
 
-    next();
+    (req as any).user = decoded;
+
+    next();   // ✅ Only once
   } catch (error) {
     console.log("JWT ERROR:", error);
 

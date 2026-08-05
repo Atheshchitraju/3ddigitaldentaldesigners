@@ -1,5 +1,5 @@
 import API_URL from "@/config/api";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { clinics } from "@/routes/clinics";
 import {
   X,
@@ -20,6 +20,7 @@ import {
   ChevronUp,
   ChevronDown,
   ShieldCheck,
+  CalendarDays,
 } from "lucide-react";
 const clinicBranches: Record<string, string[]> = {
   "Jas Dental": ["HSR Layout", "BTM Layout", "Jakkasandra"],
@@ -143,6 +144,20 @@ const upperLeft = [21, 22, 23, 24, 25, 26, 27, 28];
 const lowerRight = [48, 47, 46, 45, 44, 43, 42, 41];
 const lowerLeft = [31, 32, 33, 34, 35, 36, 37, 38];
 
+// Pedo (primary / deciduous) teeth - FDI notation
+const pedoUpperRight = [55, 54, 53, 52, 51];
+const pedoUpperLeft = [61, 62, 63, 64, 65];
+const pedoLowerRight = [85, 84, 83, 82, 81];
+const pedoLowerLeft = [71, 72, 73, 74, 75];
+
+const navItems = [
+  { id: "details", label: "Details" },
+  { id: "clinic", label: "Clinic" },
+  { id: "products", label: "Products" },
+  { id: "teeth", label: "Teeth" },
+  { id: "finish", label: "Finish" },
+];
+
 interface Props {
   open: boolean;
   onClose: () => void;
@@ -174,18 +189,27 @@ export default function OrderModal({ open, onClose }: Props) {
   const [notes, setNotes] = useState("");
 
   const [selectedTeeth, setSelectedTeeth] = useState<number[]>([]);
+  const [showPedo, setShowPedo] = useState(false);
+  const [metalTrial, setMetalTrial] = useState(false);
+  const [bisqueTrial, setBisqueTrial] = useState(false);
+  const [estimatedDelivery, setEstimatedDelivery] = useState("");
   const [files, setFiles] = useState<FileList | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<ToastState>(null);
+  const [submitAttempted, setSubmitAttempted] = useState(false);
 
   const [paymentMode, setPaymentMode] = useState<"prepaid" | "postpaid">("postpaid");
 
   const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("details");
 
   // Track which categories are expanded — start with all collapsed
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
+
+  const formScrollRef = useRef<HTMLDivElement | null>(null);
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const clinicName = useMemo(() => {
     if (selectedClinic === "other") return customClinic || "—";
@@ -202,9 +226,49 @@ export default function OrderModal({ open, onClose }: Props) {
     [selectedProducts],
   );
 
+  const progressPercent = useMemo(() => {
+    const checks = [
+      !!name,
+      !!phone,
+      !!patientName,
+      !!patientAge,
+      !!selectedClinic,
+      selectedProducts.length > 0,
+    ];
+    return Math.round((checks.filter(Boolean).length / checks.length) * 100);
+  }, [name, phone, patientName, patientAge, selectedClinic, selectedProducts.length]);
+
   const showToast = (type: "success" | "error", message: string) => {
     setToast({ type, message });
     window.setTimeout(() => setToast(null), 4000);
+  };
+
+  const registerSection = (id: string) => (el: HTMLDivElement | null) => {
+    sectionRefs.current[id] = el;
+  };
+
+  const scrollToSection = (id: string) => {
+    const el = sectionRefs.current[id];
+    const container = formScrollRef.current;
+    if (!el || !container) return;
+    const offset =
+      el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - 12;
+    container.scrollTo({ top: offset, behavior: "smooth" });
+    setActiveSection(id);
+  };
+
+  const handleFormScroll = () => {
+    const container = formScrollRef.current;
+    if (!container) return;
+    const containerTop = container.getBoundingClientRect().top;
+    let current = navItems[0].id;
+    for (const item of navItems) {
+      const el = sectionRefs.current[item.id];
+      if (!el) continue;
+      const elTop = el.getBoundingClientRect().top - containerTop;
+      if (elTop <= 140) current = item.id;
+    }
+    setActiveSection(current);
   };
 
   const toggleProduct = (item: CatalogItem) => {
@@ -247,7 +311,10 @@ export default function OrderModal({ open, onClose }: Props) {
   const resetForm = () => {
     setName("");
     setPhone("");
+    setPatientName("");
+    setPatientAge("");
     setSelectedClinic("");
+    setSelectedBranch("");
     setCustomClinic("");
     setCustomClinicEmail("");
     setCustomClinicPhone("");
@@ -255,7 +322,12 @@ export default function OrderModal({ open, onClose }: Props) {
     setShade("");
     setNotes("");
     setSelectedTeeth([]);
+    setShowPedo(false);
+    setMetalTrial(false);
+    setBisqueTrial(false);
+    setEstimatedDelivery("");
     setFiles(null);
+    setSubmitAttempted(false);
     onClose();
   };
 
@@ -268,18 +340,21 @@ export default function OrderModal({ open, onClose }: Props) {
   };
 
   const submitOrder = async () => {
-    if (
-      !name ||
-      !phone ||
-      !patientName ||
-      !patientAge ||
-      selectedProducts.length === 0 ||
-      !selectedClinic
-    ) {
-      showToast(
-        "error",
-        "Please fill in name, phone, clinic and select at least one product before submitting.",
-      );
+    setSubmitAttempted(true);
+
+    if (!name || !phone || !patientName || !patientAge) {
+      showToast("error", "Please fill in your details and the patient's details.");
+      scrollToSection("details");
+      return;
+    }
+    if (!selectedClinic) {
+      showToast("error", "Please select a clinic.");
+      scrollToSection("clinic");
+      return;
+    }
+    if (selectedProducts.length === 0) {
+      showToast("error", "Please select at least one product.");
+      scrollToSection("products");
       return;
     }
 
@@ -304,6 +379,9 @@ export default function OrderModal({ open, onClose }: Props) {
         product: selectedProducts.map((p) => `${p.name} x${p.quantity}`).join(", "),
         shade,
         selectedTeeth,
+        metalTrial,
+        bisqueTrial,
+        estimatedDelivery,
         notes,
         amount: total,
         quantity: totalUnits,
@@ -407,567 +485,594 @@ export default function OrderModal({ open, onClose }: Props) {
     }
   };
 
-  const inputClass =
-    "w-full h-[48px] sm:h-[50px] border border-slate-300 rounded-lg px-4 text-[15px] text-slate-800 placeholder:text-slate-400 bg-white outline-none transition focus:border-slate-500 focus:ring-4 focus:ring-slate-500/10";
+  const baseInputClass =
+    "w-full h-[48px] sm:h-[50px] border rounded-xl px-4 text-[15px] text-slate-800 placeholder:text-slate-400 bg-white outline-none transition focus:ring-4";
+
+  const inputClass = (hasError?: boolean) =>
+    `${baseInputClass} ${hasError
+      ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500/10"
+      : "border-slate-300 hover:border-slate-400 focus:border-slate-500 focus:ring-slate-500/10"
+    }`;
 
   return (
     <div className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 md:p-6 overflow-y-auto">
       <div className="relative bg-white w-full sm:max-w-5xl sm:rounded-2xl rounded-t-3xl shadow-2xl h-[100dvh] sm:h-auto sm:max-h-[92vh] overflow-hidden border border-slate-200 flex flex-col">
         {/* HEADER */}
-        <div className="shrink-0 bg-[#16243c] px-4 sm:px-8 py-5 sm:py-6 flex items-start justify-between gap-4">
+        <div className="shrink-0 bg-[#16243c] px-4 sm:px-8 py-5 sm:py-6 flex items-start justify-between gap-4 relative">
           <div className="min-w-0">
             <h2 className="text-lg sm:text-2xl font-semibold text-white tracking-tight">
               Place a New Order
             </h2>
             <p className="text-slate-300/80 text-xs sm:text-sm mt-1">
-              Our team confirms every order .
+              Our team confirms every order.
             </p>
           </div>
 
-          <button
-            onClick={onClose}
-            aria-label="Close"
-            className="text-slate-300 hover:text-white hover:bg-white/10 rounded-full p-2 transition shrink-0"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-3 shrink-0">
+            <span className="hidden sm:inline text-[11px] font-semibold text-slate-300/70 uppercase tracking-wide">
+              {progressPercent}% complete
+            </span>
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              className="text-slate-300 hover:text-white hover:bg-white/10 rounded-full p-2 transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* PROGRESS BAR */}
+          <div className="absolute left-0 bottom-0 h-[3px] w-full bg-white/10 overflow-hidden">
+            <div
+              className="h-full bg-emerald-400 transition-all duration-500 ease-out"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+
+        {/* SECTION NAV — scroll-spy pills, shared by desktop & mobile */}
+        <div className="shrink-0 border-b border-slate-200 bg-white overflow-x-auto">
+          <div className="flex gap-1.5 px-4 sm:px-8 py-2.5 min-w-max">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => scrollToSection(item.id)}
+                className={`px-3.5 h-8 rounded-full text-xs font-semibold whitespace-nowrap transition ${activeSection === item.id
+                    ? "bg-[#16243c] text-white"
+                    : "bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700"
+                  }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* BODY */}
         <div className="flex flex-col lg:flex-row overflow-hidden flex-1">
           {/* LEFT: FORM */}
-          <div className="flex-1 overflow-y-auto px-4 sm:px-8 py-5 sm:py-7 space-y-6 sm:space-y-8 pb-32 lg:pb-7">
-            {/* CUSTOMER */}
-            <section>
-              <SectionHeading icon={<User className="w-4 h-4" />} title="Your Details" />
-              <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
-                <Field label="Your name" required>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Dr. Bob Wick"
-                    className={inputClass}
-                  />
-                </Field>
-
-                <Field label="Phone number" required>
-                  <div className="flex gap-2">
-                    <div className="h-[48px] sm:h-[50px] px-3 sm:px-4 border border-slate-300 rounded-lg flex items-center bg-slate-50 text-slate-600 font-medium text-sm sm:text-base">
-                      +91
-                    </div>
+          <div
+            ref={formScrollRef}
+            onScroll={handleFormScroll}
+            className="flex-1 overflow-y-auto px-4 sm:px-8 py-5 sm:py-7 space-y-5 sm:space-y-6 pb-32 lg:pb-7 scroll-smooth"
+          >
+            {/* DETAILS GROUP */}
+            <div id="details" ref={registerSection("details")} className="space-y-5 sm:space-y-6 scroll-mt-4">
+              <SectionCard>
+                <SectionHeading icon={<User className="w-4 h-4" />} title="Your Details" />
+                <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+                  <Field
+                    label="Your name"
+                    required
+                    error={submitAttempted && !name ? "Enter your name" : undefined}
+                  >
                     <input
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="98765 43210"
-                      className={inputClass}
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Dr. Bob Wick"
+                      className={inputClass(submitAttempted && !name)}
                     />
-                  </div>
-                </Field>
-              </div>
-            </section>
+                  </Field>
 
-            {/* PATIENT DETAILS */}
-            <section>
-              <SectionHeading icon={<User className="w-4 h-4" />} title="Patient Details" />
-
-              <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
-                <Field label="Patient Name" required>
-                  <input
-                    type="text"
-                    value={patientName}
-                    onChange={(e) => setPatientName(e.target.value)}
-                    placeholder="Enter Patient Name"
-                    className={inputClass}
-                  />
-                </Field>
-
-                <Field label="Patient Age" required>
-                  <input
-                    type="number"
-                    min="1"
-                    max="120"
-                    value={patientAge}
-                    onChange={(e) => setPatientAge(e.target.value)}
-                    placeholder="Enter Age"
-                    className={inputClass}
-                  />
-                </Field>
-              </div>
-            </section>
-
-            {/* CLINIC */}
-            <section>
-              <SectionHeading icon={<Building2 className="w-4 h-4" />} title="Clinic" />
-              <Field label="Select clinic" required>
-                <select
-                  value={selectedClinic}
-                  onChange={(e) => {
-                    setSelectedClinic(e.target.value);
-                    setSelectedBranch("");
-                  }}
-                  className={inputClass}
-                >
-                  <option value="">Choose clinic</option>
-                  {clinics.map((clinic) => (
-                    <option key={clinic.slug} value={clinic.slug}>
-                      {clinic.name}
-                    </option>
-                  ))}
-                  <option value="other">Other clinic</option>
-                </select>
-              </Field>
-              {clinicBranches[clinicName] && (
-                <div className="mt-4">
-                  <Field label="Select Branch" required>
-                    <select
-                      value={selectedBranch}
-                      onChange={(e) => setSelectedBranch(e.target.value)}
-                      className={inputClass}
-                    >
-                      <option value="">Choose Branch</option>
-
-                      {clinicBranches[clinicName].map((branch) => (
-                        <option key={branch} value={branch}>
-                          {branch}
-                        </option>
-                      ))}
-                    </select>
+                  <Field
+                    label="Phone number"
+                    required
+                    error={submitAttempted && !phone ? "Enter a phone number" : undefined}
+                  >
+                    <div className="flex gap-2">
+                      <div className="h-[48px] sm:h-[50px] px-3 sm:px-4 border border-slate-300 rounded-xl flex items-center bg-slate-50 text-slate-600 font-medium text-sm sm:text-base shrink-0">
+                        +91
+                      </div>
+                      <input
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="98765 43210"
+                        className={inputClass(submitAttempted && !phone)}
+                      />
+                    </div>
                   </Field>
                 </div>
-              )}
-              {selectedClinic === "other" && (
-                <div className="grid sm:grid-cols-3 gap-4 mt-4">
-                  <input
-                    type="text"
-                    placeholder="Clinic name"
-                    value={customClinic}
-                    onChange={(e) => setCustomClinic(e.target.value)}
-                    className={inputClass}
-                  />
-                  <input
-                    type="email"
-                    placeholder="Clinic email"
-                    value={customClinicEmail}
-                    onChange={(e) => setCustomClinicEmail(e.target.value)}
-                    className={inputClass}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Clinic phone"
-                    value={customClinicPhone}
-                    onChange={(e) => setCustomClinicPhone(e.target.value)}
-                    className={inputClass}
-                  />
+              </SectionCard>
+
+              <SectionCard>
+                <SectionHeading icon={<User className="w-4 h-4" />} title="Patient Details" />
+                <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+                  <Field
+                    label="Patient name"
+                    required
+                    error={submitAttempted && !patientName ? "Enter patient name" : undefined}
+                  >
+                    <input
+                      type="text"
+                      value={patientName}
+                      onChange={(e) => setPatientName(e.target.value)}
+                      placeholder="Enter patient name"
+                      className={inputClass(submitAttempted && !patientName)}
+                    />
+                  </Field>
+
+                  <Field
+                    label="Patient age"
+                    required
+                    error={submitAttempted && !patientAge ? "Enter patient age" : undefined}
+                  >
+                    <input
+                      type="number"
+                      min="1"
+                      max="120"
+                      value={patientAge}
+                      onChange={(e) => setPatientAge(e.target.value)}
+                      placeholder="Enter age"
+                      className={inputClass(submitAttempted && !patientAge)}
+                    />
+                  </Field>
                 </div>
-              )}
-            </section>
+              </SectionCard>
+            </div>
+
+            {/* CLINIC */}
+            <div id="clinic" ref={registerSection("clinic")} className="scroll-mt-4">
+              <SectionCard>
+                <SectionHeading icon={<Building2 className="w-4 h-4" />} title="Clinic" />
+                <Field
+                  label="Select clinic"
+                  required
+                  error={submitAttempted && !selectedClinic ? "Choose a clinic" : undefined}
+                >
+                  <SelectField
+                    value={selectedClinic}
+                    onChange={(e) => {
+                      setSelectedClinic(e.target.value);
+                      setSelectedBranch("");
+                    }}
+                    className={inputClass(submitAttempted && !selectedClinic)}
+                  >
+                    <option value="">Choose clinic</option>
+                    {clinics.map((clinic) => (
+                      <option key={clinic.slug} value={clinic.slug}>
+                        {clinic.name}
+                      </option>
+                    ))}
+                    <option value="other">Other clinic</option>
+                  </SelectField>
+                </Field>
+                {clinicBranches[clinicName] && (
+                  <div className="mt-4">
+                    <Field label="Select branch" required>
+                      <SelectField
+                        value={selectedBranch}
+                        onChange={(e) => setSelectedBranch(e.target.value)}
+                        className={inputClass()}
+                      >
+                        <option value="">Choose branch</option>
+                        {clinicBranches[clinicName].map((branch) => (
+                          <option key={branch} value={branch}>
+                            {branch}
+                          </option>
+                        ))}
+                      </SelectField>
+                    </Field>
+                  </div>
+                )}
+                {selectedClinic === "other" && (
+                  <div className="grid sm:grid-cols-3 gap-4 mt-4">
+                    <input
+                      type="text"
+                      placeholder="Clinic name"
+                      value={customClinic}
+                      onChange={(e) => setCustomClinic(e.target.value)}
+                      className={inputClass()}
+                    />
+                    <input
+                      type="email"
+                      placeholder="Clinic email"
+                      value={customClinicEmail}
+                      onChange={(e) => setCustomClinicEmail(e.target.value)}
+                      className={inputClass()}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Clinic phone"
+                      value={customClinicPhone}
+                      onChange={(e) => setCustomClinicPhone(e.target.value)}
+                      className={inputClass()}
+                    />
+                  </div>
+                )}
+              </SectionCard>
+            </div>
 
             {/* PRODUCT — EXPANDABLE CATEGORIES */}
-            <section>
-              <SectionHeading icon={<Package className="w-4 h-4" />} title="Product Selection" />
-              <p className="text-slate-500 text-sm -mt-3 mb-4">
-                Tap categories to expand. Set quantity for each product.
-              </p>
+            <div id="products" ref={registerSection("products")} className="space-y-5 sm:space-y-6 scroll-mt-4">
+              <SectionCard>
+                <SectionHeading icon={<Package className="w-4 h-4" />} title="Product Selection" />
+                <p className="text-slate-500 text-sm -mt-3 mb-4">
+                  Tap a category to expand it, then set quantity for each product.
+                </p>
 
-              <div className="border border-slate-200 rounded-xl overflow-hidden">
-                {productCatalog.map((cat, catIdx) => {
-                  const isExpanded = expandedCategories.has(cat.category);
-                  const itemsInCategory = selectedProducts.filter((p) =>
-                    cat.items.some((item) => item.name === p.name),
-                  );
+                {submitAttempted && selectedProducts.length === 0 && (
+                  <div className="mb-4 flex items-center gap-2 text-xs font-medium text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2.5">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                    Select at least one product to continue.
+                  </div>
+                )}
 
-                  return (
-                    <div key={cat.category}>
-                      {/* CATEGORY HEADER - CLICKABLE */}
-                      <button
-                        type="button"
-                        onClick={() => toggleCategory(cat.category)}
-                        className={`w-full px-4 sm:px-5 py-3 sm:py-4 flex items-center justify-between gap-3 transition-colors ${
-                          catIdx === 0 ? "" : "border-t border-slate-200"
-                        } ${isExpanded ? "bg-slate-100" : "bg-[#16243c] hover:bg-[#1e3252]"}`}
-                      >
-                        <div className="flex items-center gap-3 flex-1 text-left min-w-0">
-                          <span
-                            className={`text-sm sm:text-base font-semibold tracking-wide uppercase ${
-                              isExpanded ? "text-slate-800" : "text-white"
-                            }`}
-                          >
-                            {cat.category}
-                          </span>
-                          {itemsInCategory.length > 0 && (
+                <div className="border border-slate-200 rounded-xl overflow-hidden">
+                  {productCatalog.map((cat, catIdx) => {
+                    const isExpanded = expandedCategories.has(cat.category);
+                    const itemsInCategory = selectedProducts.filter((p) =>
+                      cat.items.some((item) => item.name === p.name),
+                    );
+
+                    return (
+                      <div key={cat.category}>
+                        {/* CATEGORY HEADER - CLICKABLE */}
+                        <button
+                          type="button"
+                          onClick={() => toggleCategory(cat.category)}
+                          className={`w-full px-4 sm:px-5 py-3.5 sm:py-4 flex items-center justify-between gap-3 transition-colors ${catIdx === 0 ? "" : "border-t border-slate-200"
+                            } ${isExpanded ? "bg-slate-100" : "bg-[#16243c] hover:bg-[#1e3252]"}`}
+                        >
+                          <div className="flex items-center gap-3 flex-1 text-left min-w-0">
                             <span
-                              className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${
-                                isExpanded ? "bg-slate-800 text-white" : "bg-emerald-500 text-white"
-                              }`}
-                            >
-                              {itemsInCategory.length}
-                            </span>
-                          )}
-                        </div>
-                        <div
-                          className={`transition-transform duration-300 shrink-0 ${isExpanded ? "rotate-180" : ""}`}
-                        >
-                          <ChevronDown
-                            className={`w-5 h-5 ${isExpanded ? "text-slate-800" : "text-white"}`}
-                          />
-                        </div>
-                      </button>
-
-                      {/* CATEGORY ITEMS - COLLAPSIBLE */}
-                      {isExpanded && (
-                        <div className="divide-y divide-slate-100 bg-white">
-                          {cat.items.map((item) => {
-                            const selected = selectedProducts.find((p) => p.name === item.name);
-                            return (
-                              <div
-                                key={item.name}
-                                className={`flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 transition ${
-                                  selected ? "bg-emerald-50" : "bg-white hover:bg-slate-50"
+                              className={`text-sm sm:text-base font-semibold tracking-wide uppercase ${isExpanded ? "text-slate-800" : "text-white"
                                 }`}
-                              >
-                                {/* CHECKBOX */}
-                                <button
-                                  type="button"
-                                  role="checkbox"
-                                  aria-checked={!!selected}
-                                  onClick={() => toggleProduct(item)}
-                                  className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition ${
-                                    selected
-                                      ? "bg-slate-800 border-slate-800 text-white"
-                                      : "bg-white border-slate-300 hover:border-slate-400"
+                            >
+                              {cat.category}
+                            </span>
+                            {itemsInCategory.length > 0 && (
+                              <span
+                                className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${isExpanded ? "bg-slate-800 text-white" : "bg-emerald-500 text-white"
                                   }`}
-                                >
-                                  {selected && <Check className="w-3.5 h-3.5" />}
-                                </button>
-
-                                {/* PRODUCT INFO */}
-                                <button
-                                  type="button"
-                                  onClick={() => toggleProduct(item)}
-                                  className="flex-1 text-left min-w-0"
-                                >
-                                  <div className="text-sm sm:text-base font-medium text-slate-800 leading-snug">
-                                    {item.name}
-                                  </div>
-                                  <div className="flex items-center gap-2 mt-1 flex-wrap">
-                                    <span className="text-xs sm:text-sm text-slate-500">
-                                      ₹{item.price} / unit
-                                    </span>
-                                    {item.warranty && (
-                                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-full">
-                                        <ShieldCheck className="w-3 h-3" />
-                                        {item.warranty}
-                                      </span>
-                                    )}
-                                  </div>
-                                </button>
-
-                                {/* QUANTITY STEPPER */}
-                                {selected && (
-                                  <QuantityStepper
-                                    quantity={selected.quantity}
-                                    onChange={(q) => updateProductQuantity(item.name, q)}
-                                    size="sm"
-                                  />
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* SELECTED PRODUCTS TAGS */}
-              {selectedProducts.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {selectedProducts.map((p) => (
-                    <span
-                      key={p.name}
-                      className="inline-flex items-center gap-1.5 text-xs font-medium bg-slate-800 text-white pl-3 pr-1.5 py-2 rounded-full"
-                    >
-                      <span className="truncate max-w-[200px]">{p.name}</span>
-                      <span className="text-slate-300">×{p.quantity}</span>
-                      <button
-                        onClick={() =>
-                          toggleProduct({ name: p.name, price: p.price, warranty: p.warranty })
-                        }
-                        className="hover:opacity-70 transition ml-0.5"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-              )}
-            </section>
-
-            {/* SHADE */}
-            <section>
-              <SectionHeading icon={<Palette className="w-4 h-4" />} title="Shade" />
-              <Field label="Select shade">
-                <select
-                  value={shade}
-                  onChange={(e) => setShade(e.target.value)}
-                  className={inputClass}
-                >
-                  <option value="">Select shade</option>
-                  {shades.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-
-              <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-                <div>
-                  <h4 className="font-semibold text-slate-800 text-[15px]">
-                    Not sure of the shade?
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                    Use AI Shade Matcher to detect the closest VITA shade.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => window.open("/shade", "_blank")}
-                  className="w-full sm:w-auto px-4 h-10 rounded-lg bg-[#16243c] text-white text-sm font-medium hover:bg-[#1e3252] transition shrink-0"
-                >
-                  Launch Matcher
-                </button>
-              </div>
-            </section>
-
-            {/* TOOTH ARCH - QUADRANT VIEW */}
-            <section>
-              <SectionHeading icon={<Check className="w-4 h-4" />} title="Tooth Numbers (FDI)" />
-              <p className="text-slate-500 text-xs sm:text-sm -mt-3 mb-4">
-                Tap teeth to select or deselect.
-              </p>
-
-              <div className="bg-white border border-slate-200 rounded-xl sm:rounded-2xl p-3 sm:p-8 overflow-visible">
-                {/* UPPER JAW (Quadrants 1 & 2) */}
-                <div className="mb-6 sm:mb-10">
-                  <h4 className="text-xs sm:text-sm font-semibold text-slate-700 mb-4 text-center uppercase tracking-wide">
-                    Upper Jaw
-                  </h4>
-
-                  <div className="flex justify-center items-end gap-2 sm:gap-4">
-                    {/* LEFT QUADRANT (21-28) */}
-                    <div className="flex flex-col items-center gap-2">
-                      <span className="text-xs font-semibold text-slate-600 uppercase">Left</span>
-                      <div className="flex gap-0 sm:gap-1 flex-wrap justify-center">
-                        {[21, 22, 23, 24, 25, 26, 27, 28].map((tooth) => (
-                          <div key={tooth} className="flex justify-center">
-                            <ToothButton
-                              tooth={tooth}
-                              selected={selectedTeeth.includes(tooth)}
-                              onClick={() => toggleTooth(tooth)}
-                              position="upper"
-                              isMobile={false}
-                            />
+                              >
+                                {itemsInCategory.length}
+                              </span>
+                            )}
                           </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* CENTER SEPARATOR */}
-                    <div className="h-24 sm:h-32 w-1 bg-gradient-to-b from-slate-300 to-slate-400 rounded-full mx-1 sm:mx-4" />
-
-                    {/* RIGHT QUADRANT (18-11) */}
-                    <div className="flex flex-col items-center gap-2">
-                      <span className="text-xs font-semibold text-slate-600 uppercase">Right</span>
-                      <div className="flex gap-0 sm:gap-1 flex-wrap justify-center">
-                        {[18, 17, 16, 15, 14, 13, 12, 11].map((tooth) => (
-                          <div key={tooth} className="flex justify-center">
-                            <ToothButton
-                              tooth={tooth}
-                              selected={selectedTeeth.includes(tooth)}
-                              onClick={() => toggleTooth(tooth)}
-                              position="upper"
-                              isMobile={false}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* HORIZONTAL SEPARATOR */}
-                <div className="flex gap-4 sm:gap-8 justify-center items-center mb-6 sm:mb-10">
-                  <div className="flex-1 h-1 bg-gradient-to-r from-slate-200 to-slate-300 rounded-full" />
-                  <span className="text-xs font-semibold text-slate-400 uppercase px-2">
-                    Midline
-                  </span>
-                  <div className="flex-1 h-1 bg-gradient-to-r from-slate-300 to-slate-200 rounded-full" />
-                </div>
-
-                {/* LOWER JAW (Quadrants 3 & 4) */}
-                <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-slate-700 mb-4 text-center uppercase tracking-wide">
-                    Lower Jaw
-                  </h4>
-
-                  <div className="flex justify-center items-start gap-2 sm:gap-4">
-                    {/* LEFT QUADRANT (31-38) */}
-                    <div className="flex flex-col items-center gap-2">
-                      <span className="text-xs font-semibold text-slate-600 uppercase">Left</span>
-                      <div className="flex gap-0 sm:gap-1 flex-wrap justify-center">
-                        {[31, 32, 33, 34, 35, 36, 37, 38].map((tooth) => (
-                          <div key={tooth} className="flex justify-center">
-                            <ToothButton
-                              tooth={tooth}
-                              selected={selectedTeeth.includes(tooth)}
-                              onClick={() => toggleTooth(tooth)}
-                              position="lower"
-                              isMobile={false}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* CENTER SEPARATOR */}
-                    <div className="h-24 sm:h-32 w-1 bg-gradient-to-b from-slate-400 to-slate-300 rounded-full mx-1 sm:mx-4" />
-
-                    {/* RIGHT QUADRANT (48-41) */}
-                    <div className="flex flex-col items-center gap-2">
-                      <span className="text-xs font-semibold text-slate-600 uppercase">Right</span>
-                      <div className="flex gap-0 sm:gap-1 flex-wrap justify-center">
-                        {[48, 47, 46, 45, 44, 43, 42, 41].map((tooth) => (
-                          <div key={tooth} className="flex justify-center">
-                            <ToothButton
-                              tooth={tooth}
-                              selected={selectedTeeth.includes(tooth)}
-                              onClick={() => toggleTooth(tooth)}
-                              position="lower"
-                              isMobile={false}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* QUADRANT LEGEND */}
-                <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-slate-200">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
-                    <div className="p-2 rounded-lg bg-slate-50">
-                      <div className="font-semibold text-slate-700">Quad 2</div>
-                      <div className="text-slate-500 text-[10px]">Upper Left</div>
-                      <div className="text-slate-600 font-medium">21-28</div>
-                    </div>
-                    <div className="p-2 rounded-lg bg-slate-50">
-                      <div className="font-semibold text-slate-700">Quad 1</div>
-                      <div className="text-slate-500 text-[10px]">Upper Right</div>
-                      <div className="text-slate-600 font-medium">18-11</div>
-                    </div>
-                    <div className="p-2 rounded-lg bg-slate-50">
-                      <div className="font-semibold text-slate-700">Quad 3</div>
-                      <div className="text-slate-500 text-[10px]">Lower Left</div>
-                      <div className="text-slate-600 font-medium">31-38</div>
-                    </div>
-                    <div className="p-2 rounded-lg bg-slate-50">
-                      <div className="font-semibold text-slate-700">Quad 4</div>
-                      <div className="text-slate-500 text-[10px]">Lower Right</div>
-                      <div className="text-slate-600 font-medium">48-41</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {selectedTeeth.length > 0 && (
-                <div className="mt-4 sm:mt-5">
-                  <p className="text-xs font-medium text-slate-600 mb-2 sm:mb-3">Selected teeth:</p>
-                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                    {selectedTeeth
-                      .sort((a, b) => a - b)
-                      .map((t) => (
-                        <span
-                          key={t}
-                          className="inline-flex items-center gap-1 sm:gap-1.5 text-xs font-medium bg-slate-800 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-full"
-                        >
-                          #{t}
-                          <button
-                            onClick={() => toggleTooth(t)}
-                            className="hover:opacity-70 transition"
+                          <div
+                            className={`transition-transform duration-300 shrink-0 ${isExpanded ? "rotate-180" : ""}`}
                           >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </span>
-                      ))}
+                            <ChevronDown
+                              className={`w-5 h-5 ${isExpanded ? "text-slate-800" : "text-white"}`}
+                            />
+                          </div>
+                        </button>
+
+                        {/* CATEGORY ITEMS - COLLAPSIBLE */}
+                        {isExpanded && (
+                          <div className="divide-y divide-slate-100 bg-white">
+                            {cat.items.map((item) => {
+                              const selected = selectedProducts.find((p) => p.name === item.name);
+                              return (
+                                <div
+                                  key={item.name}
+                                  className={`flex items-center gap-3 px-4 sm:px-5 py-3.5 sm:py-4 transition ${selected ? "bg-emerald-50" : "bg-white hover:bg-slate-50"
+                                    }`}
+                                >
+                                  {/* CHECKBOX */}
+                                  <button
+                                    type="button"
+                                    role="checkbox"
+                                    aria-checked={!!selected}
+                                    onClick={() => toggleProduct(item)}
+                                    className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition ${selected
+                                        ? "bg-slate-800 border-slate-800 text-white"
+                                        : "bg-white border-slate-300 hover:border-slate-400"
+                                      }`}
+                                  >
+                                    {selected && <Check className="w-3.5 h-3.5" />}
+                                  </button>
+
+                                  {/* PRODUCT INFO */}
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleProduct(item)}
+                                    className="flex-1 text-left min-w-0 py-1"
+                                  >
+                                    <div className="text-sm sm:text-base font-medium text-slate-800 leading-snug">
+                                      {item.name}
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                      <span className="text-xs sm:text-sm text-slate-500">
+                                        ₹{item.price} / unit
+                                      </span>
+                                      {item.warranty && (
+                                        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-full">
+                                          <ShieldCheck className="w-3 h-3" />
+                                          {item.warranty}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </button>
+
+                                  {/* QUANTITY STEPPER */}
+                                  {selected && (
+                                    <QuantityStepper
+                                      quantity={selected.quantity}
+                                      onChange={(q) => updateProductQuantity(item.name, q)}
+                                      size="sm"
+                                    />
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* SELECTED PRODUCTS TAGS */}
+                {selectedProducts.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {selectedProducts.map((p) => (
+                      <span
+                        key={p.name}
+                        className="inline-flex items-center gap-1.5 text-xs font-medium bg-slate-800 text-white pl-3 pr-1.5 py-2 rounded-full"
+                      >
+                        <span className="truncate max-w-[200px]">{p.name}</span>
+                        <span className="text-slate-300">×{p.quantity}</span>
+                        <button
+                          onClick={() =>
+                            toggleProduct({ name: p.name, price: p.price, warranty: p.warranty })
+                          }
+                          className="hover:opacity-70 transition ml-0.5"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </span>
+                    ))}
                   </div>
+                )}
+              </SectionCard>
+
+              {/* TRIAL REQUIREMENTS */}
+              <SectionCard>
+                <SectionHeading icon={<CheckCircle2 className="w-4 h-4" />} title="Trial Requirements" />
+                <div className="flex flex-wrap gap-3">
+                  <TrialCheckbox
+                    label="Metal Trial"
+                    checked={metalTrial}
+                    onChange={setMetalTrial}
+                  />
+                  <TrialCheckbox
+                    label="Bisque Trial"
+                    checked={bisqueTrial}
+                    onChange={setBisqueTrial}
+                  />
                 </div>
-              )}
-            </section>
+              </SectionCard>
 
-            {/* NOTES */}
-            <section>
-              <SectionHeading icon={<StickyNote className="w-4 h-4" />} title="Additional Notes" />
-              <textarea
-                rows={4}
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Special instructions for the lab..."
-                className="w-full border border-slate-300 rounded-lg px-4 py-3 text-[15px] outline-none transition focus:border-slate-500 focus:ring-4 focus:ring-slate-500/10"
-              />
-            </section>
+              {/* SHADE */}
+              <SectionCard>
+                <SectionHeading icon={<Palette className="w-4 h-4" />} title="Shade" />
+                <Field label="Select shade">
+                  <SelectField value={shade} onChange={(e) => setShade(e.target.value)} className={inputClass()}>
+                    <option value="">Select shade</option>
+                    {shades.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </SelectField>
+                </Field>
 
-            {/* FILES */}
-            <section>
-              <SectionHeading icon={<Upload className="w-4 h-4" />} title="Upload Files" />
-
-              <label
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setIsDragging(true);
-                }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={onDrop}
-                className={`rounded-2xl p-5 sm:p-8 flex flex-col items-center justify-center cursor-pointer transition-all border-2 border-dashed ${
-                  isDragging
-                    ? "border-slate-500 bg-slate-50"
-                    : "border-slate-300 hover:border-slate-400 hover:bg-slate-50"
-                }`}
-              >
-                <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mb-3">
-                  <Upload className="w-5 h-5 text-slate-600" />
+                <div className="mt-4 p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                  <div>
+                    <h4 className="font-semibold text-slate-800 text-[15px]">
+                      Not sure of the shade?
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                      Use AI Shade Matcher to detect the closest VITA shade.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => window.open("/shade", "_blank")}
+                    className="w-full sm:w-auto px-4 h-10 rounded-lg bg-[#16243c] text-white text-sm font-medium hover:bg-[#1e3252] active:scale-[0.98] transition shrink-0"
+                  >
+                    Launch Matcher
+                  </button>
                 </div>
-                <span className="font-semibold text-slate-700 text-sm sm:text-base text-center">
-                  Drag files here, or tap to browse
-                </span>
-                <span className="text-xs sm:text-sm text-slate-400 mt-1 text-center">
-                  STL, images, PDFs, case photos
-                </span>
-                <input
-                  type="file"
-                  multiple
-                  className="hidden"
-                  onChange={(e) => handleFilesSelected(e.target.files)}
+              </SectionCard>
+            </div>
+
+            {/* TOOTH CHART */}
+            <div id="teeth" ref={registerSection("teeth")} className="scroll-mt-4">
+              <SectionCard>
+                <SectionHeading icon={<Check className="w-4 h-4" />} title="Tooth Numbers (FDI)" />
+                <p className="text-slate-500 text-xs sm:text-sm -mt-3 mb-4">
+                  Tap teeth to select or deselect. Scroll sideways on small screens.
+                </p>
+
+                <ToothChart
+                  upperRight={upperRight}
+                  upperLeft={upperLeft}
+                  lowerRight={lowerRight}
+                  lowerLeft={lowerLeft}
+                  selectedTeeth={selectedTeeth}
+                  onToggle={toggleTooth}
                 />
-              </label>
 
-              {files && files.length > 0 && (
-                <div className="mt-3 space-y-2">
-                  {Array.from(files).map((file, index) => (
-                    <div
-                      key={index}
-                      className="text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 flex items-center gap-2 text-slate-600"
+                {/* PEDO DROPDOWN TOGGLE */}
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowPedo((v) => !v)}
+                    className={`w-full flex items-center justify-between px-4 sm:px-5 py-3 sm:py-4 rounded-xl border transition ${showPedo
+                        ? "bg-slate-100 border-slate-300"
+                        : "bg-[#16243c] border-[#16243c] hover:bg-[#1e3252]"
+                      }`}
+                  >
+                    <span
+                      className={`text-sm sm:text-base font-semibold tracking-wide uppercase ${showPedo ? "text-slate-800" : "text-white"
+                        }`}
                     >
-                      <FileText className="w-4 h-4 text-slate-500 shrink-0" />
-                      <span className="truncate text-xs sm:text-sm">{file.name}</span>
+                      Pedo (Primary Teeth)
+                    </span>
+                    <ChevronDown
+                      className={`w-5 h-5 transition-transform duration-300 ${showPedo ? "rotate-180 text-slate-800" : "text-white"
+                        }`}
+                    />
+                  </button>
+
+                  {showPedo && (
+                    <div className="mt-3">
+                      <p className="text-slate-500 text-xs sm:text-sm mb-3">
+                        Deciduous / primary teeth — tap to select.
+                      </p>
+                      <ToothChart
+                        upperRight={pedoUpperRight}
+                        upperLeft={pedoUpperLeft}
+                        lowerRight={pedoLowerRight}
+                        lowerLeft={pedoLowerLeft}
+                        selectedTeeth={selectedTeeth}
+                        onToggle={toggleTooth}
+                        accent
+                      />
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
-            </section>
+
+                {selectedTeeth.length > 0 && (
+                  <div className="mt-4 sm:mt-5">
+                    <p className="text-xs font-medium text-slate-600 mb-2 sm:mb-3">Selected teeth:</p>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                      {selectedTeeth
+                        .sort((a, b) => a - b)
+                        .map((t) => (
+                          <span
+                            key={t}
+                            className="inline-flex items-center gap-1 sm:gap-1.5 text-xs font-medium bg-slate-800 text-white px-2 sm:px-3 py-1.5 sm:py-2 rounded-full"
+                          >
+                            #{t}
+                            <button
+                              onClick={() => toggleTooth(t)}
+                              className="hover:opacity-70 transition"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </SectionCard>
+            </div>
+
+            {/* NOTES + DELIVERY + FILES */}
+            <div id="finish" ref={registerSection("finish")} className="space-y-5 sm:space-y-6 scroll-mt-4">
+              <SectionCard>
+                <SectionHeading icon={<StickyNote className="w-4 h-4" />} title="Additional Notes" />
+                <textarea
+                  rows={4}
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Special instructions for the lab..."
+                  className="w-full border border-slate-300 rounded-xl px-4 py-3 text-[15px] outline-none transition hover:border-slate-400 focus:border-slate-500 focus:ring-4 focus:ring-slate-500/10"
+                />
+              </SectionCard>
+
+              <SectionCard>
+                <SectionHeading icon={<CalendarDays className="w-4 h-4" />} title="Estimated Delivery" />
+                <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+                  <Field label="Estimated delivery date">
+                    <input
+                      type="date"
+                      value={estimatedDelivery}
+                      onChange={(e) => setEstimatedDelivery(e.target.value)}
+                      className={inputClass()}
+                    />
+                  </Field>
+                </div>
+              </SectionCard>
+
+              <SectionCard>
+                <SectionHeading icon={<Upload className="w-4 h-4" />} title="Upload Files" />
+
+                <label
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDragging(true);
+                  }}
+                  onDragLeave={() => setIsDragging(false)}
+                  onDrop={onDrop}
+                  className={`rounded-2xl p-5 sm:p-8 flex flex-col items-center justify-center cursor-pointer transition-all border-2 border-dashed ${isDragging
+                      ? "border-slate-500 bg-slate-50"
+                      : "border-slate-300 hover:border-slate-400 hover:bg-slate-50"
+                    }`}
+                >
+                  <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mb-3">
+                    <Upload className="w-5 h-5 text-slate-600" />
+                  </div>
+                  <span className="font-semibold text-slate-700 text-sm sm:text-base text-center">
+                    Drag files here, or tap to browse
+                  </span>
+                  <span className="text-xs sm:text-sm text-slate-400 mt-1 text-center">
+                    STL, images, PDFs, case photos
+                  </span>
+                  <input
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => handleFilesSelected(e.target.files)}
+                  />
+                </label>
+
+                {files && files.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {Array.from(files).map((file, index) => (
+                      <div
+                        key={index}
+                        className="text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 flex items-center gap-2 text-slate-600"
+                      >
+                        <FileText className="w-4 h-4 text-slate-500 shrink-0" />
+                        <span className="truncate text-xs sm:text-sm flex-1">{file.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!files) return;
+                            const dt = new DataTransfer();
+                            Array.from(files).forEach((f, i) => {
+                              if (i !== index) dt.items.add(f);
+                            });
+                            setFiles(dt.files.length ? dt.files : null);
+                          }}
+                          className="text-slate-400 hover:text-rose-600 transition shrink-0"
+                          aria-label={`Remove ${file.name}`}
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </SectionCard>
+            </div>
           </div>
 
           {/* RIGHT: DESKTOP STICKY SUMMARY */}
@@ -984,6 +1089,14 @@ export default function OrderModal({ open, onClose }: Props) {
                   label="Teeth selected"
                   value={selectedTeeth.length ? `${selectedTeeth.length}` : "—"}
                 />
+                <SummaryRow
+                  label="Trial"
+                  value={
+                    [metalTrial && "Metal", bisqueTrial && "Bisque"].filter(Boolean).join(", ") ||
+                    "—"
+                  }
+                />
+                <SummaryRow label="Est. delivery" value={estimatedDelivery || "—"} />
               </div>
 
               <label className="block mb-2 text-[13px] font-medium text-slate-600">Payment</label>
@@ -994,7 +1107,7 @@ export default function OrderModal({ open, onClose }: Props) {
               <button
                 onClick={submitOrder}
                 disabled={loading}
-                className="w-full h-[52px] rounded-lg bg-[#16243c] text-white font-medium flex items-center justify-center gap-2 hover:bg-[#1e3252] transition disabled:opacity-60 mt-6"
+                className="w-full h-[52px] rounded-xl bg-[#16243c] text-white font-medium flex items-center justify-center gap-2 hover:bg-[#1e3252] active:scale-[0.98] transition disabled:opacity-60 disabled:active:scale-100 mt-6"
               >
                 {loading ? (
                   <>
@@ -1009,7 +1122,7 @@ export default function OrderModal({ open, onClose }: Props) {
 
               <button
                 onClick={onClose}
-                className="w-full h-[48px] rounded-lg border border-slate-300 bg-white text-slate-600 font-medium mt-3 hover:bg-slate-50 transition"
+                className="w-full h-[48px] rounded-xl border border-slate-300 bg-white text-slate-600 font-medium mt-3 hover:bg-slate-50 active:scale-[0.98] transition"
               >
                 Cancel
               </button>
@@ -1018,9 +1131,9 @@ export default function OrderModal({ open, onClose }: Props) {
         </div>
 
         {/* MOBILE: STICKY BOTTOM BAR + EXPANDABLE SHEET */}
-        <div className="lg:hidden shrink-0 border-t border-slate-200 bg-white">
+        <div className="lg:hidden shrink-0 border-t border-slate-200 bg-white shadow-[0_-4px_16px_rgba(15,23,42,0.06)]">
           {mobileSummaryOpen && (
-            <div className="px-4 pt-4 pb-2 max-h-[50vh] overflow-y-auto space-y-4">
+            <div className="px-4 pt-2 pb-2 max-h-[50vh] overflow-y-auto space-y-4">
               <div className="space-y-3 text-sm">
                 <SummaryRow label="Clinic" value={clinicName} />
                 <SummaryRow label="Shade" value={shade || "—"} />
@@ -1028,6 +1141,14 @@ export default function OrderModal({ open, onClose }: Props) {
                   label="Teeth selected"
                   value={selectedTeeth.length ? `${selectedTeeth.length}` : "—"}
                 />
+                <SummaryRow
+                  label="Trial"
+                  value={
+                    [metalTrial && "Metal", bisqueTrial && "Bisque"].filter(Boolean).join(", ") ||
+                    "—"
+                  }
+                />
+                <SummaryRow label="Est. delivery" value={estimatedDelivery || "—"} />
               </div>
 
               <div>
@@ -1041,20 +1162,21 @@ export default function OrderModal({ open, onClose }: Props) {
 
           <button
             onClick={() => setMobileSummaryOpen((v) => !v)}
-            className="w-full flex items-center justify-between px-4 py-3 text-slate-600 text-xs font-medium border-t border-slate-100"
+            className="w-full flex flex-col items-center pt-2 pb-1.5 text-slate-500"
           >
-            <span className="font-semibold">
+            <span className="w-9 h-1 rounded-full bg-slate-300 mb-1.5" />
+            <span className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wide">
               {mobileSummaryOpen ? "Hide summary" : "View summary"}
+              {mobileSummaryOpen ? (
+                <ChevronDown className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronUp className="w-3.5 h-3.5" />
+              )}
             </span>
-            {mobileSummaryOpen ? (
-              <ChevronDown className="w-4 h-4" />
-            ) : (
-              <ChevronUp className="w-4 h-4" />
-            )}
           </button>
 
-          <div className="px-4 pb-4 pt-3 flex flex-col gap-2">
-            <div className="flex items-center justify-between">
+          <div className="px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2 flex flex-col gap-2 border-t border-slate-100">
+            <div className="flex items-center justify-between pt-2">
               <div>
                 <div className="text-xs text-slate-400">Total</div>
                 <div className="text-xl font-semibold text-slate-900">
@@ -1066,14 +1188,14 @@ export default function OrderModal({ open, onClose }: Props) {
             <div className="flex items-center gap-2">
               <button
                 onClick={onClose}
-                className="h-12 px-4 rounded-lg border border-slate-300 bg-white text-slate-600 font-medium text-sm flex-1"
+                className="h-12 px-4 rounded-xl border border-slate-300 bg-white text-slate-600 font-medium text-sm flex-1 active:scale-[0.98] transition"
               >
                 Cancel
               </button>
               <button
                 onClick={submitOrder}
                 disabled={loading}
-                className="h-12 px-6 rounded-lg bg-[#16243c] text-white font-medium text-sm flex items-center justify-center gap-2 disabled:opacity-60 flex-1"
+                className="h-12 px-6 rounded-xl bg-[#16243c] text-white font-medium text-sm flex items-center justify-center gap-2 disabled:opacity-60 flex-1 active:scale-[0.98] transition"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -1090,9 +1212,8 @@ export default function OrderModal({ open, onClose }: Props) {
         {/* TOAST */}
         {toast && (
           <div
-            className={`absolute bottom-32 lg:bottom-5 left-1/2 -translate-x-1/2 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 text-sm font-medium text-white max-w-[90%] ${
-              toast.type === "success" ? "bg-emerald-700" : "bg-rose-700"
-            }`}
+            className={`absolute bottom-32 lg:bottom-5 left-1/2 -translate-x-1/2 px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 text-sm font-medium text-white max-w-[90%] ${toast.type === "success" ? "bg-emerald-700" : "bg-rose-700"
+              }`}
           >
             {toast.type === "success" ? (
               <CheckCircle2 className="w-4 h-4 shrink-0" />
@@ -1107,143 +1228,170 @@ export default function OrderModal({ open, onClose }: Props) {
   );
 }
 
-function ToothButton({
+/**
+ * Card wrapper that gives every form section a consistent boundary,
+ * spacing rhythm, and hover elevation.
+ */
+function SectionCard({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm shadow-slate-900/[0.02] transition hover:border-slate-300">
+      {children}
+    </div>
+  );
+}
+
+/**
+ * Native <select> with a consistent custom chevron so it matches
+ * text inputs across browsers/platforms.
+ */
+function SelectField({
+  children,
+  className = "",
+  ...props
+}: React.SelectHTMLAttributes<HTMLSelectElement>) {
+  return (
+    <div className="relative">
+      <select {...props} className={`${className} appearance-none pr-10 cursor-pointer`}>
+        {children}
+      </select>
+      <ChevronDown className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+    </div>
+  );
+}
+
+function TrialCheckbox({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <label
+      className={`flex items-center gap-2.5 px-4 h-11 rounded-xl border cursor-pointer transition select-none ${checked
+          ? "bg-slate-800 border-slate-800 text-white"
+          : "bg-white border-slate-300 text-slate-700 hover:border-slate-400"
+        }`}
+    >
+      <span
+        className={`w-[18px] h-[18px] rounded-md border flex items-center justify-center shrink-0 ${checked ? "bg-white border-white" : "bg-white border-slate-300"
+          }`}
+      >
+        {checked && <Check className="w-3 h-3 text-slate-800" />}
+      </span>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="hidden"
+      />
+      <span className="text-sm font-medium">{label}</span>
+    </label>
+  );
+}
+
+/**
+ * Horizontal FDI tooth chart — one row per jaw, right quadrant then left
+ * quadrant separated by a midline divider (matches standard dental chart
+ * notation: 18-11 | 21-28 on top, 48-41 | 31-38 on the bottom).
+ */
+function ToothChart({
+  upperRight,
+  upperLeft,
+  lowerRight,
+  lowerLeft,
+  selectedTeeth,
+  onToggle,
+  accent = false,
+}: {
+  upperRight: number[];
+  upperLeft: number[];
+  lowerRight: number[];
+  lowerLeft: number[];
+  selectedTeeth: number[];
+  onToggle: (tooth: number) => void;
+  accent?: boolean;
+}) {
+  return (
+    <div
+      className={`border rounded-xl sm:rounded-2xl p-3 sm:p-6 overflow-x-auto ${accent ? "bg-sky-50/50 border-sky-200" : "bg-white border-slate-200"
+        }`}
+    >
+      {/* UPPER JAW */}
+      <div className="flex justify-center items-center gap-1 sm:gap-1.5 min-w-max mx-auto mb-3 sm:mb-4">
+        {upperRight.map((tooth) => (
+          <ToothCell
+            key={tooth}
+            tooth={tooth}
+            selected={selectedTeeth.includes(tooth)}
+            onClick={() => onToggle(tooth)}
+          />
+        ))}
+        <div className="w-px h-9 sm:h-11 bg-slate-300 mx-1.5 sm:mx-2 shrink-0" />
+        {upperLeft.map((tooth) => (
+          <ToothCell
+            key={tooth}
+            tooth={tooth}
+            selected={selectedTeeth.includes(tooth)}
+            onClick={() => onToggle(tooth)}
+          />
+        ))}
+      </div>
+
+      {/* MIDLINE */}
+      <div className="flex items-center gap-3 my-2 sm:my-3 min-w-max mx-auto justify-center">
+        <div className="w-24 sm:w-40 h-px bg-slate-200" />
+        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">
+          Midline
+        </span>
+        <div className="w-24 sm:w-40 h-px bg-slate-200" />
+      </div>
+
+      {/* LOWER JAW */}
+      <div className="flex justify-center items-center gap-1 sm:gap-1.5 min-w-max mx-auto mt-3 sm:mt-4">
+        {lowerRight.map((tooth) => (
+          <ToothCell
+            key={tooth}
+            tooth={tooth}
+            selected={selectedTeeth.includes(tooth)}
+            onClick={() => onToggle(tooth)}
+          />
+        ))}
+        <div className="w-px h-9 sm:h-11 bg-slate-300 mx-1.5 sm:mx-2 shrink-0" />
+        {lowerLeft.map((tooth) => (
+          <ToothCell
+            key={tooth}
+            tooth={tooth}
+            selected={selectedTeeth.includes(tooth)}
+            onClick={() => onToggle(tooth)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ToothCell({
   tooth,
   selected,
   onClick,
-  position,
-  isMobile = false,
 }: {
   tooth: number;
   selected: boolean;
   onClick: () => void;
-  position: "upper" | "lower";
-  isMobile?: boolean;
 }) {
-  // Responsive sizing
-  const width = "max(32px, 6vw)"; // Mobile: 32px, scales with viewport
-  const height = "max(48px, 9vw)";
-
   return (
     <button
       type="button"
       onClick={onClick}
-      className="relative inline-flex items-center justify-center transition-all duration-200 group shrink-0"
-      style={{
-        width: width,
-        height: height,
-        minWidth: "32px",
-        minHeight: "48px",
-        maxWidth: "48px",
-        maxHeight: "64px",
-      }}
-    >
-      {/* Realistic Tooth SVG */}
-      <svg
-        viewBox="0 0 40 60"
-        className="w-full h-full absolute"
-        style={{
-          filter: selected
-            ? "drop-shadow(0 4px 8px rgba(15, 23, 42, 0.25))"
-            : "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))",
-        }}
-      >
-        {/* Tooth Gradient Definitions */}
-        {position === "upper" ? (
-          <defs>
-            <linearGradient id={`grad-upper-${tooth}`} x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop
-                offset="0%"
-                style={{ stopColor: selected ? "#1e293b" : "#f8fafc", stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: selected ? "#0f172a" : "#e2e8f0", stopOpacity: 1 }}
-              />
-            </linearGradient>
-          </defs>
-        ) : (
-          <defs>
-            <linearGradient id={`grad-lower-${tooth}`} x1="0%" y1="100%" x2="0%" y2="0%">
-              <stop
-                offset="0%"
-                style={{ stopColor: selected ? "#1e293b" : "#f8fafc", stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: selected ? "#0f172a" : "#e2e8f0", stopOpacity: 1 }}
-              />
-            </linearGradient>
-          </defs>
-        )}
-
-        {position === "upper" ? (
-          // Upper teeth shape
-          <path
-            d="M 8 5 Q 5 8 5 15 L 5 45 Q 5 52 10 55 Q 15 58 20 58 Q 25 58 30 55 Q 35 52 35 45 L 35 15 Q 35 8 32 5 Z"
-            fill={`url(#grad-upper-${tooth})`}
-            stroke={selected ? "#0f172a" : "#cbd5e1"}
-            strokeWidth="1.5"
-          />
-        ) : (
-          // Lower teeth shape
-          <path
-            d="M 8 5 Q 5 8 5 15 L 5 45 Q 5 52 10 55 Q 15 58 20 58 Q 25 58 30 55 Q 35 52 35 45 L 35 15 Q 35 8 32 5 Z"
-            fill={`url(#grad-lower-${tooth})`}
-            stroke={selected ? "#0f172a" : "#cbd5e1"}
-            strokeWidth="1.5"
-          />
-        )}
-
-        {/* Tooth highlight/shine */}
-        {!selected && <ellipse cx="14" cy="12" rx="4" ry="3" fill="white" opacity="0.6" />}
-
-        {/* Tooth ridge/texture */}
-        {!selected && (
-          <>
-            <line x1="20" y1="5" x2="20" y2="50" stroke="rgba(0,0,0,0.05)" strokeWidth="0.5" />
-            <line x1="12" y1="5" x2="12" y2="50" stroke="rgba(0,0,0,0.03)" strokeWidth="0.5" />
-            <line x1="28" y1="5" x2="28" y2="50" stroke="rgba(0,0,0,0.03)" strokeWidth="0.5" />
-          </>
-        )}
-      </svg>
-
-      {/* Tooth number - centered and readable */}
-      <span
-        className={`relative z-10 font-bold text-[10px] sm:text-xs transition-all duration-200 ${
-          selected ? "text-white" : "text-slate-700"
+      className={`shrink-0 w-9 h-10 sm:w-11 sm:h-12 rounded-lg border flex items-center justify-center text-xs sm:text-sm font-bold transition active:scale-95 ${selected
+          ? "bg-slate-800 border-slate-800 text-white shadow-sm"
+          : "bg-white border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-50"
         }`}
-        style={{
-          textShadow: !selected ? "0 1px 2px rgba(255,255,255,0.8)" : "none",
-          fontWeight: 700,
-          lineHeight: "1",
-        }}
-      >
-        {tooth}
-      </span>
-
-      {/* Hover effect ring */}
-      {!selected && (
-        <div
-          className="absolute inset-0 rounded opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{
-            border: "2px solid rgba(100, 116, 139, 0.4)",
-            pointerEvents: "none",
-          }}
-        />
-      )}
-
-      {/* Selection ring */}
-      {selected && (
-        <div
-          className="absolute inset-0 rounded"
-          style={{
-            border: "2px solid rgba(255, 255, 255, 0.8)",
-            pointerEvents: "none",
-            boxShadow: "inset 0 0 0 1px rgba(15, 23, 42, 0.5)",
-          }}
-        />
-      )}
+    >
+      {tooth}
     </button>
   );
 }
@@ -1262,10 +1410,12 @@ function SectionHeading({ icon, title }: { icon: React.ReactNode; title: string 
 function Field({
   label,
   required,
+  error,
   children,
 }: {
   label: string;
   required?: boolean;
+  error?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -1274,6 +1424,11 @@ function Field({
         {label} {required && <span className="text-rose-600">*</span>}
       </label>
       {children}
+      {error && (
+        <p className="mt-1.5 text-xs font-medium text-rose-600 flex items-center gap-1">
+          <AlertCircle className="w-3 h-3 shrink-0" /> {error}
+        </p>
+      )}
     </div>
   );
 }
@@ -1298,8 +1453,8 @@ function QuantityStepper({
   onChange: (q: number) => void;
   size?: "sm" | "md";
 }) {
-  const btn = size === "sm" ? "w-7 h-7 rounded-md" : "w-10 h-10 rounded-lg";
-  const input = size === "sm" ? "w-9 h-7 text-xs rounded-md" : "w-full h-10 rounded-lg";
+  const btn = size === "sm" ? "w-8 h-8 rounded-lg" : "w-10 h-10 rounded-lg";
+  const input = size === "sm" ? "w-10 h-8 text-xs rounded-lg" : "w-full h-10 rounded-lg";
   const iconSize = size === "sm" ? "w-3 h-3" : "w-4 h-4";
 
   return (
@@ -1307,7 +1462,7 @@ function QuantityStepper({
       <button
         type="button"
         onClick={() => onChange(Math.max(1, quantity - 1))}
-        className={`${btn} border border-slate-300 bg-white flex items-center justify-center hover:bg-slate-100 transition shrink-0`}
+        className={`${btn} border border-slate-300 bg-white flex items-center justify-center hover:bg-slate-100 active:scale-95 transition shrink-0`}
       >
         <Minus className={iconSize} />
       </button>
@@ -1321,7 +1476,7 @@ function QuantityStepper({
       <button
         type="button"
         onClick={() => onChange(quantity + 1)}
-        className={`${btn} border border-slate-300 bg-white flex items-center justify-center hover:bg-slate-100 transition shrink-0`}
+        className={`${btn} border border-slate-300 bg-white flex items-center justify-center hover:bg-slate-100 active:scale-95 transition shrink-0`}
       >
         <PlusIcon className={iconSize} />
       </button>
@@ -1343,18 +1498,16 @@ function PaymentToggle({
       <button
         type="button"
         onClick={() => onChange("postpaid")}
-        className={`h-10 rounded-md text-sm font-medium transition ${
-          paymentMode === "postpaid" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
-        }`}
+        className={`h-10 rounded-md text-sm font-medium transition ${paymentMode === "postpaid" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
+          }`}
       >
         Pay Later
       </button>
       <button
         type="button"
         onClick={() => onChange("prepaid")}
-        className={`h-10 rounded-md text-sm font-medium transition ${
-          paymentMode === "prepaid" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
-        }`}
+        className={`h-10 rounded-md text-sm font-medium transition ${paymentMode === "prepaid" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500"
+          }`}
       >
         Pay Now
       </button>

@@ -277,10 +277,35 @@ function AdminOrdersPage() {
   }, [filteredOrders, page]);
 
   const navButtons = [
-    { label: "Orders", to: "/admin/orders", color: "bg-blue-600 hover:bg-blue-700" },
-    { label: "Scanner Bookings", to: "/admin/bookings", color: "bg-purple-600 hover:bg-purple-700" },
-    { label: "Active Scanners", to: "/admin/scanners", color: "bg-cyan-600 hover:bg-cyan-700" },
-    { label: "Clinics", to: "/admin/clinics", color: "bg-orange-600 hover:bg-orange-700" },
+    {
+      label: "Orders",
+      to: "/admin/orders",
+      color: "bg-blue-600 hover:bg-blue-700",
+    },
+
+    {
+      label: "Scanner Bookings",
+      to: "/admin/bookings",
+      color: "bg-purple-600 hover:bg-purple-700",
+    },
+
+    {
+      label: "Active Scanners",
+      to: "/admin/scanners",
+      color: "bg-cyan-600 hover:bg-cyan-700",
+    },
+
+    {
+      label: "Clinics",
+      to: "/admin/clinics",
+      color: "bg-orange-600 hover:bg-orange-700",
+    },
+
+    {
+      label: "Employees",
+      to: "/admin/employees",
+      color: "bg-green-600 hover:bg-green-700",
+    },
   ];
 
   return (
@@ -590,8 +615,8 @@ function AdminOrdersPage() {
                             <p className="text-slate-400 text-xs">Payment Status</p>
                             <span
                               className={`inline-block mt-0.5 px-2 py-0.5 rounded-md text-xs font-semibold ${order.paymentStatus === "paid"
-                                  ? "bg-emerald-100 text-emerald-700"
-                                  : "bg-amber-100 text-amber-700"
+                                ? "bg-emerald-100 text-emerald-700"
+                                : "bg-amber-100 text-amber-700"
                                 }`}
                             >
                               {order.paymentStatus || "-"}
@@ -798,8 +823,8 @@ function AdminOrdersPage() {
                       <td className="px-4 py-3">
                         <span
                           className={`px-2 py-1 rounded-lg text-xs font-semibold ${order.paymentStatus === "paid"
-                              ? "bg-emerald-100 text-emerald-700"
-                              : "bg-amber-100 text-amber-700"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-amber-100 text-amber-700"
                             }`}
                         >
                           {order.paymentStatus || "-"}
