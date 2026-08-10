@@ -20,6 +20,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShadeIndexRouteImport } from './routes/shade/index'
 import { Route as ClinicsIndexRouteImport } from './routes/clinics/index'
 import { Route as TrackingBookingIdRouteImport } from './routes/tracking/$bookingId'
+import { Route as EmployeeResetPasswordRouteImport } from './routes/employee/reset-password'
 import { Route as EmployeeLoginRouteImport } from './routes/employee/login'
 import { Route as EmployeeDashboardRouteImport } from './routes/employee/dashboard'
 import { Route as ClinicsIdRouteImport } from './routes/clinics/$id'
@@ -84,6 +85,11 @@ const ClinicsIndexRoute = ClinicsIndexRouteImport.update({
 const TrackingBookingIdRoute = TrackingBookingIdRouteImport.update({
   id: '/tracking/$bookingId',
   path: '/tracking/$bookingId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmployeeResetPasswordRoute = EmployeeResetPasswordRouteImport.update({
+  id: '/employee/reset-password',
+  path: '/employee/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmployeeLoginRoute = EmployeeLoginRouteImport.update({
@@ -155,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/clinics/$id': typeof ClinicsIdRoute
   '/employee/dashboard': typeof EmployeeDashboardRoute
   '/employee/login': typeof EmployeeLoginRoute
+  '/employee/reset-password': typeof EmployeeResetPasswordRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
   '/shade/': typeof ShadeIndexRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/clinics/$id': typeof ClinicsIdRoute
   '/employee/dashboard': typeof EmployeeDashboardRoute
   '/employee/login': typeof EmployeeLoginRoute
+  '/employee/reset-password': typeof EmployeeResetPasswordRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics': typeof ClinicsIndexRoute
   '/shade': typeof ShadeIndexRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/clinics/$id': typeof ClinicsIdRoute
   '/employee/dashboard': typeof EmployeeDashboardRoute
   '/employee/login': typeof EmployeeLoginRoute
+  '/employee/reset-password': typeof EmployeeResetPasswordRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
   '/shade/': typeof ShadeIndexRoute
@@ -227,6 +236,7 @@ export interface FileRouteTypes {
     | '/clinics/$id'
     | '/employee/dashboard'
     | '/employee/login'
+    | '/employee/reset-password'
     | '/tracking/$bookingId'
     | '/clinics/'
     | '/shade/'
@@ -250,6 +260,7 @@ export interface FileRouteTypes {
     | '/clinics/$id'
     | '/employee/dashboard'
     | '/employee/login'
+    | '/employee/reset-password'
     | '/tracking/$bookingId'
     | '/clinics'
     | '/shade'
@@ -273,6 +284,7 @@ export interface FileRouteTypes {
     | '/clinics/$id'
     | '/employee/dashboard'
     | '/employee/login'
+    | '/employee/reset-password'
     | '/tracking/$bookingId'
     | '/clinics/'
     | '/shade/'
@@ -297,6 +309,7 @@ export interface RootRouteChildren {
   ClinicsIdRoute: typeof ClinicsIdRoute
   EmployeeDashboardRoute: typeof EmployeeDashboardRoute
   EmployeeLoginRoute: typeof EmployeeLoginRoute
+  EmployeeResetPasswordRoute: typeof EmployeeResetPasswordRoute
   TrackingBookingIdRoute: typeof TrackingBookingIdRoute
   ClinicsIndexRoute: typeof ClinicsIndexRoute
   ShadeIndexRoute: typeof ShadeIndexRoute
@@ -380,6 +393,13 @@ declare module '@tanstack/react-router' {
       path: '/tracking/$bookingId'
       fullPath: '/tracking/$bookingId'
       preLoaderRoute: typeof TrackingBookingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/employee/reset-password': {
+      id: '/employee/reset-password'
+      path: '/employee/reset-password'
+      fullPath: '/employee/reset-password'
+      preLoaderRoute: typeof EmployeeResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/employee/login': {
@@ -473,6 +493,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClinicsIdRoute: ClinicsIdRoute,
   EmployeeDashboardRoute: EmployeeDashboardRoute,
   EmployeeLoginRoute: EmployeeLoginRoute,
+  EmployeeResetPasswordRoute: EmployeeResetPasswordRoute,
   TrackingBookingIdRoute: TrackingBookingIdRoute,
   ClinicsIndexRoute: ClinicsIndexRoute,
   ShadeIndexRoute: ShadeIndexRoute,

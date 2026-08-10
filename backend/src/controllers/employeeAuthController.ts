@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import Employee from "../models/Employee";
 import Order from "../models/Order";
 
@@ -251,6 +252,132 @@ export const getEmployeeDashboard = async (
         });
 
     } catch (error: any) {
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+// ─────────────────────────────────────────────────────────────
+// Forgot Password
+// ─────────────────────────────────────────────────────────────
+
+export const forgotPassword = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                success: false,
+                message: "Email is required",
+            });
+        }
+
+        const employee = await Employee.findOne({
+            email: email.toLowerCase().trim(),
+        });
+
+        // Do not reveal whether an email exists
+        if (!employee) {
+            return res.status(200).json({
+                success: true,
+                message:
+                    "If an account exists with this email, a password reset link will be sent.",
+            });
+        }
+
+        // Generate secure random token
+        const resetToken = crypto.randomBytes(32).toString("hex");
+
+        // Token expires after 15 minutes
+        const resetTokenExpires = new Date(
+            Date.now() + 15 * 60 * 1000
+        );
+
+        employee.resetPasswordToken = resetToken;
+        employee.resetPasswordExpires = resetTokenExpires;
+
+        await employee.save();
+
+        console.log("================================");
+        console.log("PASSWORD RESET REQUEST");
+        console.log("Employee:", employee.name);
+        console.log("Email:", employee.email);
+        console.log("Reset Token:", resetToken);
+        console.log("Expires:", resetTokenExpires);
+        console.log("================================");
+
+        return res.status(200).json({
+            success: true,
+            message:
+                "If an account exists with this email, a password reset link will be sent.",
+        });
+
+    } catch (error: any) {
+        console.log("FORGOT PASSWORD ERROR:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+export const resetPassword = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const { token, password } = req.body;
+
+        if (!token || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Reset token and new password are required.",
+            });
+        }
+
+        if (password.length < 6) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must be at least 6 characters.",
+            });
+        }
+
+        const employee = await Employee.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: {
+                $gt: new Date(),
+            },
+        });
+
+        if (!employee) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid or expired reset token.",
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        employee.password = hashedPassword;
+
+        // Invalidate token after successful password change
+        employee.resetPasswordToken = null;
+        employee.resetPasswordExpires = null;
+
+        await employee.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Password reset successfully.",
+        });
+
+    } catch (error: any) {
+        console.log("RESET PASSWORD ERROR:", error);
+
         return res.status(500).json({
             success: false,
             message: error.message,

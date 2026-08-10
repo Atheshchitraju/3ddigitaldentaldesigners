@@ -225,7 +225,9 @@ function EmployeeDashboard() {
   const [loadingEmployees, setLoadingEmployees] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("employeeToken");
+    const token =
+      localStorage.getItem("employeeToken") ||
+      sessionStorage.getItem("employeeToken");
 
     if (!token) {
       navigate({ to: "/employee/login" });
@@ -300,6 +302,9 @@ function EmployeeDashboard() {
   const logout = () => {
     localStorage.removeItem("employeeToken");
     localStorage.removeItem("employee");
+
+    sessionStorage.removeItem("employeeToken");
+    sessionStorage.removeItem("employee");
 
     navigate({ to: "/employee/login" });
   };

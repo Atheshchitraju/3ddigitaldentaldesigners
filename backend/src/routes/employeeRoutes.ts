@@ -2,6 +2,8 @@ import express from "express";
 
 import {
     employeeLogin,
+    forgotPassword,
+    resetPassword,
     getLoggedEmployee,
     getEmployeeDashboard,
 } from "../controllers/employeeAuthController";
@@ -22,6 +24,10 @@ const router = express.Router();
 /* Authentication */
 
 router.post("/login", employeeLogin);
+
+router.post("/forgot-password", forgotPassword);
+
+router.post("/reset-password", resetPassword);
 
 router.get("/me", authMiddleware, getLoggedEmployee);
 router.get(
