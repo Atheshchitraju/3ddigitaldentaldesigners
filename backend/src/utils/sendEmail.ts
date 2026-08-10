@@ -16,6 +16,9 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 15000,
 });
 
 export const sendPasswordResetEmail = async (
@@ -23,72 +26,83 @@ export const sendPasswordResetEmail = async (
     name: string,
     resetToken: string
 ) => {
+    console.log("📧 Starting password reset email...");
+    console.log("📧 From:", process.env.EMAIL_USER);
+    console.log("📧 To:", email);
+
     const frontendUrl =
         process.env.FRONTEND_URL || "https://digitaldentaldesigners.in";
 
     const resetUrl =
         `${frontendUrl}/employee/reset-password?token=${resetToken}`;
 
-    const info = await transporter.sendMail({
-        from: `"Digital Dental Designers" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: "Reset Your Digital Dental Designers Password",
+    console.log("🔗 Reset URL:", resetUrl);
 
-        html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+    try {
+        console.log("📤 Calling Gmail SMTP...");
 
-                <h2 style="color: #1D5C5A;">
-                    Digital Dental Designers
-                </h2>
+        const info = await transporter.sendMail({
+            from: `"Digital Dental Designers" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: "Reset Your Digital Dental Designers Password",
 
-                <p>Hello ${name},</p>
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+                    <h2 style="color: #1D5C5A;">
+                        Digital Dental Designers
+                    </h2>
 
-                <p>
-                    We received a request to reset your employee account password.
-                </p>
+                    <p>Hello ${name},</p>
 
-                <p>
-                    Click the button below to create a new password:
-                </p>
+                    <p>
+                        We received a request to reset your employee account password.
+                    </p>
 
-                <div style="margin: 30px 0;">
-                    
-                        href="${resetUrl}"
-                        style="
-                            background:#1D5C5A;
-                            color:white;
-                            padding:14px 24px;
-                            text-decoration:none;
-                            border-radius:6px;
-                            display:inline-block;
-                            font-weight:bold;
-                        "
-                    >
-                        Reset Password
-                    </a>
+                    <p>
+                        Click the button below to create a new password:
+                    </p>
+
+                    <div style="margin: 30px 0;">
+                        
+                            href="${resetUrl}"
+                            style="
+                                background:#1D5C5A;
+                                color:white;
+                                padding:14px 24px;
+                                text-decoration:none;
+                                border-radius:6px;
+                                display:inline-block;
+                                font-weight:bold;
+                            "
+                        >
+                            Reset Password
+                        </a>
+                    </div>
+
+                    <p>This password reset link will expire in 1 hour.</p>
+
+                    <p>
+                        If you did not request this password reset,
+                        you can safely ignore this email.
+                    </p>
+
+                    <hr />
+
+                    <p style="font-size:12px;color:#777;">
+                        Digital Dental Designers
+                    </p>
                 </div>
+            `,
+        });
 
-                <p>
-                    This password reset link will expire in 1 hour.
-                </p>
+        console.log("✅ EMAIL SENT!");
+        console.log("📨 Message ID:", info.messageId);
 
-                <p>
-                    If you did not request this password reset, you can safely ignore
-                    this email.
-                </p>
+        return info;
+    } catch (error) {
+        console.error("❌ EMAIL SEND FAILED:");
+        console.error(error);
 
-                <hr />
-
-                <p style="font-size:12px;color:#777;">
-                    Digital Dental Designers
-                </p>
-
-            </div>
-        `,
-    });
-
-    console.log("EMAIL SENT SUCCESSFULLY");
-    console.log("Message ID:", info.messageId);
-    console.log("Accepted:", info.accepted);
-    console.log("Rejected:", info.rejected);
+        throw error;
+    }
 };
