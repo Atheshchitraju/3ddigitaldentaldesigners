@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { sendPasswordResetEmail } from "../utils/sendEmail";
 import Employee from "../models/Employee";
 import Order from "../models/Order";
 
@@ -277,10 +278,10 @@ export const forgotPassword = async (
         }
 
         const employee = await Employee.findOne({
-            email: email.toLowerCase().trim(),
+            email: email.toLowerCase(),
         });
 
-        // Do not reveal whether an email exists
+        // Don't reveal whether an account exists
         if (!employee) {
             return res.status(200).json({
                 success: true,
@@ -289,26 +290,23 @@ export const forgotPassword = async (
             });
         }
 
-        // Generate secure random token
         const resetToken = crypto.randomBytes(32).toString("hex");
 
-        // Token expires after 15 minutes
-        const resetTokenExpires = new Date(
-            Date.now() + 15 * 60 * 1000
-        );
-
         employee.resetPasswordToken = resetToken;
-        employee.resetPasswordExpires = resetTokenExpires;
+
+        employee.resetPasswordExpires = new Date(
+            Date.now() + 60 * 60 * 1000
+        );
 
         await employee.save();
 
-        console.log("================================");
-        console.log("PASSWORD RESET REQUEST");
-        console.log("Employee:", employee.name);
-        console.log("Email:", employee.email);
-        console.log("Reset Token:", resetToken);
-        console.log("Expires:", resetTokenExpires);
-        console.log("================================");
+        await sendPasswordResetEmail(
+            employee.email,
+            employee.name,
+            resetToken
+        );
+
+        console.log("Password reset email sent to:", employee.email);
 
         return res.status(200).json({
             success: true,
@@ -317,11 +315,11 @@ export const forgotPassword = async (
         });
 
     } catch (error: any) {
-        console.log("FORGOT PASSWORD ERROR:", error);
+        console.error("Forgot password error:", error);
 
         return res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Unable to process password reset request",
         });
     }
 };
@@ -335,14 +333,14 @@ export const resetPassword = async (
         if (!token || !password) {
             return res.status(400).json({
                 success: false,
-                message: "Reset token and new password are required.",
+                message: "Token and password are required",
             });
         }
 
         if (password.length < 6) {
             return res.status(400).json({
                 success: false,
-                message: "Password must be at least 6 characters.",
+                message: "Password must be at least 6 characters",
             });
         }
 
@@ -356,7 +354,7 @@ export const resetPassword = async (
         if (!employee) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid or expired reset token.",
+                message: "Invalid or expired reset link",
             });
         }
 
@@ -364,23 +362,22 @@ export const resetPassword = async (
 
         employee.password = hashedPassword;
 
-        // Invalidate token after successful password change
-        employee.resetPasswordToken = null;
-        employee.resetPasswordExpires = null;
+        employee.resetPasswordToken = undefined;
+        employee.resetPasswordExpires = undefined;
 
         await employee.save();
 
         return res.status(200).json({
             success: true,
-            message: "Password reset successfully.",
+            message: "Password reset successfully",
         });
 
     } catch (error: any) {
-        console.log("RESET PASSWORD ERROR:", error);
+        console.error("Reset password error:", error);
 
         return res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Unable to reset password",
         });
     }
-};
+}
