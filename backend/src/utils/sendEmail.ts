@@ -1,30 +1,6 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log(
-    "EMAIL_PASS exists:",
-    !!process.env.EMAIL_PASS
-);
-console.log(
-    "EMAIL_PASS length:",
-    process.env.EMAIL_PASS?.length
-);
-
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    requireTLS: true,
-
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-
-    connectionTimeout: 15000,
-    greetingTimeout: 15000,
-    socketTimeout: 15000,
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendPasswordResetEmail = async (
     email: string,
@@ -32,11 +8,11 @@ export const sendPasswordResetEmail = async (
     resetToken: string
 ) => {
     console.log("📧 Starting password reset email...");
-    console.log("📧 From:", process.env.EMAIL_USER);
     console.log("📧 To:", email);
 
     const frontendUrl =
-        process.env.FRONTEND_URL || "https://digitaldentaldesigners.in";
+        process.env.FRONTEND_URL ||
+        "https://digitaldentaldesigners.in";
 
     const resetUrl =
         `${frontendUrl}/employee/reset-password?token=${resetToken}`;
@@ -44,15 +20,14 @@ export const sendPasswordResetEmail = async (
     console.log("🔗 Reset URL:", resetUrl);
 
     try {
-        console.log("📤 Calling Gmail SMTP...");
-
-        const info = await transporter.sendMail({
-            from: `"Digital Dental Designers" <${process.env.EMAIL_USER}>`,
-            to: email,
+        const { data, error } = await resend.emails.send({
+            from: "Digital Dental Designers <noreply@digitaldentaldesigners.in>",
+            to: [email],
             subject: "Reset Your Digital Dental Designers Password",
 
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+
                     <h2 style="color: #1D5C5A;">
                         Digital Dental Designers
                     </h2>
@@ -68,7 +43,7 @@ export const sendPasswordResetEmail = async (
                     </p>
 
                     <div style="margin: 30px 0;">
-                        
+                        <a
                             href="${resetUrl}"
                             style="
                                 background:#1D5C5A;
@@ -84,7 +59,9 @@ export const sendPasswordResetEmail = async (
                         </a>
                     </div>
 
-                    <p>This password reset link will expire in 1 hour.</p>
+                    <p>
+                        This password reset link will expire in 1 hour.
+                    </p>
 
                     <p>
                         If you did not request this password reset,
@@ -96,14 +73,21 @@ export const sendPasswordResetEmail = async (
                     <p style="font-size:12px;color:#777;">
                         Digital Dental Designers
                     </p>
+
                 </div>
             `,
         });
 
-        console.log("✅ EMAIL SENT!");
-        console.log("📨 Message ID:", info.messageId);
+        if (error) {
+            console.error("❌ Resend error:", error);
+            throw error;
+        }
 
-        return info;
+        console.log("✅ EMAIL SENT!");
+        console.log("📨 Resend ID:", data?.id);
+
+        return data;
+
     } catch (error) {
         console.error("❌ EMAIL SEND FAILED:");
         console.error(error);
