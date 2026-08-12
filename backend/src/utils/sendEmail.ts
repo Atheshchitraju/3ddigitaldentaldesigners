@@ -109,6 +109,14 @@ export const sendOrderConfirmationEmail = async (
     console.log("📧 To:", email);
     console.log("📧 Order ID:", orderId);
 
+    const frontendUrl =
+        process.env.FRONTEND_URL || "https://digitaldentaldesigners.in";
+
+    const trackingUrl =
+        `${frontendUrl}/track-order/${encodeURIComponent(orderId)}`;
+
+    console.log("🔗 Tracking URL:", trackingUrl);
+
     try {
         // console.log("CALLING RESEND");
         const { data, error } = await resend.emails.send({
@@ -234,6 +242,59 @@ export const sendOrderConfirmationEmail = async (
                             We will notify you when there are important
                             updates regarding your order.
                         </p>
+
+                        <div style="
+                            margin: 30px 0;
+                            padding: 25px;
+                            background: #f1f7f6;
+                            border-radius: 10px;
+                            text-align: center;
+                            border: 1px solid #d8e9e7;
+                        ">
+
+                            <h3 style="
+                                color: #1D5C5A;
+                                margin-top: 0;
+                                margin-bottom: 10px;
+                            ">
+                                Track Your Order
+                            </h3>
+
+                            <p style="
+                                color: #555;
+                                font-size: 14px;
+                                margin-bottom: 20px;
+                            ">
+                                You can check your order progress anytime using the
+                                tracking page.
+                            </p>
+
+                            <a
+                                href="${trackingUrl}"
+                                style="
+                                    background: #1D5C5A;
+                                    color: white;
+                                    padding: 14px 28px;
+                                    text-decoration: none;
+                                    border-radius: 7px;
+                                    display: inline-block;
+                                    font-weight: bold;
+                                    font-size: 14px;
+                                "
+                            >
+                                Track Your Order
+                            </a>
+
+                            <p style="
+                                margin-top: 18px;
+                                margin-bottom: 0;
+                                font-size: 12px;
+                                color: #888;
+                            ">
+                                Order ID: ${orderId}
+                            </p>
+
+                        </div>
 
                         <hr style="
                             border: none;
