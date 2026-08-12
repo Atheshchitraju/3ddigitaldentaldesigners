@@ -44,7 +44,7 @@ export const clinics = [
     name: "Jas Dental",
     slug: "jas-dental",
     location: "HSR Layout, Bengaluru",
-    email: "jasasthetic@gmail.com",
+    email: "jasaesthetic@gmail.com",
     whatsapp: "9591111177",
     logo: bashaDoctor,
   },

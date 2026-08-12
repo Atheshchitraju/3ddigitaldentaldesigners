@@ -1,10 +1,16 @@
 import { Request, Response } from "express";
 import Order from "../models/Order";
 import { sendWhatsAppMessage } from "../services/whatsappService";
+import { sendOrderConfirmationEmail } from "../utils/sendEmail";
+
+// console.log("🔥 UPDATED orderController.ts LOADED");
 
 // CREATE ORDER
 
 export const createOrder = async (req: Request, res: Response) => {
+  // console.log("🔥🔥 CREATE ORDER CONTROLLER HIT 🔥🔥");
+  // console.log("DIAGNOSTIC createOrder() EXECUTING");
+
   try {
     const {
       name,
@@ -27,6 +33,14 @@ export const createOrder = async (req: Request, res: Response) => {
 
       paymentDetails,
     } = req.body;
+
+    console.log("========== ORDER REQUEST ==========");
+    console.log("Clinic:", clinic);
+    console.log("Clinic Email:", clinicEmail);
+    // console.log("DIAGNOSTIC clinicEmail value:", clinicEmail);
+    console.log("Customer Name:", name);
+    console.log("Product:", product);
+    console.log("===================================");
 
     const orderId = `ORD-${Date.now()}`;
 
@@ -53,6 +67,43 @@ export const createOrder = async (req: Request, res: Response) => {
 
       orderId,
     });
+
+    // console.log("EMAIL BLOCK REACHED");
+
+    // SEND ORDER CONFIRMATION EMAIL
+
+    try {
+      if (clinicEmail) {
+        // console.log("📧 Sending order confirmation email...");
+        // console.log("CALLING sendOrderConfirmationEmail");
+
+        await sendOrderConfirmationEmail(
+          clinicEmail,
+          name,
+          orderId,
+          patientName,
+          patientAge,
+          clinic,
+          product,
+          shade,
+          selectedTeeth,
+          notes,
+          amount,
+          quantity,
+          paymentMode,
+          paymentStatus,
+        );
+
+        // console.log("sendOrderConfirmationEmail RETURNED");
+
+        // console.log("✅ ORDER CONFIRMATION EMAIL SENT SUCCESSFULLY");
+      } else {
+        // console.log("⚠️ No clinic email found. Skipping order email.");
+      }
+    } catch (emailError) {
+      console.error("❌ ORDER CONFIRMATION EMAIL FAILED:");
+      console.error(emailError);
+    }
 
     // SEND ORDER RECEIVED MESSAGE
 
