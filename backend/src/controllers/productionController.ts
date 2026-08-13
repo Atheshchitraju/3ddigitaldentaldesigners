@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import Order from "../models/Order";
 import Employee from "../models/Employee";
+import { generateProductionReport } from "../utils/generateProductionReport";
+import { sendProductionReportEmail } from "../utils/sendEmail";
 
 /**
  * Ensures order.production exists before it's read or written.
@@ -1419,6 +1421,31 @@ export const markDelivered = async (req: Request, res: Response) => {
     );
 
     await order.save();
+
+    // =========================================================
+    // GENERATE & SEND PRODUCTION REPORT AFTER DELIVERY
+    // =========================================================
+
+    try {
+      if (order.clinicEmail) {
+        console.log("📄 Generating production report...");
+
+        const pdfBuffer = await generateProductionReport(order);
+
+        await sendProductionReportEmail(
+          order.clinicEmail,
+          order,
+          pdfBuffer,
+        );
+      } else {
+        console.log(
+          "⚠️ No clinic email found. Production report email skipped.",
+        );
+      }
+    } catch (reportError) {
+      console.error("❌ PRODUCTION REPORT EMAIL FAILED:");
+      console.error(reportError);
+    }
 
     return res.status(200).json({
       success: true,

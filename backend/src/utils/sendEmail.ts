@@ -337,3 +337,62 @@ export const sendOrderConfirmationEmail = async (
         throw error;
     }
 };
+export const sendProductionReportEmail = async (
+    to: string,
+    order: any,
+    pdfBuffer: Buffer,
+) => {
+    if (!to) {
+        throw new Error("Clinic email is missing");
+    }
+
+    console.log("📧 Sending production report email...");
+
+    const { data, error } = await resend.emails.send({
+        from: "3D Digital Dental Designers <noreply@digitaldentaldesigners.in>",
+        to: [to],
+
+        subject: `Production & Delivery Report - Order ${order.orderId}`,
+
+        html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>3D Digital Dental Designers</h2>
+
+        <p>Your order has been successfully delivered.</p>
+
+        <p>
+          Please find the complete production and delivery
+          report attached to this email.
+        </p>
+
+        <p>
+          <strong>Order ID:</strong> ${order.orderId}
+        </p>
+
+        <p>
+          Thank you for choosing
+          <strong>3D Digital Dental Designers</strong>.
+        </p>
+      </div>
+    `,
+
+        attachments: [
+            {
+                filename: `${order.orderId}-Production-Report.pdf`,
+                content: pdfBuffer,
+            },
+        ],
+    });
+
+    if (error) {
+        console.error("❌ Resend production report error:");
+        console.error(error);
+
+        throw error;
+    }
+
+    console.log("✅ Production report email sent successfully");
+    console.log("📨 Resend ID:", data?.id);
+
+    return data;
+};
