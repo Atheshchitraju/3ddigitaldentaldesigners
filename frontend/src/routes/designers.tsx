@@ -7,6 +7,7 @@ import d1 from "@/assets/Ramesh.webp";
 import d2 from "@/assets/designer.webp";
 import d3 from "@/assets/desginer2.webp";
 import d4 from "@/assets/Suman1.webp";
+import d5 from "@/assets/Praveen.webp";
 
 export const Route = createFileRoute("/designers")({
   head: () => ({
@@ -36,6 +37,7 @@ const designers = [
   { name: "Abdul Kalam Shaik", role: "Lead 3D Dental Designer", img: d3 },
   { name: "Ramesh", role: "Ceramist", exp: "9 years", img: d1 },
   { name: "Suman ", role: "Master Metalist", exp: "10 years", img: d4 },
+  { name: "Praveen", role: "Senior Ceramist", exp: "18 years", img: d5 },
 ];
 
 function TiltCard({ name, role, exp, img }: (typeof designers)[number]) {
