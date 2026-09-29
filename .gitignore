@@ -53,3 +53,8 @@ desktop.ini
 *.njsproj
 *.sln
 *.sw?
+
+# Local/private projects
+scanner-mobile/
+tracker-agent/
+WAP/

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as OrderRouteImport } from './routes/order'
 import { Route as EquipmentRouteImport } from './routes/equipment'
 import { Route as DesignersRouteImport } from './routes/designers'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -18,6 +19,7 @@ import { Route as BookScannerRouteImport } from './routes/book-scanner'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ShadeIndexRouteImport } from './routes/shade/index'
+import { Route as PartnerWithUsIndexRouteImport } from './routes/partner-with-us/index'
 import { Route as ClinicsIndexRouteImport } from './routes/clinics/index'
 import { Route as TrackingBookingIdRouteImport } from './routes/tracking/$bookingId'
 import { Route as TrackOrderOrderIdRouteImport } from './routes/track-order/$orderId'
@@ -41,6 +43,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const PortfolioRoute = PortfolioRouteImport.update({
   id: '/portfolio',
   path: '/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderRoute = OrderRouteImport.update({
+  id: '/order',
+  path: '/order',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EquipmentRoute = EquipmentRouteImport.update({
@@ -76,6 +83,11 @@ const IndexRoute = IndexRouteImport.update({
 const ShadeIndexRoute = ShadeIndexRouteImport.update({
   id: '/shade/',
   path: '/shade/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnerWithUsIndexRoute = PartnerWithUsIndexRouteImport.update({
+  id: '/partner-with-us/',
+  path: '/partner-with-us/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClinicsIndexRoute = ClinicsIndexRouteImport.update({
@@ -156,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/designers': typeof DesignersRoute
   '/equipment': typeof EquipmentRoute
+  '/order': typeof OrderRoute
   '/portfolio': typeof PortfolioRoute
   '/services': typeof ServicesRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -171,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/track-order/$orderId': typeof TrackOrderOrderIdRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
+  '/partner-with-us/': typeof PartnerWithUsIndexRoute
   '/shade/': typeof ShadeIndexRoute
   '/admin/production/$orderId': typeof AdminProductionOrderIdRoute
 }
@@ -181,6 +195,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/designers': typeof DesignersRoute
   '/equipment': typeof EquipmentRoute
+  '/order': typeof OrderRoute
   '/portfolio': typeof PortfolioRoute
   '/services': typeof ServicesRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -196,6 +211,7 @@ export interface FileRoutesByTo {
   '/track-order/$orderId': typeof TrackOrderOrderIdRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics': typeof ClinicsIndexRoute
+  '/partner-with-us': typeof PartnerWithUsIndexRoute
   '/shade': typeof ShadeIndexRoute
   '/admin/production/$orderId': typeof AdminProductionOrderIdRoute
 }
@@ -207,6 +223,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/designers': typeof DesignersRoute
   '/equipment': typeof EquipmentRoute
+  '/order': typeof OrderRoute
   '/portfolio': typeof PortfolioRoute
   '/services': typeof ServicesRoute
   '/admin/bookings': typeof AdminBookingsRoute
@@ -222,6 +239,7 @@ export interface FileRoutesById {
   '/track-order/$orderId': typeof TrackOrderOrderIdRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
+  '/partner-with-us/': typeof PartnerWithUsIndexRoute
   '/shade/': typeof ShadeIndexRoute
   '/admin/production/$orderId': typeof AdminProductionOrderIdRoute
 }
@@ -234,6 +252,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/designers'
     | '/equipment'
+    | '/order'
     | '/portfolio'
     | '/services'
     | '/admin/bookings'
@@ -249,6 +268,7 @@ export interface FileRouteTypes {
     | '/track-order/$orderId'
     | '/tracking/$bookingId'
     | '/clinics/'
+    | '/partner-with-us/'
     | '/shade/'
     | '/admin/production/$orderId'
   fileRoutesByTo: FileRoutesByTo
@@ -259,6 +279,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/designers'
     | '/equipment'
+    | '/order'
     | '/portfolio'
     | '/services'
     | '/admin/bookings'
@@ -274,6 +295,7 @@ export interface FileRouteTypes {
     | '/track-order/$orderId'
     | '/tracking/$bookingId'
     | '/clinics'
+    | '/partner-with-us'
     | '/shade'
     | '/admin/production/$orderId'
   id:
@@ -284,6 +306,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/designers'
     | '/equipment'
+    | '/order'
     | '/portfolio'
     | '/services'
     | '/admin/bookings'
@@ -299,6 +322,7 @@ export interface FileRouteTypes {
     | '/track-order/$orderId'
     | '/tracking/$bookingId'
     | '/clinics/'
+    | '/partner-with-us/'
     | '/shade/'
     | '/admin/production/$orderId'
   fileRoutesById: FileRoutesById
@@ -310,6 +334,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DesignersRoute: typeof DesignersRoute
   EquipmentRoute: typeof EquipmentRoute
+  OrderRoute: typeof OrderRoute
   PortfolioRoute: typeof PortfolioRoute
   ServicesRoute: typeof ServicesRoute
   AdminBookingsRoute: typeof AdminBookingsRoute
@@ -325,6 +350,7 @@ export interface RootRouteChildren {
   TrackOrderOrderIdRoute: typeof TrackOrderOrderIdRoute
   TrackingBookingIdRoute: typeof TrackingBookingIdRoute
   ClinicsIndexRoute: typeof ClinicsIndexRoute
+  PartnerWithUsIndexRoute: typeof PartnerWithUsIndexRoute
   ShadeIndexRoute: typeof ShadeIndexRoute
   AdminProductionOrderIdRoute: typeof AdminProductionOrderIdRoute
 }
@@ -343,6 +369,13 @@ declare module '@tanstack/react-router' {
       path: '/portfolio'
       fullPath: '/portfolio'
       preLoaderRoute: typeof PortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order': {
+      id: '/order'
+      path: '/order'
+      fullPath: '/order'
+      preLoaderRoute: typeof OrderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/equipment': {
@@ -392,6 +425,13 @@ declare module '@tanstack/react-router' {
       path: '/shade'
       fullPath: '/shade/'
       preLoaderRoute: typeof ShadeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partner-with-us/': {
+      id: '/partner-with-us/'
+      path: '/partner-with-us'
+      fullPath: '/partner-with-us/'
+      preLoaderRoute: typeof PartnerWithUsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clinics/': {
@@ -502,6 +542,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DesignersRoute: DesignersRoute,
   EquipmentRoute: EquipmentRoute,
+  OrderRoute: OrderRoute,
   PortfolioRoute: PortfolioRoute,
   ServicesRoute: ServicesRoute,
   AdminBookingsRoute: AdminBookingsRoute,
@@ -517,6 +558,7 @@ const rootRouteChildren: RootRouteChildren = {
   TrackOrderOrderIdRoute: TrackOrderOrderIdRoute,
   TrackingBookingIdRoute: TrackingBookingIdRoute,
   ClinicsIndexRoute: ClinicsIndexRoute,
+  PartnerWithUsIndexRoute: PartnerWithUsIndexRoute,
   ShadeIndexRoute: ShadeIndexRoute,
   AdminProductionOrderIdRoute: AdminProductionOrderIdRoute,
 }

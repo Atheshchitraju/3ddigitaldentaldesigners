@@ -7,6 +7,7 @@ import {
   approveClinic,
   rejectClinic,
   updateClinicLocation,
+  // registerPartnerClinic,
 } from "../controllers/clinicController";
 
 const router = express.Router();
@@ -14,6 +15,7 @@ const router = express.Router();
 router.get("/", getClinics);
 
 router.post("/", createClinic);
+// router.post("/partner", registerPartnerClinic);
 router.post("/seed", seedClinics);
 router.get("/all", getAllClinics);
 

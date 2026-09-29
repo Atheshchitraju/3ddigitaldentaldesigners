@@ -38,6 +38,7 @@ import logo28 from "@/assets/maDentallogo.webp";
 import logo29 from "@/assets/toothComfertslogo.webp";
 import logo30 from "@/assets/ayeshaDentallogo.webp";
 import logo31 from "@/assets/lathalogo.webp";
+import logo32 from "@/assets/anviDentallogo.webp";
 
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
@@ -80,6 +81,7 @@ import maDentalBanner from "@/assets/maDentalBanner.webp";
 import toothCompertsBanner from "@/assets/toothComfertsBanner.webp";
 import ayeshaDentalBanner from "@/assets/ayeshaDentalBanner.webp";
 import lathaBanner from "@/assets/lathaBanner.webp";
+import anviDentalBanner from "@/assets/anviDentalBanner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -434,6 +436,15 @@ const clients = [
     description:
       "Latha Dental Care Centre offers comprehensive dental care with 19 years of clinical excellence, providing advanced restorative, cosmetic, implant, orthodontic, pediatric, and digital dentistry solutions for patients of all ages.",
   },
+  {
+    id: "anvi-dental-clinic",
+    name: "Anvi Dental Clinic",
+    location: "Devanahalli, North Bengaluru",
+    // logo: logo32,
+    // banner: anviDentalBanner,
+    description:
+      "Anvi Dental Clinic, led by Dr. Shrinivas Baburao, provides comprehensive dental care with 11 years of clinical experience and expertise in advanced restorative and digital dentistry.",
+  },
 ];
 
 const stats = [
@@ -585,11 +596,10 @@ function Index() {
                   <img
                     src={clients[active].banner}
                     alt={clients[active].name}
-                    className={`h-full w-full ${
-                      clients[active].id === "jas-dental"
+                    className={`h-full w-full ${clients[active].id === "jas-dental"
                         ? "object-contain bg-white"
                         : "object-cover"
-                    }`}
+                      }`}
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
@@ -599,13 +609,12 @@ function Index() {
                     <img
                       src={clients[active].logo}
                       alt={clients[active].name}
-                      className={`h-full w-full ${
-                        clients[active].id === "girish-dental"
+                      className={`h-full w-full ${clients[active].id === "girish-dental"
                           ? "object-contain scale-125"
                           : clients[active].id === "excel-dental"
                             ? "object-contain scale-150"
                             : "object-cover"
-                      }`}
+                        }`}
                     />
                   </div>
 
@@ -659,9 +668,8 @@ function Index() {
                 <img
                   src={clients[active].banner}
                   alt={clients[active].name}
-                  className={`h-full w-full ${
-                    clients[active].id === "jas-dental" ? "object-contain bg-white" : "object-cover"
-                  }`}
+                  className={`h-full w-full ${clients[active].id === "jas-dental" ? "object-contain bg-white" : "object-cover"
+                    }`}
                 />
 
                 {/* OVERLAY */}
@@ -672,13 +680,12 @@ function Index() {
                   <img
                     src={clients[active].logo}
                     alt={clients[active].name}
-                    className={`h-full w-full ${
-                      clients[active].id === "girish-dental"
+                    className={`h-full w-full ${clients[active].id === "girish-dental"
                         ? "object-contain scale-125"
                         : clients[active].id === "excel-dental"
                           ? "object-contain scale-150"
                           : "object-cover"
-                    }`}
+                      }`}
                   />
                 </div>
 
@@ -745,9 +752,8 @@ function Index() {
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className={`transition-all duration-300 rounded-full ${
-                  active === i ? "w-10 h-3 bg-primary" : "w-3 h-3 bg-primary/30 hover:bg-primary/60"
-                }`}
+                className={`transition-all duration-300 rounded-full ${active === i ? "w-10 h-3 bg-primary" : "w-3 h-3 bg-primary/30 hover:bg-primary/60"
+                  }`}
               />
             ))}
           </div>
@@ -968,9 +974,8 @@ function Index() {
           {cinematicServices.map((service, i) => (
             <div
               key={service.title}
-              className={`grid lg:grid-cols-12 gap-10 lg:gap-12 items-center ${
-                i !== cinematicServices.length - 1 ? "mb-20 md:mb-24" : ""
-              }`}
+              className={`grid lg:grid-cols-12 gap-10 lg:gap-12 items-center ${i !== cinematicServices.length - 1 ? "mb-20 md:mb-24" : ""
+                }`}
             >
               {/* IMAGE */}
               <motion.div

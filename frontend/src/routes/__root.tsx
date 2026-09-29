@@ -1,6 +1,7 @@
 import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import FaqChatbot from "../components/FaqChatbot";
 
 function NotFoundComponent() {
   return (
@@ -35,6 +36,7 @@ function RootComponent() {
       <Navbar />
       <Outlet />
       <Footer />
+      <FaqChatbot />
     </>
   );
 }

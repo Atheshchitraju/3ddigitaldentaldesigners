@@ -6,20 +6,29 @@ import { sendPasswordResetEmail } from "../utils/sendEmail";
 import Employee from "../models/Employee";
 import Order from "../models/Order";
 
-export const employeeLogin = async (req: Request, res: Response) => {
+export const employeeLogin = async (
+    req: Request,
+    res: Response
+) => {
+    const loginStart = performance.now();
+
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
-            return res.status(400).json({
-                success: false,
-                message: "Email and Password are required",
-            });
-        }
+        console.log("🔐 Employee login:", email);
+
+        // 1. MongoDB lookup
+        const dbStart = performance.now();
 
         const employee = await Employee.findOne({
             email: email.toLowerCase(),
         });
+
+        console.log(
+            `⏱️ Employee.findOne: ${Math.round(
+                performance.now() - dbStart
+            )} ms`
+        );
 
         if (!employee) {
             return res.status(401).json({
@@ -29,13 +38,25 @@ export const employeeLogin = async (req: Request, res: Response) => {
         }
 
         if (employee.status !== "Active") {
-            return res.status(401).json({
+            return res.status(403).json({
                 success: false,
                 message: "Employee account is inactive",
             });
         }
 
-        const isMatch = await bcrypt.compare(password, employee.password);
+        // 2. Password verification
+        const bcryptStart = performance.now();
+
+        const isMatch = await bcrypt.compare(
+            password,
+            employee.password
+        );
+
+        console.log(
+            `⏱️ bcrypt.compare: ${Math.round(
+                performance.now() - bcryptStart
+            )} ms`
+        );
 
         if (!isMatch) {
             return res.status(401).json({
@@ -44,37 +65,71 @@ export const employeeLogin = async (req: Request, res: Response) => {
             });
         }
 
+        // 3. Non-blocking activity update
         Employee.updateOne(
             { _id: employee._id },
-            { lastLogin: new Date(), lastSeen: new Date() }
-        ).exec();
+            {
+                $set: {
+                    lastLogin: new Date(),
+                    lastSeen: new Date(),
+                },
+            }
+        ).catch((err) => {
+            console.error(
+                "⚠️ Failed to update employee activity:",
+                err
+            );
+        });
+
+        // 4. JWT
+        const jwtStart = performance.now();
 
         const token = jwt.sign(
             {
+                id: employee._id,
                 employeeId: employee.employeeId,
                 role: employee.role,
                 department: employee.department,
-                name: employee.name,
             },
-            process.env.JWT_SECRET as string,
-            { expiresIn: "7d" }
+            process.env.JWT_SECRET!,
+            {
+                expiresIn: "7d",
+            }
         );
 
-        return res.status(200).json({
+        console.log(
+            `⏱️ JWT generation: ${Math.round(
+                performance.now() - jwtStart
+            )} ms`
+        );
+
+        console.log(
+            `🚀 TOTAL LOGIN: ${Math.round(
+                performance.now() - loginStart
+            )} ms`
+        );
+
+        return res.json({
             success: true,
             token,
             employee: {
+                id: employee._id,
                 employeeId: employee.employeeId,
                 name: employee.name,
+                email: employee.email,
+                phone: employee.phone,
                 role: employee.role,
                 department: employee.department,
+                status: employee.status,
             },
         });
+
     } catch (error: any) {
-        console.log(error);
+        console.error("Employee login error:", error);
+
         return res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Server error",
         });
     }
 };

@@ -25,9 +25,13 @@ function EmployeeLogin() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (loading) return;
+
     setLoading(true);
     setError("");
     setSuccess("");
+
+    const startTime = performance.now();
 
     try {
       const response = await fetch(`${API_URL}/api/employee/login`, {
@@ -36,35 +40,34 @@ function EmployeeLogin() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email,
+          email: email.trim().toLowerCase(),
           password,
         }),
       });
 
       const data = await response.json();
 
-      if (!data.success) {
-        setError(data.message);
-        setLoading(false);
+      const duration = Math.round(performance.now() - startTime);
+
+      console.log(`Employee login API: ${duration}ms`);
+
+      if (!response.ok || !data.success) {
+        setError(data.message || "Login failed");
         return;
       }
 
       localStorage.setItem("employeeToken", data.token);
-
-      localStorage.setItem(
-        "employee",
-        JSON.stringify(data.employee)
-      );
+      localStorage.setItem("employee", JSON.stringify(data.employee));
 
       navigate({
         to: "/employee/dashboard",
       });
     } catch (err) {
-      console.log(err);
+      console.error("Employee login error:", err);
       setError("Unable to connect to server.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   // ─────────────────────────────────────────────

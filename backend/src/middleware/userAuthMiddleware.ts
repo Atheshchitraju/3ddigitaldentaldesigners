@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-export const authMiddleware = (
+export const userAuthMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -31,13 +31,15 @@ export const authMiddleware = (
       token,
       process.env.JWT_SECRET as string,
     ) as {
-      role?: string;
+      userId?: string;
+      email?: string;
+      accountType?: string;
     };
 
-    if (decoded.role !== "admin") {
-      return res.status(403).json({
+    if (!decoded.userId) {
+      return res.status(401).json({
         success: false,
-        message: "Admin access required",
+        message: "Invalid user token",
       });
     }
 
@@ -45,7 +47,7 @@ export const authMiddleware = (
 
     next();
   } catch (error) {
-    console.error("JWT ERROR:", error);
+    console.error("USER JWT ERROR:", error);
 
     return res.status(401).json({
       success: false,
