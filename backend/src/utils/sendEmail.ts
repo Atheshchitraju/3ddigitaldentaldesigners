@@ -396,3 +396,104 @@ export const sendProductionReportEmail = async (
 
     return data;
 };
+export const sendUserPasswordResetEmail = async (
+  email: string,
+  name: string,
+  resetToken: string,
+) => {
+  console.log("📧 Starting customer password reset email...");
+  console.log("📧 To:", email);
+
+  const frontendUrl =
+    process.env.FRONTEND_URL ||
+    "https://digitaldentaldesigners.in";
+
+  const resetUrl =
+    `${frontendUrl}/reset-password?token=${resetToken}`;
+
+  console.log("🔗 Customer Reset URL:", resetUrl);
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "Digital Dental Designers <noreply@digitaldentaldesigners.in>",
+      to: [email],
+      subject: "Reset Your Digital Dental Designers Password",
+
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px; background: #f5f7f7; color: #333;">
+
+          <div style="background: #1D5C5A; color: white; padding: 25px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h2 style="margin: 0;">Digital Dental Designers</h2>
+            <p style="margin: 8px 0 0;">Password Reset</p>
+          </div>
+
+          <div style="background: white; padding: 30px; border-radius: 0 0 10px 10px;">
+
+            <h3 style="color: #1D5C5A;">
+              Hello ${name},
+            </h3>
+
+            <p>
+              We received a request to reset the password
+              for your Digital Dental Designers account.
+            </p>
+
+            <p>
+              Click the button below to create a new password.
+            </p>
+
+            <div style="margin: 30px 0; text-align: center;">
+              <a
+                href="${resetUrl}"
+                style="background: #1D5C5A; color: white; padding: 14px 28px; text-decoration: none; border-radius: 7px; display: inline-block; font-weight: bold;"
+              >
+                Reset Password
+              </a>
+            </div>
+
+            <p style="font-size: 13px; color: #666;">
+              This password reset link will expire in 1 hour.
+            </p>
+
+            <p style="font-size: 13px; color: #666;">
+              If you did not request this password reset, you can safely ignore this email.
+            </p>
+
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;" />
+
+            <p style="font-size: 12px; color: #777; word-break: break-all;">
+              If the button doesn't work, copy and paste this link into your browser:
+            </p>
+
+            <p style="font-size: 12px; color: #555; word-break: break-all;">
+              ${resetUrl}
+            </p>
+
+            <p style="margin-top: 30px; font-size: 12px; color: #777; text-align: center;">
+              Digital Dental Designers
+            </p>
+
+          </div>
+        </div>
+      `,
+    });
+
+    if (error) {
+      console.error(
+        "❌ Resend customer password reset error:",
+        error,
+      );
+      throw error;
+    }
+
+    console.log("✅ CUSTOMER PASSWORD RESET EMAIL SENT!");
+    console.log("📨 Resend ID:", data?.id);
+
+    return data;
+  } catch (error) {
+    console.error("❌ CUSTOMER PASSWORD RESET EMAIL FAILED:");
+    console.error(error);
+
+    throw error;
+  }
+};

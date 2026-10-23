@@ -34,6 +34,8 @@ import toothCompertsDoctor from "@/assets/toothComfertsDoctor.webp";
 import ayeshaDentalDoctor from "@/assets/ayeshaDentalDoctor.webp";
 import latahDoctor from "@/assets/lathaDoctor.webp";
 // import ShrinivasDoctor from "@/assets/ShrinivasDoctor.webp";
+import sathyadeepLogo from "@/assets/sathyadeepLogo.webp";
+import sathyadeepBanner from "@/assets/sathyadeepBanner.webp";
 
 export const Route = createFileRoute("/clinics/")({
   component: ClinicsPage,
@@ -307,6 +309,15 @@ export const clinics = [
   //   email: "anvihealthcareservices@gmail.com",
   //   logo: ShrinivasDoctor,
   // },
+  {
+    name: "Sathyadeep Dental Clinic",
+    slug: "sathyadeep-dental-clinic",
+    location: "BTM Layout 2nd Stage, Bengaluru, Karnataka 560076",
+    email: "dentalsathyadeep@gmail.com",
+    whatsapp: "9980142380",
+    logo: sathyadeepLogo,
+    banner: sathyadeepBanner,
+  },
 ];
 
 function ClinicsPage() {
@@ -316,20 +327,20 @@ function ClinicsPage() {
     selectedLocation === "All"
       ? clinics
       : clinics.filter((clinic) => {
-        if (selectedLocation === "Bengaluru") {
-          return clinic.location.includes("Bengaluru") || clinic.location.includes("Bangalore");
-        }
+          if (selectedLocation === "Bengaluru") {
+            return clinic.location.includes("Bengaluru") || clinic.location.includes("Bangalore");
+          }
 
-        if (selectedLocation === "Hyderabad") {
-          return clinic.location.includes("Hyderabad");
-        }
+          if (selectedLocation === "Hyderabad") {
+            return clinic.location.includes("Hyderabad");
+          }
 
-        if (selectedLocation === "Andhra Pradesh") {
-          return clinic.location.includes("Andhra Pradesh");
-        }
+          if (selectedLocation === "Andhra Pradesh") {
+            return clinic.location.includes("Andhra Pradesh");
+          }
 
-        return true;
-      });
+          return true;
+        });
 
   return (
     <section className="min-h-screen pt-32 pb-20 bg-white">
@@ -350,10 +361,11 @@ function ClinicsPage() {
             <button
               key={location}
               onClick={() => setSelectedLocation(location)}
-              className={`px-4 py-2 rounded-full border transition-all duration-200 ${selectedLocation === location
+              className={`px-4 py-2 rounded-full border transition-all duration-200 ${
+                selectedLocation === location
                   ? "bg-purple-600 text-white border-purple-600"
                   : "bg-white hover:bg-gray-100"
-                }`}
+              }`}
             >
               {location}
             </button>

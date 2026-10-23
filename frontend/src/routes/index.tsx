@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 
 import { PageShell } from "@/components/PageShell";
 import { Reveal } from "@/components/Section";
+import eventPoster from "@/assets/social-media-strategy-poster.jpg";
+import { X, CalendarCheck } from "lucide-react";
 
 import logo from "@/assets/logo1.webp";
 import logo1 from "@/assets/Excel.webp";
@@ -39,6 +41,7 @@ import logo29 from "@/assets/toothComfertslogo.webp";
 import logo30 from "@/assets/ayeshaDentallogo.webp";
 import logo31 from "@/assets/lathalogo.webp";
 import logo32 from "@/assets/anviDentallogo.webp";
+import logo33 from "@/assets/sathyadeepLogo.webp";
 
 import ChaitanaBanner from "@/assets/chaitana-banner.webp";
 
@@ -82,6 +85,7 @@ import toothCompertsBanner from "@/assets/toothComfertsBanner.webp";
 import ayeshaDentalBanner from "@/assets/ayeshaDentalBanner.webp";
 import lathaBanner from "@/assets/lathaBanner.webp";
 import anviDentalBanner from "@/assets/anviDentalBanner.webp";
+import sathyadeepBanner from "@/assets/sathyadeepBanner.webp";
 
 import india from "@/assets/india.webp";
 import Dental1 from "@/assets/Dental1.webp";
@@ -445,6 +449,16 @@ const clients = [
     description:
       "Anvi Dental Clinic, led by Dr. Shrinivas Baburao, provides comprehensive dental care with 11 years of clinical experience and expertise in advanced restorative and digital dentistry.",
   },
+  {
+    id: "sathyadeep-dental-clinic",
+    name: "Sathyadeep Dental Clinic",
+    location: "BTM Layout 2nd Stage, Bengaluru",
+    logo: logo33,
+    banner: sathyadeepBanner,
+
+    description:
+      "Established in 1992, Sathyadeep Dental Clinic in BTM Layout, Bengaluru, provides prosthodontic care, smile designing, aligners, veneers, implant planning, full mouth rehabilitation, and digital dentistry solutions.",
+  },
 ];
 
 const stats = [
@@ -525,6 +539,32 @@ function Index() {
 
   const [showScannerModal, setShowScannerModal] = useState(false);
 
+  // Event popup state
+  const [showEventPopup, setShowEventPopup] = useState(false);
+  const [showRegistrationForm, setShowRegistrationForm] = useState(false);
+
+  // Show the popup automatically once per browser session.
+  useEffect(() => {
+    if (sessionStorage.getItem("event-popup-dismissed")) return;
+
+    const timer = window.setTimeout(() => {
+      setShowEventPopup(true);
+    }, 2500);
+
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  const closeEventPopup = () => {
+    setShowEventPopup(false);
+    sessionStorage.setItem("event-popup-dismissed", "true");
+  };
+
+  // Reopen the same popup whenever the floating button is clicked.
+  const openEventPopup = () => {
+    setShowEventPopup(true);
+    setShowRegistrationForm(false);
+  };
+
   const nextSlide = () => {
     setActive((prev) => (prev + 1) % clients.length);
   };
@@ -596,10 +636,11 @@ function Index() {
                   <img
                     src={clients[active].banner}
                     alt={clients[active].name}
-                    className={`h-full w-full ${clients[active].id === "jas-dental"
+                    className={`h-full w-full ${
+                      clients[active].id === "jas-dental"
                         ? "object-contain bg-white"
                         : "object-cover"
-                      }`}
+                    }`}
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
@@ -609,12 +650,13 @@ function Index() {
                     <img
                       src={clients[active].logo}
                       alt={clients[active].name}
-                      className={`h-full w-full ${clients[active].id === "girish-dental"
+                      className={`h-full w-full ${
+                        clients[active].id === "girish-dental"
                           ? "object-contain scale-125"
                           : clients[active].id === "excel-dental"
                             ? "object-contain scale-150"
                             : "object-cover"
-                        }`}
+                      }`}
                     />
                   </div>
 
@@ -668,8 +710,9 @@ function Index() {
                 <img
                   src={clients[active].banner}
                   alt={clients[active].name}
-                  className={`h-full w-full ${clients[active].id === "jas-dental" ? "object-contain bg-white" : "object-cover"
-                    }`}
+                  className={`h-full w-full ${
+                    clients[active].id === "jas-dental" ? "object-contain bg-white" : "object-cover"
+                  }`}
                 />
 
                 {/* OVERLAY */}
@@ -680,12 +723,13 @@ function Index() {
                   <img
                     src={clients[active].logo}
                     alt={clients[active].name}
-                    className={`h-full w-full ${clients[active].id === "girish-dental"
+                    className={`h-full w-full ${
+                      clients[active].id === "girish-dental"
                         ? "object-contain scale-125"
                         : clients[active].id === "excel-dental"
                           ? "object-contain scale-150"
                           : "object-cover"
-                      }`}
+                    }`}
                   />
                 </div>
 
@@ -752,8 +796,9 @@ function Index() {
               <button
                 key={i}
                 onClick={() => setActive(i)}
-                className={`transition-all duration-300 rounded-full ${active === i ? "w-10 h-3 bg-primary" : "w-3 h-3 bg-primary/30 hover:bg-primary/60"
-                  }`}
+                className={`transition-all duration-300 rounded-full ${
+                  active === i ? "w-10 h-3 bg-primary" : "w-3 h-3 bg-primary/30 hover:bg-primary/60"
+                }`}
               />
             ))}
           </div>
@@ -974,8 +1019,9 @@ function Index() {
           {cinematicServices.map((service, i) => (
             <div
               key={service.title}
-              className={`grid lg:grid-cols-12 gap-10 lg:gap-12 items-center ${i !== cinematicServices.length - 1 ? "mb-20 md:mb-24" : ""
-                }`}
+              className={`grid lg:grid-cols-12 gap-10 lg:gap-12 items-center ${
+                i !== cinematicServices.length - 1 ? "mb-20 md:mb-24" : ""
+              }`}
             >
               {/* IMAGE */}
               <motion.div
@@ -1386,6 +1432,125 @@ function Index() {
         </div>
       )}
       {/* HERO */}
+
+      {/* FLOATING EVENT REGISTRATION BUTTON */}
+      {!showEventPopup && (
+        <button
+          type="button"
+          onClick={openEventPopup}
+          aria-label="Open event poster and registration form"
+          className="
+            fixed bottom-5 right-5 z-[90]
+            flex items-center gap-2
+            rounded-full bg-[#5631a5]
+            px-4 py-3 sm:px-5 sm:py-3.5
+            text-sm font-semibold text-white
+            shadow-xl shadow-purple-900/30
+            transition-all duration-300
+            hover:scale-105 hover:bg-[#40227e]
+            focus-visible:outline-none
+            focus-visible:ring-4 focus-visible:ring-purple-300
+            animate-pulse motion-reduce:animate-none
+          "
+        >
+          <CalendarCheck size={21} aria-hidden="true" />
+          <span>Register Now</span>
+        </button>
+      )}
+
+      {/* EVENT POPUP */}
+      {showEventPopup && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-3 backdrop-blur-sm sm:p-6"
+          onClick={closeEventPopup}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Social Media Strategy event"
+            className="relative max-h-[92vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-3 shadow-2xl sm:p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={closeEventPopup}
+              aria-label="Close event popup"
+              className="absolute right-2 top-2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/80 text-white transition hover:bg-black"
+            >
+              <X size={20} />
+            </button>
+
+            <img
+              src={eventPoster}
+              alt="The Social Media Strategy event poster"
+              className="mx-auto max-h-[68vh] w-full rounded-lg object-contain"
+            />
+
+            {!showRegistrationForm ? (
+              <button
+                type="button"
+                onClick={() => setShowRegistrationForm(true)}
+                className="mt-3 w-full rounded-xl bg-[#5631a5] px-5 py-3 font-semibold text-white transition hover:bg-[#40227e]"
+              >
+                Register Now
+              </button>
+            ) : (
+              <form
+                action="https://formsubmit.co/social.digitaldental@gmail.com"
+                method="POST"
+                className="mt-4 space-y-3"
+              >
+                <input
+                  type="hidden"
+                  name="_subject"
+                  value="New Event Registration - Digital Dental Designers"
+                />
+                <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_next" value="https://digitaldentaldesigners.in/" />
+
+                <input
+                  name="name"
+                  required
+                  placeholder="Full name"
+                  autoComplete="name"
+                  className="w-full rounded-lg border border-gray-300 p-3"
+                />
+
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="Email address"
+                  autoComplete="email"
+                  className="w-full rounded-lg border border-gray-300 p-3"
+                />
+
+                <input
+                  name="phone"
+                  type="tel"
+                  required
+                  placeholder="Phone number"
+                  autoComplete="tel"
+                  className="w-full rounded-lg border border-gray-300 p-3"
+                />
+
+                <input
+                  name="paymentReference"
+                  placeholder="Payment reference (optional)"
+                  className="w-full rounded-lg border border-gray-300 p-3"
+                />
+
+                <button
+                  type="submit"
+                  className="w-full rounded-xl bg-[#5631a5] px-5 py-3 font-semibold text-white transition hover:bg-[#40227e]"
+                >
+                  Submit Registration
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </PageShell>
   );
 }

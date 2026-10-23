@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as EquipmentRouteImport } from './routes/equipment'
@@ -38,6 +39,11 @@ import { Route as AdminProductionOrderIdRouteImport } from './routes/admin/produ
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortfolioRoute = PortfolioRouteImport.update({
@@ -170,6 +176,7 @@ export interface FileRoutesByFullPath {
   '/equipment': typeof EquipmentRoute
   '/order': typeof OrderRoute
   '/portfolio': typeof PortfolioRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/clinics': typeof AdminClinicsRoute
@@ -197,6 +204,7 @@ export interface FileRoutesByTo {
   '/equipment': typeof EquipmentRoute
   '/order': typeof OrderRoute
   '/portfolio': typeof PortfolioRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/clinics': typeof AdminClinicsRoute
@@ -225,6 +233,7 @@ export interface FileRoutesById {
   '/equipment': typeof EquipmentRoute
   '/order': typeof OrderRoute
   '/portfolio': typeof PortfolioRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/clinics': typeof AdminClinicsRoute
@@ -254,6 +263,7 @@ export interface FileRouteTypes {
     | '/equipment'
     | '/order'
     | '/portfolio'
+    | '/reset-password'
     | '/services'
     | '/admin/bookings'
     | '/admin/clinics'
@@ -281,6 +291,7 @@ export interface FileRouteTypes {
     | '/equipment'
     | '/order'
     | '/portfolio'
+    | '/reset-password'
     | '/services'
     | '/admin/bookings'
     | '/admin/clinics'
@@ -308,6 +319,7 @@ export interface FileRouteTypes {
     | '/equipment'
     | '/order'
     | '/portfolio'
+    | '/reset-password'
     | '/services'
     | '/admin/bookings'
     | '/admin/clinics'
@@ -336,6 +348,7 @@ export interface RootRouteChildren {
   EquipmentRoute: typeof EquipmentRoute
   OrderRoute: typeof OrderRoute
   PortfolioRoute: typeof PortfolioRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
   AdminBookingsRoute: typeof AdminBookingsRoute
   AdminClinicsRoute: typeof AdminClinicsRoute
@@ -362,6 +375,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portfolio': {
@@ -544,6 +564,7 @@ const rootRouteChildren: RootRouteChildren = {
   EquipmentRoute: EquipmentRoute,
   OrderRoute: OrderRoute,
   PortfolioRoute: PortfolioRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
   AdminBookingsRoute: AdminBookingsRoute,
   AdminClinicsRoute: AdminClinicsRoute,

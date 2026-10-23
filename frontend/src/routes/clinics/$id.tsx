@@ -37,6 +37,7 @@ import maDentalBanner from "@/assets/maDentalBanner.webp";
 import toothCompertsBanner from "@/assets/toothComfertsBanner.webp";
 import ayeshaDentalBanner from "@/assets/ayeshaDentalBanner.webp";
 import lathaBanner from "@/assets/lathaBanner.webp";
+import sathyadeepBanner from "@/assets/sathyadeepBanner.webp";
 /* =========================
    DOCTORS
 ========================= */
@@ -73,6 +74,7 @@ import maDentalDoctor from "../../assets/maDentalDoctor.webp";
 import toothCompertsDoctor from "../../assets/toothComfertsDoctor.webp";
 import ayeshaDentalDoctor from "../../assets/ayeshaDentalDoctor.webp";
 import lathaDoctor from "../../assets/lathaDoctor.webp";
+import sathyadeepDoctor from "@/assets/sathyadeepLogo.webp";
 
 /* =========================
    GALLERY
@@ -211,6 +213,16 @@ import latha9 from "@/assets/latha9.webp";
 import latha10 from "@/assets/latha10.webp";
 import latha11 from "@/assets/latha11.webp";
 import latha12 from "@/assets/latha12.webp";
+
+import sd1 from "@/assets/sd1.webp";
+import sd2 from "@/assets/sd2.webp";
+import sd3 from "@/assets/sd3.webp";
+import sd4 from "@/assets/sd4.webp";
+import sd5 from "@/assets/sd5.webp";
+import sd6 from "@/assets/sd6.webp";
+import sd7 from "@/assets/sd7.webp";
+import sd8 from "@/assets/sd8.webp";
+import sd9 from "@/assets/sd9.webp";
 
 export const Route = createFileRoute("/clinics/$id")({
   component: ClinicPage,
@@ -2166,6 +2178,68 @@ const clinics = [
       },
     ],
   },
+  {
+    id: "sathyadeep-dental-clinic",
+    name: "Sathyadeep Dental Clinic",
+
+    logo: sathyadeepDoctor,
+    banner: sathyadeepBanner,
+
+    description:
+      "Established in 1992, Sathyadeep Dental Clinic is a dental care center in BTM Layout, Bengaluru, offering prosthodontic care, smile design, aligners, veneers, crown design, implant planning, full mouth rehabilitation, and advanced digital dentistry services.",
+
+    location: "BTM Layout 2nd Stage, Bengaluru, Karnataka 560076",
+
+    phone: "+91 9980142380",
+    email: "dentalsathyadeep@gmail.com",
+
+    map: "https://www.google.com/maps?q=Sathyadeep+Dental+Clinic+%23669+29th+Main+Road+BTM+Layout+2nd+Stage+Bangalore&output=embed",
+
+    website: "https://sathyadeepdental.com",
+
+    services: [
+      "Smile Design",
+      "Aligners",
+      "Veneers",
+      "Crown Design",
+      "Implant Planning",
+      "Full Mouth Rehabilitation",
+      "Digital Smile Planning",
+      "3D Design Services",
+      "Consultation Support",
+      "Lab Support",
+    ],
+
+    gallery: [sd1, sd2, sd3, sd4, sd5, sd6, sd7, sd8, sd9],
+
+    doctors: [
+      {
+        name: "Dr Sathyadeep",
+
+        role: "Clinic Owner",
+
+        image: sathyadeepDoctor,
+
+        experience: "21 Years Experience",
+
+        phone: "9980142380",
+
+        email: "dentalsathyadeep@gmail.com",
+
+        specialization: "Prosthodontics",
+
+        qualification: "MDS",
+
+        clinicName: "Sathyadeep Dental Clinic",
+
+        address: "#669, 29th Main Road, BTM Layout 2nd Stage, Bengaluru, Karnataka 560076",
+
+        website: "https://sathyadeepdental.com",
+
+        additionalInfo: "Medical Registration No: 19639A | Established in 1992",
+      },
+    ],
+  },
 ];
 
 function ClinicPage() {
@@ -2291,7 +2365,7 @@ function ClinicPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
-            {clinic.gallery.map((img) => (
+            {(clinic.gallery ?? []).map((img) => (
               <div key={img} className="overflow-hidden rounded-[24px] sm:rounded-[32px]">
                 <img
                   src={img}
