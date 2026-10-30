@@ -1,0 +1,9 @@
+﻿User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /employee/
+Disallow: /track-order/
+Disallow: /tracking/
+
+Sitemap: https://digitaldentaldesigners.in/sitemap.xml
