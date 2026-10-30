@@ -21,6 +21,7 @@ import employeeDashboardRoutes from "./routes/employeeDashboardRoutes";
 import partnerApplicationRoutes from "./routes/partnerApplicationRoutes";
 import chatRoutes from "./routes/chatRoutes";
 import userAuthRoutes from "./routes/userAuthRoutes";
+import eventRegistrationRoutes from "./routes/eventRegistrationRoutes";
 const app = express();
 
 connectDB();
@@ -60,6 +61,10 @@ console.log("Partner Application Routes Loaded");
 app.use("/api/chat", chatRoutes);
 
 app.use("/api/production", productionRoutes);
+app.use(
+  "/api/events/the-dentist-as-a-brand",
+  eventRegistrationRoutes
+);
 app.use("/api/employee", employeeRoutes);
 console.log("Employee Routes Loaded");
 app.use("/api/employees",employeeManagementRoutes);

@@ -24,6 +24,7 @@ import { Route as PartnerWithUsIndexRouteImport } from './routes/partner-with-us
 import { Route as ClinicsIndexRouteImport } from './routes/clinics/index'
 import { Route as TrackingBookingIdRouteImport } from './routes/tracking/$bookingId'
 import { Route as TrackOrderOrderIdRouteImport } from './routes/track-order/$orderId'
+import { Route as EventsTheDentistAsABrandRouteImport } from './routes/events/the-dentist-as-a-brand'
 import { Route as EmployeeResetPasswordRouteImport } from './routes/employee/reset-password'
 import { Route as EmployeeLoginRouteImport } from './routes/employee/login'
 import { Route as EmployeeDashboardRouteImport } from './routes/employee/dashboard'
@@ -111,6 +112,12 @@ const TrackOrderOrderIdRoute = TrackOrderOrderIdRouteImport.update({
   path: '/track-order/$orderId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsTheDentistAsABrandRoute =
+  EventsTheDentistAsABrandRouteImport.update({
+    id: '/events/the-dentist-as-a-brand',
+    path: '/events/the-dentist-as-a-brand',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const EmployeeResetPasswordRoute = EmployeeResetPasswordRouteImport.update({
   id: '/employee/reset-password',
   path: '/employee/reset-password',
@@ -188,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/employee/dashboard': typeof EmployeeDashboardRoute
   '/employee/login': typeof EmployeeLoginRoute
   '/employee/reset-password': typeof EmployeeResetPasswordRoute
+  '/events/the-dentist-as-a-brand': typeof EventsTheDentistAsABrandRoute
   '/track-order/$orderId': typeof TrackOrderOrderIdRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
@@ -216,6 +224,7 @@ export interface FileRoutesByTo {
   '/employee/dashboard': typeof EmployeeDashboardRoute
   '/employee/login': typeof EmployeeLoginRoute
   '/employee/reset-password': typeof EmployeeResetPasswordRoute
+  '/events/the-dentist-as-a-brand': typeof EventsTheDentistAsABrandRoute
   '/track-order/$orderId': typeof TrackOrderOrderIdRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics': typeof ClinicsIndexRoute
@@ -245,6 +254,7 @@ export interface FileRoutesById {
   '/employee/dashboard': typeof EmployeeDashboardRoute
   '/employee/login': typeof EmployeeLoginRoute
   '/employee/reset-password': typeof EmployeeResetPasswordRoute
+  '/events/the-dentist-as-a-brand': typeof EventsTheDentistAsABrandRoute
   '/track-order/$orderId': typeof TrackOrderOrderIdRoute
   '/tracking/$bookingId': typeof TrackingBookingIdRoute
   '/clinics/': typeof ClinicsIndexRoute
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
     | '/employee/dashboard'
     | '/employee/login'
     | '/employee/reset-password'
+    | '/events/the-dentist-as-a-brand'
     | '/track-order/$orderId'
     | '/tracking/$bookingId'
     | '/clinics/'
@@ -303,6 +314,7 @@ export interface FileRouteTypes {
     | '/employee/dashboard'
     | '/employee/login'
     | '/employee/reset-password'
+    | '/events/the-dentist-as-a-brand'
     | '/track-order/$orderId'
     | '/tracking/$bookingId'
     | '/clinics'
@@ -331,6 +343,7 @@ export interface FileRouteTypes {
     | '/employee/dashboard'
     | '/employee/login'
     | '/employee/reset-password'
+    | '/events/the-dentist-as-a-brand'
     | '/track-order/$orderId'
     | '/tracking/$bookingId'
     | '/clinics/'
@@ -360,6 +373,7 @@ export interface RootRouteChildren {
   EmployeeDashboardRoute: typeof EmployeeDashboardRoute
   EmployeeLoginRoute: typeof EmployeeLoginRoute
   EmployeeResetPasswordRoute: typeof EmployeeResetPasswordRoute
+  EventsTheDentistAsABrandRoute: typeof EventsTheDentistAsABrandRoute
   TrackOrderOrderIdRoute: typeof TrackOrderOrderIdRoute
   TrackingBookingIdRoute: typeof TrackingBookingIdRoute
   ClinicsIndexRoute: typeof ClinicsIndexRoute
@@ -475,6 +489,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackOrderOrderIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events/the-dentist-as-a-brand': {
+      id: '/events/the-dentist-as-a-brand'
+      path: '/events/the-dentist-as-a-brand'
+      fullPath: '/events/the-dentist-as-a-brand'
+      preLoaderRoute: typeof EventsTheDentistAsABrandRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/employee/reset-password': {
       id: '/employee/reset-password'
       path: '/employee/reset-password'
@@ -576,6 +597,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmployeeDashboardRoute: EmployeeDashboardRoute,
   EmployeeLoginRoute: EmployeeLoginRoute,
   EmployeeResetPasswordRoute: EmployeeResetPasswordRoute,
+  EventsTheDentistAsABrandRoute: EventsTheDentistAsABrandRoute,
   TrackOrderOrderIdRoute: TrackOrderOrderIdRoute,
   TrackingBookingIdRoute: TrackingBookingIdRoute,
   ClinicsIndexRoute: ClinicsIndexRoute,

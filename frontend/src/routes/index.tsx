@@ -539,9 +539,9 @@ function Index() {
 
   const [showScannerModal, setShowScannerModal] = useState(false);
 
-  // Event popup state
+  // Event popup state. The popup is now only a teaser: registration happens on
+  // the dedicated /events/the-dentist-as-a-brand page.
   const [showEventPopup, setShowEventPopup] = useState(false);
-  const [showRegistrationForm, setShowRegistrationForm] = useState(false);
 
   // Show the popup automatically once per browser session.
   useEffect(() => {
@@ -557,12 +557,6 @@ function Index() {
   const closeEventPopup = () => {
     setShowEventPopup(false);
     sessionStorage.setItem("event-popup-dismissed", "true");
-  };
-
-  // Reopen the same popup whenever the floating button is clicked.
-  const openEventPopup = () => {
-    setShowEventPopup(true);
-    setShowRegistrationForm(false);
   };
 
   const nextSlide = () => {
@@ -1433,12 +1427,12 @@ function Index() {
       )}
       {/* HERO */}
 
-      {/* FLOATING EVENT REGISTRATION BUTTON */}
+      {/* FLOATING EVENT REGISTRATION BUTTON
+          Navigates to the "The Dentist as a Brand" event route instead of opening the popup. */}
       {!showEventPopup && (
-        <button
-          type="button"
-          onClick={openEventPopup}
-          aria-label="Open event poster and registration form"
+        <Link
+          to="/events/the-dentist-as-a-brand"
+          aria-label="Register for The Dentist as a Brand event"
           className="
             fixed bottom-5 right-5 z-[90]
             flex items-center gap-2
@@ -1455,10 +1449,10 @@ function Index() {
         >
           <CalendarCheck size={21} aria-hidden="true" />
           <span>Register Now</span>
-        </button>
+        </Link>
       )}
 
-      {/* EVENT POPUP */}
+      {/* EVENT POPUP (poster teaser that links to the event page) */}
       {showEventPopup && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-3 backdrop-blur-sm sm:p-6"
@@ -1467,7 +1461,7 @@ function Index() {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Social Media Strategy event"
+            aria-label="The Dentist as a Brand event"
             className="relative max-h-[92vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-3 shadow-2xl sm:p-4"
             onClick={(e) => e.stopPropagation()}
           >
@@ -1482,72 +1476,18 @@ function Index() {
 
             <img
               src={eventPoster}
-              alt="The Social Media Strategy event poster"
+              alt="The Dentist as a Brand event poster"
               className="mx-auto max-h-[68vh] w-full rounded-lg object-contain"
             />
 
-            {!showRegistrationForm ? (
-              <button
-                type="button"
-                onClick={() => setShowRegistrationForm(true)}
-                className="mt-3 w-full rounded-xl bg-[#5631a5] px-5 py-3 font-semibold text-white transition hover:bg-[#40227e]"
-              >
-                Register Now
-              </button>
-            ) : (
-              <form
-                action="https://formsubmit.co/social.digitaldental@gmail.com"
-                method="POST"
-                className="mt-4 space-y-3"
-              >
-                <input
-                  type="hidden"
-                  name="_subject"
-                  value="New Event Registration - Digital Dental Designers"
-                />
-                <input type="hidden" name="_template" value="table" />
-                <input type="hidden" name="_next" value="https://digitaldentaldesigners.in/" />
-
-                <input
-                  name="name"
-                  required
-                  placeholder="Full name"
-                  autoComplete="name"
-                  className="w-full rounded-lg border border-gray-300 p-3"
-                />
-
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="Email address"
-                  autoComplete="email"
-                  className="w-full rounded-lg border border-gray-300 p-3"
-                />
-
-                <input
-                  name="phone"
-                  type="tel"
-                  required
-                  placeholder="Phone number"
-                  autoComplete="tel"
-                  className="w-full rounded-lg border border-gray-300 p-3"
-                />
-
-                <input
-                  name="paymentReference"
-                  placeholder="Payment reference (optional)"
-                  className="w-full rounded-lg border border-gray-300 p-3"
-                />
-
-                <button
-                  type="submit"
-                  className="w-full rounded-xl bg-[#5631a5] px-5 py-3 font-semibold text-white transition hover:bg-[#40227e]"
-                >
-                  Submit Registration
-                </button>
-              </form>
-            )}
+            {/* Registration (payment + form) lives on the event page */}
+            <Link
+              to="/events/the-dentist-as-a-brand"
+              onClick={closeEventPopup}
+              className="mt-3 block w-full rounded-xl bg-[#5631a5] px-5 py-3 text-center font-semibold text-white transition hover:bg-[#40227e]"
+            >
+              Register Now
+            </Link>
           </div>
         </div>
       )}
