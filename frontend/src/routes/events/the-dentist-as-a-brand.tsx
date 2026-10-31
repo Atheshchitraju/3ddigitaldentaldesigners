@@ -3,6 +3,7 @@ import { useEffect, useState, type ReactNode, type FormEvent } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import vijayaLakshmiImage from "@/assets/events/Dr. Vijaya Lakshmi_ Dental Expert.png";
 import rizwanaImage from "@/assets/events/Meet Our Dental Expert.png";
+import aiDentistryImage from "@/assets/events/Ai_Dentistry.png";
 
 import {
   ArrowLeft,
@@ -24,7 +25,6 @@ export const Route = createFileRoute("/events/the-dentist-as-a-brand")({
 const UPI_ID = "7204392493-2@ybl";
 const UPI_LINK =
   "upi://pay?pa=7204392493-2@ybl&pn=Digital%20Dental%20Designers&am=750&cu=INR&tn=The%20Dentist%20as%20a%20Brand";
-const EVENT_URL = "https://digitaldentaldesigners.in/events/the-dentist-as-a-brand";
 const GLOBAL_NAV_OFFSET = 72;
 
 function DentistAsBrandPage() {
@@ -69,14 +69,16 @@ function DentistAsBrandPage() {
           </span>
           <a
             href="#registration"
-            className="hidden rounded-full bg-[#321708] px-5 py-2 text-sm font-bold text-white transition hover:bg-[#542b12] md:inline-flex"
+            className="hidden items-center gap-1.5 rounded-full bg-[#321708] px-5 py-2 text-sm font-bold text-white transition hover:bg-[#542b12] md:inline-flex"
           >
-            Register · ₹750
+            <span>Register · ₹750</span>
+            <span className="text-xs font-normal opacity-70 line-through">(₹1200)</span>
           </a>
           <span className="w-12 md:hidden" aria-hidden />
         </div>
       </header>
 
+      {/* HERO - NOW WITH AI DENTISTRY IMAGE INSTEAD OF VIJAYA LAKSHMI */}
       <section className="relative overflow-hidden bg-[#260b2c] px-4 py-12 text-white sm:px-6 md:py-20">
         <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-[#d89b39]/20 blur-3xl" />
         <div className="relative mx-auto max-w-7xl">
@@ -91,34 +93,48 @@ function DentistAsBrandPage() {
               <p className="mt-4 text-lg font-medium text-[#f2d9a5] sm:text-xl">
                 From Invisible Expertise to Remarkable Identity
               </p>
+              <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 backdrop-blur">
+                <span className="text-lg font-extrabold">₹750</span>
+                <span className="text-sm line-through text-white/60">(₹1200)</span>
+                <span className="ml-1 rounded-full bg-[#e5a044] px-2.5 py-0.5 text-xs font-bold text-[#321708]">
+                  Save ₹450
+                </span>
+              </div>
               <p className="mt-5 max-w-xl leading-7 text-white/80 sm:leading-8">
                 A 3-hour Digital Branding &amp; Content Masterclass for Dentists. Your clinical
                 expertise matters. Does your digital presence communicate what makes you different?
               </p>
-              <p className="mt-4 max-w-xl leading-7 text-white/75">
-                Move beyond generic social media content and build a distinctive, credible, and
-                patient-centred digital identity.
-              </p>
               <dl className="mt-7 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
                 <HeroFact label="Date" value="Sun, 15 Nov 2026" />
                 <HeroFact label="Time" value="10 AM – 1 PM" />
-                <HeroFact label="Early bird" value="₹750" />
+                <HeroFact
+                  label="Early bird"
+                  value="₹750"
+                  valueNode={
+                    <>
+                      ₹750{" "}
+                      <span className="text-xs font-normal line-through opacity-70">(₹1200)</span>
+                    </>
+                  }
+                />
               </dl>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <a
                   href="#registration"
                   className="inline-flex items-center justify-center gap-2 rounded-full bg-[#e5a044] px-7 py-3.5 font-bold text-[#321708] transition hover:bg-[#f2bd69]"
                 >
-                  Register Now
+                  Register Now – ₹750{" "}
+                  <span className="text-sm font-normal line-through">(₹1200)</span>
                   <ArrowRight size={18} />
                 </a>
               </div>
             </div>
+            {/* SINGLE AI DENTISTRY IMAGE HERE */}
             <div className="mx-auto w-full max-w-lg">
               <div className="overflow-hidden rounded-3xl border border-[#d8a84b]/50 bg-white/5 p-3 shadow-2xl">
                 <img
-                  src={vijayaLakshmiImage}
-                  alt="Meet our dental expert, Dr. M. Vijaya Lakshmi Macherla"
+                  src={aiDentistryImage}
+                  alt="AI Dentistry - Intelligent Diagnostics"
                   className="h-auto w-full rounded-2xl object-contain"
                   loading="eager"
                 />
@@ -148,43 +164,6 @@ function DentistAsBrandPage() {
             value="Bengaluru"
             detail="Venue shared with registered attendees"
           />
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b77924] sm:text-sm">
-            The Masterclass
-          </p>
-          <h2 className="mt-4 text-3xl font-extrabold leading-tight md:text-5xl">
-            Your clinical expertise matters.
-            <span className="block text-[#a86a25]">Does your digital presence communicate it?</span>
-          </h2>
-          <p className="mt-6 text-base leading-8 text-[#6b5140] sm:text-lg">
-            In a crowded digital world, posting more is not the same as building a memorable brand.
-            Explore how dentists can move beyond generic social media content and develop a
-            distinctive, credible, and patient-centred digital identity.
-          </p>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16">
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b77924] sm:text-sm">
-            Beyond Basic Social Media
-          </p>
-          <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">
-            What Makes This Masterclass Different?
-          </h2>
-          <p className="mt-6 text-base leading-8 text-[#6b5140] sm:text-lg">
-            This is not a basic guide to posting reels. It is a strategic session about how
-            branding, patient psychology, and content can work together to help dental professionals
-            become easier to recognise, understand, and remember.
-          </p>
-          <p className="mt-4 text-base font-semibold leading-8 text-[#542b12] sm:text-lg">
-            Join this strategic masterclass in dental branding, marketing psychology, and content
-            differentiation. This is not just another seminar with content ideas.
-          </p>
         </div>
       </section>
 
@@ -219,6 +198,7 @@ function DentistAsBrandPage() {
         </div>
       </section>
 
+      {/* Inside the 3-Hour Experience - WITH NEW AI CARD AT END */}
       <section className="bg-[#f8e9d9] px-4 py-12 sm:px-6 md:py-16">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
@@ -233,7 +213,7 @@ function DentistAsBrandPage() {
               professional identity.
             </p>
           </div>
-          <div className="mt-9 grid gap-4 md:grid-cols-3">
+          <div className="mt-9 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <NumberedCard
               number="01"
               title="Become Remarkable"
@@ -249,112 +229,50 @@ function DentistAsBrandPage() {
               title="Build Recognition"
               description="Become recognisable and easier to recall through an intentional digital presence."
             />
+            {/* NEW AI CARD */}
+            <div className="rounded-3xl border border-[#5b1768]/20 bg-gradient-to-br from-[#260b2c] to-[#5b1768] p-6 text-white shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl md:p-7">
+              <p className="text-sm font-extrabold tracking-widest text-[#e5bd61]">04</p>
+              <h3 className="mt-3 text-xl font-extrabold">🧠 AI IN MODERN DENTISTRY</h3>
+              <p className="mt-1 text-sm font-bold text-[#e5bd61]">AI in Dentistry</p>
+              <p className="mt-3 leading-7 text-white/80">
+                Integrate intelligent tools into clinical workflows and patient communication.
+              </p>
+              <p className="mt-3 text-sm leading-6 text-white/70">
+                Explore AI-powered clinical tools, smarter workflows and visual patient
+                communication to support better understanding and informed treatment decisions.
+              </p>
+              <p className="mt-4 text-xs font-bold uppercase tracking-wide text-[#e5bd61]">
+                From Clinical Intelligence to Digital Practice Growth.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16">
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-3xl bg-[#f8e9d9] p-7 md:p-9">
-            <h2 className="text-2xl font-extrabold md:text-3xl">Who Should Attend?</h2>
-            <p className="mt-4 leading-7 text-[#6b5140]">Dentists and clinic owners who want to:</p>
-            <ul className="mt-4 space-y-3 text-[#6b5140]">
-              <li>• Sharpen their professional positioning as a strong personal brand.</li>
-              <li>• Make their content more distinctive in the era of new guidelines.</li>
-              <li>• Communicate their expertise more clearly.</li>
-              <li>• Build a recognisable and intentional digital presence.</li>
-              <li>• Move beyond generic social media strategies.</li>
-            </ul>
-          </div>
-          <div className="rounded-3xl border border-[#e5c9a7] bg-white p-7 md:p-9">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b77924]">
-              Attendee Takeaway
-            </p>
-            <h2 className="mt-3 text-2xl font-extrabold md:text-3xl">Dental Brand Blueprint</h2>
-            <p className="mt-4 leading-7 text-[#6b5140]">
-              A practical worksheet to help you define your audience, positioning, distinctive
-              perspective, signature content series, recognition cues, measures of progress, and
-              much more.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-[#f8e9d9] px-4 py-12 sm:px-6 md:py-16">
-        <div className="mx-auto max-w-7xl">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b77924] sm:text-sm">
-              Inside the 3-hour experience
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">What You Will Learn</h2>
-          </div>
-          <div className="mt-9 grid gap-4 md:grid-cols-3 md:gap-5">
-            <NumberedCard
-              number="01"
-              title="Become Remarkable"
-              description="Become remarkable rather than interchangeable and build a recognisable professional identity."
-            />
-            <NumberedCard
-              number="02"
-              title="Understand Patients"
-              description="Understand what patients really need and communicate your expertise more clearly."
-            />
-            <NumberedCard
-              number="03"
-              title="Build Recognition"
-              description="Become recognisable and easier to recall through an intentional digital presence."
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b77924] sm:text-sm">
-            The Experience
-          </p>
-          <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">A Focused 3-Hour Masterclass</h2>
-          <p className="mt-4 leading-7 text-[#6b5140]">
-            A practical session designed to help you clarify your professional identity and
-            communicate it consistently.
-          </p>
-        </div>
-        <div className="mt-9 grid gap-4 md:grid-cols-3">
-          <NumberedCard
-            number="01"
-            title="Brand Positioning"
-            description="Define what makes your clinical expertise distinctive and meaningful to the patients you serve."
-            plain
-          />
-          <NumberedCard
-            number="02"
-            title="Patient-Centred Communication"
-            description="Understand patient needs and shape messaging that communicates trust and credibility."
-            plain
-          />
-          <NumberedCard
-            number="03"
-            title="Content Differentiation"
-            description="Move beyond generic posts and develop recognisable content themes for your digital presence."
-            plain
-          />
         </div>
       </section>
 
       <section id="registration" className="scroll-mt-40 bg-[#260b2c] px-4 py-14 sm:px-6 md:py-20">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center text-white">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#e5bd61] sm:text-sm">
-              Early bird · ₹750
-            </p>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-5 py-2">
+              <span className="text-sm font-extrabold">Early bird · ₹750</span>
+              <span className="text-xs line-through text-white/60">(₹1200)</span>
+            </div>
             <h2 className="mt-3 text-3xl font-extrabold md:text-5xl">Reserve Your Seat</h2>
             <p className="mt-4 leading-7 text-white/75">
-              Two quick steps: pay ₹750 by UPI, then submit your details with your UTR.
+              Pay <span className="font-bold text-white">₹750</span>{" "}
+              <span className="line-through text-white/60">(₹1200)</span> by UPI, then submit your
+              details.
             </p>
           </div>
           <div className="mt-10 grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-8">
             <div className="rounded-3xl bg-gradient-to-br from-[#e8a052] to-[#f3d49c] p-6 text-[#321708] shadow-xl md:p-8">
               <StepBadge n={1} label="Pay ₹750 via UPI" />
+              <div className="mt-5 flex items-baseline gap-3">
+                <span className="text-3xl font-extrabold">₹750</span>
+                <span className="text-lg line-through text-[#542b12]/60">(₹1200)</span>
+                <span className="rounded-full bg-[#321708] px-3 py-1 text-xs font-bold text-white">
+                  Save ₹450
+                </span>
+              </div>
               <div className="mt-6 md:hidden">
                 <a
                   href={UPI_LINK}
@@ -363,10 +281,6 @@ function DentistAsBrandPage() {
                   <Smartphone size={20} />
                   Open UPI app &amp; pay ₹750
                 </a>
-                <p className="mt-3 text-center text-xs text-[#542b12]">
-                  This opens GPay, PhonePe, Paytm or any UPI app on your phone with the amount
-                  already filled in.
-                </p>
               </div>
               <div className="mt-6 hidden text-center md:block">
                 <div className="mx-auto w-fit rounded-2xl bg-white p-4 shadow-md">
@@ -374,10 +288,7 @@ function DentistAsBrandPage() {
                 </div>
                 <p className="mt-4 flex items-center justify-center gap-2 font-bold">
                   <Smartphone size={18} />
-                  Scan with any UPI app on your phone
-                </p>
-                <p className="mt-1 text-sm text-[#542b12]">
-                  Your phone will open the payment with ₹750 filled in.
+                  Scan with any UPI app
                 </p>
               </div>
               <div className="my-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-wide text-[#542b12]">
@@ -386,20 +297,6 @@ function DentistAsBrandPage() {
                 <span className="h-px flex-1 bg-[#542b12]/25" />
               </div>
               <CopyUpiId upiId={UPI_ID} />
-              <ul className="mt-6 space-y-2 text-sm text-[#542b12]">
-                <li className="flex gap-2">
-                  <Check size={16} className="mt-0.5 shrink-0" />
-                  Pay exactly ₹750.
-                </li>
-                <li className="flex gap-2">
-                  <Check size={16} className="mt-0.5 shrink-0" />
-                  Take a screenshot of the success screen.
-                </li>
-                <li className="flex gap-2">
-                  <Check size={16} className="mt-0.5 shrink-0" />
-                  Note the 12-digit UTR / transaction ID.
-                </li>
-              </ul>
             </div>
             <div className="rounded-3xl bg-white p-6 shadow-xl md:p-8">
               <StepBadge n={2} label="Confirm your seat" dark />
@@ -407,10 +304,6 @@ function DentistAsBrandPage() {
                 <div className="py-8 text-center" role="status">
                   <CheckCircle2 className="mx-auto text-green-600" size={52} />
                   <h3 className="mt-4 text-2xl font-extrabold">Registration Received</h3>
-                  <p className="mx-auto mt-3 max-w-md leading-7 text-[#6b5140]">
-                    Thank you! Your seat will be confirmed by email once your payment has been
-                    verified.
-                  </p>
                 </div>
               ) : (
                 <RegistrationForm />
@@ -420,65 +313,8 @@ function DentistAsBrandPage() {
         </div>
       </section>
 
-      <section className="bg-[#f8e9d9] px-4 py-12 sm:px-6 md:py-16">
-        <div className="mx-auto max-w-4xl">
-          <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b77924] sm:text-sm">
-              Got Questions?
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">Event FAQs</h2>
-            <p className="mx-auto mt-4 max-w-2xl leading-7 text-[#6b5140]">
-              Everything you need to know about The Dentist as a Brand masterclass.
-            </p>
-          </div>
-          <div className="mt-9 space-y-3">
-            <FAQItem
-              question="Who should attend this seminar?"
-              answer="Dental students, interns, practising dentists, clinic owners, and dental professionals who want to build their digital presence."
-            />
-            <FAQItem
-              question="Do I need prior social media knowledge?"
-              answer="No! Whether you're just starting out or already posting content, you'll learn strategic ways to strengthen your digital identity."
-            />
-            <FAQItem
-              question="Will this help me grow my dental practice?"
-              answer="You'll learn how personal branding, educational content, and digital visibility can help build patient awareness and trust."
-            />
-            <FAQItem
-              question="Is this just another Instagram marketing workshop?"
-              answer="No. The focus is on strategic personal branding, digital positioning, content frameworks, and responsible online communication—not just posting reels."
-            />
-            <FAQItem
-              question="Will we learn about professional advertising guidelines?"
-              answer="Yes, the seminar will address ethical and responsible digital communication for dental professionals, including relevant professional guidelines."
-            />
-            <FAQItem
-              question="Do I need to be comfortable appearing on camera?"
-              answer="Not necessarily. You'll explore ways to communicate your professional value and create content that suits your style."
-            />
-            <FAQItem
-              question="Who are the speakers?"
-              answer="Dr. M. Vijaya Lakshmi Macherla — Dental Surgeon, Implantologist, and Smile Design Specialist, featured in Forbes India 2026. Dr. Rizwana Tarannum — B.D.S., Certified Cosmetic Dentist, and Digital Marketing Head."
-            />
-            <FAQItem
-              question="When and where is the event?"
-              answer="The masterclass takes place on 15 November 2026, in Bengaluru. The registration fee is ₹750."
-            />
-            <FAQItem
-              question="How do I register?"
-              answer="Use the registration section on this page to pay the registration fee and submit your details. You can also scan the event registration QR code when available."
-            />
-            <FAQItem
-              question="Why should I attend?"
-              answer="Because clinical excellence deserves clear communication. Learn how to build a recognisable professional identity and approach your digital growth strategically."
-            />
-          </div>
-        </div>
-      </section>
-
       <footer className="bg-[#14041a] px-4 pb-24 pt-8 text-center text-sm text-white/70 sm:px-6 md:pb-8">
         <p className="font-semibold text-white">DIGITAL DENTAL DESIGNERS</p>
-        <p className="mt-2">digitaldentaldesigners.in · +91 7411714007 · Bengaluru</p>
         <Link to="/" className="mt-5 inline-flex items-center gap-2 text-[#e5bd61] hover:underline">
           <ArrowLeft size={16} />
           Back to Home
@@ -491,7 +327,8 @@ function DentistAsBrandPage() {
             href="#registration"
             className="flex w-full items-center justify-center gap-2 rounded-full bg-[#321708] px-6 py-3.5 font-bold text-white"
           >
-            Register · ₹750
+            Register · ₹750{" "}
+            <span className="text-xs font-normal opacity-60 line-through">(₹1200)</span>
             <ArrowRight size={18} />
           </a>
         </div>
@@ -504,21 +341,18 @@ function RegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registrationMessage, setRegistrationMessage] = useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
-
   const inputClass =
     "w-full rounded-xl border border-[#e5c9a7] bg-white p-3 text-base outline-none transition focus:border-[#b77924] focus:ring-2 focus:ring-[#e5a044]/40";
-
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     setIsSubmitting(true);
     setRegistrationMessage("");
     setRegistrationSuccess(false);
-
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) throw new Error("VITE_API_URL is not set in .env");
       const form = event.currentTarget;
       const formData = new FormData(form);
-
       const payload = {
         fullName: formData.get("fullName"),
         email: formData.get("email"),
@@ -526,59 +360,35 @@ function RegistrationForm() {
         qualification: formData.get("qualification"),
         utr: formData.get("utr"),
       };
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/events/the-dentist-as-a-brand/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        },
-      );
-
+      const response = await fetch(`${apiUrl}/api/events/the-dentist-as-a-brand/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
       const result = await response.json();
-
-      if (!response.ok || !result.success) {
+      if (!response.ok || !result.success)
         throw new Error(result.message || "Registration could not be submitted.");
-      }
-
       setRegistrationSuccess(true);
       setRegistrationMessage(result.message);
-
       form.reset();
     } catch (error) {
-      console.error("Registration error:", error);
-
       setRegistrationSuccess(false);
-      setRegistrationMessage(
-        error instanceof Error ? error.message : "Something went wrong. Please try again.",
-      );
+      setRegistrationMessage(error instanceof Error ? error.message : "Something went wrong.");
     } finally {
       setIsSubmitting(false);
     }
   };
-
   return (
     <form onSubmit={onSubmit} className="mt-6 space-y-4">
       <Field label="Full name">
-        <input
-          name="fullName"
-          required
-          autoComplete="name"
-          placeholder="Dr. Your Name"
-          className={inputClass}
-        />
+        <input name="fullName" required placeholder="Dr. Your Name" className={inputClass} />
       </Field>
-
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Email address">
           <input
             name="email"
             type="email"
             required
-            autoComplete="email"
             placeholder="you@example.com"
             className={inputClass}
           />
@@ -588,14 +398,11 @@ function RegistrationForm() {
             name="phone"
             type="tel"
             required
-            autoComplete="tel"
-            inputMode="tel"
             placeholder="+91 98765 43210"
             className={inputClass}
           />
         </Field>
       </div>
-
       <Field label="Dental qualification / clinic name">
         <input
           name="qualification"
@@ -604,47 +411,34 @@ function RegistrationForm() {
           className={inputClass}
         />
       </Field>
-
       <Field label="Payment reference / UTR number">
-        <input
-          name="utr"
-          required
-          minLength={6}
-          inputMode="numeric"
-          placeholder="12-digit UTR or UPI transaction ID"
-          className={inputClass}
-        />
+        <input name="utr" required placeholder="12-digit UTR" className={inputClass} />
       </Field>
-
       {registrationMessage && (
         <div
           role="status"
-          className={`rounded-xl border p-4 text-sm ${
-            registrationSuccess
-              ? "border-green-200 bg-green-50 text-green-800"
-              : "border-red-200 bg-red-50 text-red-800"
-          }`}
+          className={`rounded-xl border p-4 text-sm ${registrationSuccess ? "border-green-200 bg-green-50 text-green-800" : "border-red-200 bg-red-50 text-red-800"}`}
         >
           {registrationMessage}
         </div>
       )}
-
       <button
         type="submit"
         disabled={isSubmitting}
         className="w-full rounded-full bg-[#5b1768] px-6 py-4 font-bold text-white transition hover:bg-[#42104d] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isSubmitting ? "Submitting Registration..." : "Submit Registration"}
+        {isSubmitting ? (
+          "Submitting..."
+        ) : (
+          <>
+            Submit Registration – ₹750{" "}
+            <span className="font-normal line-through opacity-70">(₹1200)</span>
+          </>
+        )}
       </button>
-
-      <p className="text-center text-xs text-[#8a7665]">
-        Your details are sent to our backend. Screenshot upload is handled separately – if needed,
-        add upload middleware on the server.
-      </p>
     </form>
   );
 }
-
 function CopyUpiId({ upiId }: { upiId: string }) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
@@ -660,15 +454,16 @@ function CopyUpiId({ upiId }: { upiId: string }) {
       <button
         type="button"
         onClick={copy}
-        className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#321708] px-3.5 py-2 text-xs font-bold text-white transition hover:bg-[#542b12]"
+        className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-[#321708] px-3.5 py-2 text-xs font-bold text-white"
       >
-        {copied ? <Check size={14} /> : <Copy size={14} />}
-        {copied ? "Copied" : "Copy"}
+        <>
+          {copied ? <Check size={14} /> : <Copy size={14} />}
+          {copied ? "Copied" : "Copy"}
+        </>
       </button>
     </div>
   );
 }
-
 function StepBadge({ n, label, dark }: { n: number; label: string; dark?: boolean }) {
   return (
     <div className="flex items-center gap-3">
@@ -681,16 +476,22 @@ function StepBadge({ n, label, dark }: { n: number; label: string; dark?: boolea
     </div>
   );
 }
-
-function HeroFact({ label, value }: { label: string; value: string }) {
+function HeroFact({
+  label,
+  value,
+  valueNode,
+}: {
+  label: string;
+  value: string;
+  valueNode?: ReactNode;
+}) {
   return (
     <div className="rounded-xl border border-white/15 bg-white/5 px-4 py-3">
       <dt className="text-xs uppercase tracking-wide text-[#e5bd61]">{label}</dt>
-      <dd className="mt-1 font-bold">{value}</dd>
+      <dd className="mt-1 font-bold">{valueNode ?? value}</dd>
     </div>
   );
 }
-
 function InfoCard({
   icon,
   title,
@@ -713,29 +514,23 @@ function InfoCard({
     </div>
   );
 }
-
 function NumberedCard({
   number,
   title,
   description,
-  plain,
 }: {
   number: string;
   title: string;
   description: string;
-  plain?: boolean;
 }) {
   return (
-    <div
-      className={`rounded-3xl border bg-white p-6 md:p-7 ${plain ? "border-[#ead8c5]" : "border-[#e8d0b4] transition duration-300 hover:-translate-y-1 hover:shadow-xl"}`}
-    >
+    <div className="rounded-3xl border border-[#e8d0b4] bg-white p-6 transition hover:-translate-y-1 hover:shadow-xl md:p-7">
       <p className="text-sm font-extrabold tracking-widest text-[#b77924]">{number}</p>
       <h3 className="mt-3 text-xl font-extrabold">{title}</h3>
       <p className="mt-3 leading-7 text-[#6b5140]">{description}</p>
     </div>
   );
 }
-
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   return (
     <details className="group rounded-2xl border border-[#e5c9a7] bg-white px-5 py-4">
@@ -747,7 +542,6 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
     </details>
   );
 }
-
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <label className="block">
