@@ -27,6 +27,49 @@ const UPI_LINK =
   "upi://pay?pa=7204392493-2@ybl&pn=Digital%20Dental%20Designers&am=750&cu=INR&tn=The%20Dentist%20as%20a%20Brand";
 const GLOBAL_NAV_OFFSET = 72;
 
+const FAQS = [
+  {
+    q: "Who should attend this seminar?",
+    a: "Dental students, interns, practising dentists, clinic owners, and dental professionals who want to build their digital presence.",
+  },
+  {
+    q: "Do I need prior social media knowledge?",
+    a: "No! Whether you're just starting out or already posting content, you'll learn strategic ways to strengthen your digital identity.",
+  },
+  {
+    q: "Will this help me grow my dental practice?",
+    a: "You'll learn how personal branding, educational content, and digital visibility can help build patient awareness and trust.",
+  },
+  {
+    q: "Is this just another Instagram marketing workshop?",
+    a: "No. The focus is on strategic personal branding, digital positioning, content frameworks, and responsible online communication—not just posting reels.",
+  },
+  {
+    q: "Will we learn about professional advertising guidelines?",
+    a: "Yes, the seminar will address ethical and responsible digital communication for dental professionals, including relevant professional guidelines.",
+  },
+  {
+    q: "Do I need to be comfortable appearing on camera?",
+    a: "Not necessarily. You'll explore ways to communicate your professional value and create content that suits your style.",
+  },
+  {
+    q: "Who are the speakers?",
+    a: "🎤 Dr. M. Vijaya Lakshmi Macherla — Dental Surgeon, Implantologist, and Smile Design Specialist, featured in Forbes India 2026.\n🎤 Dr. Rizwana Tarannum — B.D.S., Certified Cosmetic Dentist, and Digital Marketing Head.",
+  },
+  {
+    q: "When and where is the event?",
+    a: "📅 15 November 2026\n📍 Bengaluru\n🎟️ Registration fee: ₹750",
+  },
+  {
+    q: "How do I register?",
+    a: "Scan the QR code on the event poster and complete your registration to reserve your spot.",
+  },
+  {
+    q: "Why should I attend?",
+    a: "Because clinical excellence deserves clear communication. Learn how to build a recognisable professional identity and approach your digital growth strategically.",
+  },
+];
+
 function DentistAsBrandPage() {
   const [registered, setRegistered] = useState(false);
   const [showStickyCta, setShowStickyCta] = useState(true);
@@ -78,7 +121,7 @@ function DentistAsBrandPage() {
         </div>
       </header>
 
-      {/* HERO - NOW WITH AI DENTISTRY IMAGE INSTEAD OF VIJAYA LAKSHMI */}
+      {/* HERO - UPDATED WITH YOUR WHATSAPP MATTER */}
       <section className="relative overflow-hidden bg-[#260b2c] px-4 py-12 text-white sm:px-6 md:py-20">
         <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-[#d89b39]/20 blur-3xl" />
         <div className="relative mx-auto max-w-7xl">
@@ -93,43 +136,48 @@ function DentistAsBrandPage() {
               <p className="mt-4 text-lg font-medium text-[#f2d9a5] sm:text-xl">
                 From Invisible Expertise to Remarkable Identity
               </p>
-              <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 backdrop-blur">
+              <p className="mt-5 text-[15px] font-bold leading-7 text-white sm:text-[16px]">
+                A 3-Hour Digital Branding & Content Masterclass for Dentists
+              </p>
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-2 backdrop-blur">
                 <span className="text-lg font-extrabold">₹750</span>
                 <span className="text-sm line-through text-white/60">(₹1200)</span>
                 <span className="ml-1 rounded-full bg-[#e5a044] px-2.5 py-0.5 text-xs font-bold text-[#321708]">
                   Save ₹450
                 </span>
               </div>
-              <p className="mt-5 max-w-xl leading-7 text-white/80 sm:leading-8">
-                A 3-hour Digital Branding &amp; Content Masterclass for Dentists. Your clinical
-                expertise matters. Does your digital presence communicate what makes you different?
-              </p>
-              <dl className="mt-7 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
-                <HeroFact label="Date" value="Sun, 15 Nov 2026" />
-                <HeroFact label="Time" value="10 AM – 1 PM" />
-                <HeroFact
-                  label="Early bird"
-                  value="₹750"
-                  valueNode={
-                    <>
-                      ₹750{" "}
-                      <span className="text-xs font-normal line-through opacity-70">(₹1200)</span>
-                    </>
-                  }
-                />
-              </dl>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="#registration"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#e5a044] px-7 py-3.5 font-bold text-[#321708] transition hover:bg-[#f2bd69]"
-                >
-                  Register Now – ₹750{" "}
-                  <span className="text-sm font-normal line-through">(₹1200)</span>
-                  <ArrowRight size={18} />
-                </a>
+
+              <div className="mt-6 space-y-4 text-[15px] leading-7 text-white/85 sm:leading-8">
+                <p>
+                  Your clinical expertise matters. Does your digital presence communicate what makes
+                  you different?
+                </p>
+                <p>
+                  In a crowded digital world, posting more is not the same as building a memorable
+                  brand. Explore how dentists can move beyond generic social media content and
+                  develop a distinctive, credible, and patient-centred digital identity.
+                </p>
+                <p className="font-medium text-white">
+                  Join this STRATEGIC MASTERCLASS in dental branding, marketing psychology, and
+                  content differentiation. This is not just another seminar with content ideas.
+                </p>
+                <div className="pt-3">
+                  <div className="h-px w-12 bg-[#e5bd61]/50" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-extrabold uppercase tracking-[0.15em] text-[#e5bd61]">
+                    WHAT MAKES THIS MASTERCLASS DIFFERENT?
+                  </h3>
+                  <p className="mt-2">
+                    This is not a basic guide to posting reels. It is a strategic session about how
+                    branding, patient psychology, and content can work together to help dental
+                    professionals become easier to recognise, understand, and remember.
+                  </p>
+                </div>
               </div>
             </div>
-            {/* SINGLE AI DENTISTRY IMAGE HERE */}
+
+            {/* AI IMAGE WITH TEXT BELOW */}
             <div className="mx-auto w-full max-w-lg">
               <div className="overflow-hidden rounded-3xl border border-[#d8a84b]/50 bg-white/5 p-3 shadow-2xl">
                 <img
@@ -138,6 +186,18 @@ function DentistAsBrandPage() {
                   className="h-auto w-full rounded-2xl object-contain"
                   loading="eager"
                 />
+              </div>
+              <div className="mt-5 rounded-3xl border border-[#d8a84b]/30 bg-white/10 p-6 backdrop-blur">
+                <h3 className="flex items-center gap-2 text-lg font-extrabold leading-tight text-white">
+                  <span>🧠</span> AI IN MODERN DENTISTRY
+                </h3>
+                <p className="mt-3 text-[15px] leading-7 text-white/85">
+                  Explore AI-powered clinical tools, smarter workflows and visual patient
+                  communication to support better understanding and informed treatment decisions.
+                </p>
+                <p className="mt-4 text-xs font-bold uppercase tracking-[0.15em] text-[#e5bd61]">
+                  From Clinical Intelligence to Digital Practice Growth.
+                </p>
               </div>
             </div>
           </div>
@@ -198,7 +258,6 @@ function DentistAsBrandPage() {
         </div>
       </section>
 
-      {/* Inside the 3-Hour Experience - WITH NEW AI CARD AT END */}
       <section className="bg-[#f8e9d9] px-4 py-12 sm:px-6 md:py-16">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
@@ -229,8 +288,7 @@ function DentistAsBrandPage() {
               title="Build Recognition"
               description="Become recognisable and easier to recall through an intentional digital presence."
             />
-            {/* NEW AI CARD */}
-            <div className="rounded-3xl border border-[#5b1768]/20 bg-gradient-to-br from-[#260b2c] to-[#5b1768] p-6 text-white shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl md:p-7">
+            {/* <div className="rounded-3xl border border-[#5b1768]/20 bg-gradient-to-br from-[#260b2c] to-[#5b1768] p-6 text-white shadow-xl transition duration-300 hover:-translate-y-1 hover:shadow-2xl md:p-7">
               <p className="text-sm font-extrabold tracking-widest text-[#e5bd61]">04</p>
               <h3 className="mt-3 text-xl font-extrabold">🧠 AI IN MODERN DENTISTRY</h3>
               <p className="mt-1 text-sm font-bold text-[#e5bd61]">AI in Dentistry</p>
@@ -244,7 +302,7 @@ function DentistAsBrandPage() {
               <p className="mt-4 text-xs font-bold uppercase tracking-wide text-[#e5bd61]">
                 From Clinical Intelligence to Digital Practice Growth.
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -309,6 +367,23 @@ function DentistAsBrandPage() {
                 <RegistrationForm />
               )}
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#fffaf5] px-4 py-14 sm:px-6 md:py-20">
+        <div className="mx-auto max-w-4xl">
+          <div className="text-center">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b77924] sm:text-sm">
+              Got Questions?
+            </p>
+            <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">Event FAQs</h2>
+            <p className="mt-3 text-[#6b5140]">Everything you need to know before you register</p>
+          </div>
+          <div className="mt-8 space-y-3">
+            {FAQS.map((f, i) => (
+              <FAQItem key={i} question={`${i + 1}. ${f.q}`} answer={f.a} />
+            ))}
           </div>
         </div>
       </section>
@@ -476,22 +551,6 @@ function StepBadge({ n, label, dark }: { n: number; label: string; dark?: boolea
     </div>
   );
 }
-function HeroFact({
-  label,
-  value,
-  valueNode,
-}: {
-  label: string;
-  value: string;
-  valueNode?: ReactNode;
-}) {
-  return (
-    <div className="rounded-xl border border-white/15 bg-white/5 px-4 py-3">
-      <dt className="text-xs uppercase tracking-wide text-[#e5bd61]">{label}</dt>
-      <dd className="mt-1 font-bold">{valueNode ?? value}</dd>
-    </div>
-  );
-}
 function InfoCard({
   icon,
   title,
@@ -533,12 +592,15 @@ function NumberedCard({
 }
 function FAQItem({ question, answer }: { question: string; answer: string }) {
   return (
-    <details className="group rounded-2xl border border-[#e5c9a7] bg-white px-5 py-4">
+    <details className="group rounded-2xl border border-[#e5c9a7] bg-white px-5 py-4 open:bg-[#fffaf5]">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-[#321708]">
         {question}
-        <ChevronDown size={20} className="shrink-0 transition group-open:rotate-180" />
+        <ChevronDown
+          size={20}
+          className="shrink-0 transition group-open:rotate-180 text-[#b77924]"
+        />
       </summary>
-      <p className="mt-3 leading-7 text-[#6b5140]">{answer}</p>
+      <p className="mt-3 whitespace-pre-line leading-7 text-[#6b5140]">{answer}</p>
     </details>
   );
 }
