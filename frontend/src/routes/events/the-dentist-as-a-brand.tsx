@@ -266,10 +266,66 @@ function DentistAsBrandPage() {
         </div>
       </section>
 
-      {/* WHO SHOULD ATTEND */}
+      {/* MEET EXPERTS - FIXED: BIG LIKE BEFORE, FORBES ONLY FOR VIJAYA MAM */}
+      <section className="bg-[#1a0a2e] px-4 py-14 sm:px-6 md:py-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="font-body text-[11px] font-bold uppercase tracking-[0.25em] text-[#f7c873]">
+              Meet Our Dental Experts
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-extrabold text-white md:text-[42px]">
+              Learn From Experienced Professionals
+            </h2>
+          </div>
+          <div className="mx-auto mt-10 grid max-w-5xl gap-8 md:grid-cols-2">
+            {/* Vijaya Mam - On Top with Forbes Badge */}
+            <div className="overflow-hidden rounded-[28px] border border-[#f7c873]/30 bg-white shadow-2xl">
+              <img
+                src={vijayaLakshmiImage}
+                alt="Dr. M. Vijaya Lakshmi Macherla"
+                className="h-auto w-full object-contain"
+                loading="lazy"
+              />
+              <div className="border-t border-[#f0dfc9] bg-white p-6">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#1a0a2e] px-4 py-1.5 text-[11px] font-bold text-[#f7c873]">
+                  <Star size={12} className="fill-[#f7c873]" /> Featured in Forbes India 2026
+                </div>
+                <h3 className="font-display mt-4 text-[22px] font-bold leading-tight text-[#1a0a2e]">
+                  Dr. M. Vijaya Lakshmi Macherla
+                </h3>
+                <p className="mt-2 text-[14px] leading-6 text-[#6b5140]">
+                  Dental Surgeon, Implantologist, and Smile Design Specialist
+                </p>
+              </div>
+            </div>
+            {/* Rizwana Mam - Below on mobile */}
+            <div className="overflow-hidden rounded-[28px] border border-white/20 bg-white shadow-2xl">
+              <img
+                src={rizwanaImage}
+                alt="Dr. Rizwana Tarannum"
+                className="h-auto w-full object-contain"
+                loading="lazy"
+              />
+              <div className="border-t border-[#f0dfc9] bg-white p-6">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[#fdf2e2] px-4 py-1.5 text-[11px] font-bold text-[#a05a18]">
+                  Digital Marketing Head
+                </div>
+                <h3 className="font-display mt-4 text-[22px] font-bold leading-tight text-[#1a0a2e]">
+                  Dr. Rizwana Tarannum
+                </h3>
+                <p className="mt-2 text-[14px] leading-6 text-[#6b5140]">
+                  B.D.S., Certified Cosmetic Dentist
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* WHO SHOULD ATTEND - FIXED: NO SMALL IMAGES, NO MISLEADING LINE */}
       <section className="bg-white px-4 py-14 sm:px-6 md:py-20 font-body border-y border-[#f0dfc9]">
-        <div className="mx-auto max-w-6xl grid lg:grid-cols-2 gap-10 items-center">
-          <div>
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#fdf2e2] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#a05a18]">
               <Users size={14} /> Who Is This For?
             </div>
@@ -279,45 +335,22 @@ function DentistAsBrandPage() {
             <p className="mt-4 text-[15px] leading-7 text-[#6b5140]">
               Dentists and clinic owners who want to:
             </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "Sharpen their professional positioning as a strong personal Brand",
-                "Make their content more distinctive in the era of new guidelines",
-                "Communicate their expertise more clearly",
-                "Build a recognisable and intentional digital presence",
-                "Move beyond generic social media strategies",
-              ].map((item, i) => (
-                <li
-                  key={i}
-                  className="flex gap-3 rounded-2xl border border-[#f8e9d9] bg-[#fffaf5] p-4 text-[14px] font-medium leading-6"
-                >
-                  <CheckCircle2 className="shrink-0 text-[#e5a044]" size={20} /> {item}
-                </li>
-              ))}
-            </ul>
           </div>
-          <div className="relative">
-            <div className="absolute -inset-4 rounded-[32px] bg-gradient-to-br from-[#f7c873]/30 to-[#8b5cf6]/10 blur-2xl" />
-            <div className="relative overflow-hidden rounded-[28px] border border-[#f0dfc9] bg-[#fffaf5] p-2 shadow-xl">
-              <div className="grid grid-cols-2 gap-2">
-                <img
-                  src={vijayaLakshmiImage}
-                  alt="Expert"
-                  className="rounded-[18px] bg-white object-contain w-full"
-                />
-                <img
-                  src={rizwanaImage}
-                  alt="Expert"
-                  className="rounded-[18px] bg-white object-contain w-full"
-                />
-              </div>
-              <div className="mt-3 rounded-[18px] bg-[#1a0a2e] p-5 text-white flex items-center gap-3">
-                <Target size={20} className="text-[#f7c873]" />
-                <p className="text-sm font-bold">
-                  Forbes India 2026 Featured Experts + Digital Growth Leaders
-                </p>
-              </div>
-            </div>
+          <div className="mx-auto mt-8 grid max-w-3xl gap-3">
+            {[
+              "Sharpen their professional positioning as a strong personal Brand",
+              "Make their content more distinctive in the era of new guidelines",
+              "Communicate their expertise more clearly",
+              "Build a recognisable and intentional digital presence",
+              "Move beyond generic social media strategies",
+            ].map((item, i) => (
+              <li
+                key={i}
+                className="flex list-none gap-3 rounded-2xl border border-[#f8e9d9] bg-[#fffaf5] p-5 text-[15px] font-medium leading-6"
+              >
+                <CheckCircle2 className="shrink-0 text-[#e5a044]" size={22} /> {item}
+              </li>
+            ))}
           </div>
         </div>
       </section>
