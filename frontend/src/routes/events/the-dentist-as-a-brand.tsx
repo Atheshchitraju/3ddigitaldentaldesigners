@@ -61,7 +61,7 @@ const FAQS = [
   },
   {
     q: "Who are the speakers?",
-    a: "🎤 Dr. M. Vijaya Lakshmi Macherla — Dental Surgeon, Implantologist, and Smile Design Specialist, featured in Forbes India 2026.\n🎤 Dr. Rizwana Tarannum — B.D.S., Certified Cosmetic Dentist, and Digital Marketing Head.",
+    a: "🎤 Dr. M. Vijaya Lakshmi Macherla — Dental Surgeon, Implantologist, and Smile Design Specialist, featured in Forbes India 2026.\n🎤 Dr. Rizwana Tarannum — Cosmetic Dentist , Digital Marketing Head.",
   },
   {
     q: "When and where is the event?",
