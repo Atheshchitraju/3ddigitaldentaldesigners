@@ -1,3 +1,4 @@
+
 import express from "express";
 
 import {
@@ -15,36 +16,60 @@ import {
     toggleEmployee,
 } from "../controllers/employeeController";
 
-
-
-import { authMiddleware } from "../middleware/authMiddleware";
+import {
+    authMiddleware,
+    requireRole,
+} from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-/* Authentication */
-
+// Authentication
 router.post("/login", employeeLogin);
-
 router.post("/forgot-password", forgotPassword);
-
 router.post("/reset-password", resetPassword);
 
-router.get("/me", authMiddleware, getLoggedEmployee);
+// Employee access
+router.get(
+    "/me",
+    authMiddleware,
+    requireRole("Employee"),
+    getLoggedEmployee
+);
+
 router.get(
     "/dashboard",
     authMiddleware,
+    requireRole("Employee"),
     getEmployeeDashboard
 );
 
-/* Employee Management */
+// Admin-only employee management
+router.post(
+    "/",
+    authMiddleware,
+    requireRole("Admin"),
+    createEmployee
+);
 
-router.post("/", authMiddleware, createEmployee);
+router.get(
+    "/",
+    authMiddleware,
+    requireRole("Admin"),
+    getEmployees
+);
 
-router.get("/", authMiddleware, getEmployees);
+router.delete(
+    "/:id",
+    authMiddleware,
+    requireRole("Admin"),
+    deleteEmployee
+);
 
-router.delete("/:id", authMiddleware, deleteEmployee);
-
-router.put("/:id/toggle", authMiddleware, toggleEmployee);
-
+router.put(
+    "/:id/toggle",
+    authMiddleware,
+    requireRole("Admin"),
+    toggleEmployee
+);
 
 export default router;

@@ -177,8 +177,18 @@ export const getEmployeeDashboard = async (
     try {
         const user = (req as any).user;
 
-        const employeeName = user.name;
-        const department = user.department;
+        const employee = await Employee.findById(user.id)
+            .select("-password");
+
+        if (!employee || employee.status !== "Active") {
+            return res.status(403).json({
+                success: false,
+                message: "Employee account is unavailable",
+            });
+        }
+
+        const employeeName = employee.name;
+        const department = employee.department;
 
         let field = "";
 

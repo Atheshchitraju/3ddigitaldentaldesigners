@@ -6,26 +6,11 @@ import Employee from "../models/Employee";
 /**
  * Create Employee
  */
-export const createEmployee = async (
-    req: Request,
-    res: Response
-) => {
+export const createEmployee = async (req: Request, res: Response) => {
     try {
-        const {
-            name,
-            email,
-            phone,
-            password,
-            role,
-            department,
-        } = req.body;
+        const { name, email, phone, password, role, department } = req.body;
 
-        if (
-            !name ||
-            !email ||
-            !password ||
-            !role
-        ) {
+        if (!name || !email || !password || !role) {
             return res.status(400).json({
                 success: false,
                 message: "Missing required fields",
@@ -43,16 +28,12 @@ export const createEmployee = async (
             });
         }
 
-        const hashedPassword =
-            await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        const employeeCount =
-            await Employee.countDocuments();
+        const employeeCount = await Employee.countDocuments();
 
         const employee = await Employee.create({
-            employeeId:
-                "EMP" +
-                String(employeeCount + 1).padStart(4, "0"),
+            employeeId: "EMP" + String(employeeCount + 1).padStart(4, "0"),
 
             name,
             email: email.toLowerCase(),
@@ -61,13 +42,18 @@ export const createEmployee = async (
             role,
             department,
         });
-        console.log(employee);
+
+        const {
+            password: _password,
+            ...safeEmployee
+        } = employee.toObject();
+
+        console.log("Employee created:", safeEmployee.employeeId);
 
         return res.status(201).json({
             success: true,
             message: "Employee created",
-
-            employee,
+            employee: safeEmployee,
         });
     } catch (error: any) {
         return res.status(500).json({
@@ -81,12 +67,8 @@ export const createEmployee = async (
  * Get All Employees
  */
 
-export const getEmployees = async (
-    req: Request,
-    res: Response
-) => {
+export const getEmployees = async (req: Request, res: Response) => {
     try {
-
         const { department } = req.query;
 
         const filter: any = {};
@@ -97,24 +79,19 @@ export const getEmployees = async (
 
         filter.status = "Active";
 
-        const employees = await Employee.find(filter)
-            .select("-password")
-            .sort({
-                name: 1,
-            });
+        const employees = await Employee.find(filter).select("-password").sort({
+            name: 1,
+        });
 
         return res.json({
             success: true,
             employees,
         });
-
     } catch (error: any) {
-
         return res.status(500).json({
             success: false,
             message: error.message,
         });
-
     }
 };
 
@@ -122,66 +99,50 @@ export const getEmployees = async (
  * Delete Employee
  */
 
-export const deleteEmployee =
-    async (
-        req: Request,
-        res: Response
-    ) => {
-        try {
-            await Employee.findByIdAndDelete(
-                req.params.id
-            );
+export const deleteEmployee = async (req: Request, res: Response) => {
+    try {
+        await Employee.findByIdAndDelete(req.params.id);
 
-            return res.json({
-                success: true,
-            });
-        } catch (error: any) {
-            return res.status(500).json({
-                success: false,
+        return res.json({
+            success: true,
+        });
+    } catch (error: any) {
+        return res.status(500).json({
+            success: false,
 
-                message: error.message,
-            });
-        }
-    };
+            message: error.message,
+        });
+    }
+};
 
 /**
  * Activate / Deactivate
  */
 
-export const toggleEmployee =
-    async (
-        req: Request,
-        res: Response
-    ) => {
-        try {
-            const employee =
-                await Employee.findById(
-                    req.params.id
-                );
+export const toggleEmployee = async (req: Request, res: Response) => {
+    try {
+        const employee = await Employee.findById(req.params.id);
 
-            if (!employee) {
-                return res.status(404).json({
-                    success: false,
-                });
-            }
-
-            employee.status =
-                employee.status === "Active"
-                    ? "Inactive"
-                    : "Active";
-
-            await employee.save();
-
-            return res.json({
-                success: true,
-
-                employee,
-            });
-        } catch (error: any) {
-            return res.status(500).json({
+        if (!employee) {
+            return res.status(404).json({
                 success: false,
-
-                message: error.message,
             });
         }
-    };
+
+        employee.status = employee.status === "Active" ? "Inactive" : "Active";
+
+        await employee.save();
+
+        return res.json({
+            success: true,
+
+            employee,
+        });
+    } catch (error: any) {
+        return res.status(500).json({
+            success: false,
+
+            message: error.message,
+        });
+    }
+};
