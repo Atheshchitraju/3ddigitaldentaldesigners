@@ -727,16 +727,43 @@ function ProductionPage() {
   const fetchOrder = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/api/orders/${orderId}`);
-      const data = await response.json();
 
-      if (data.success) {
-        setOrder(data.order);
+      const token = localStorage.getItem("adminToken");
+
+      if (!token) {
+        console.error("Admin token not found. Please login again.");
+        setOrder(null);
+        return;
       }
 
-      setLoading(false);
+      const response = await fetch(
+        `${API_URL}/api/orders/${encodeURIComponent(orderId)}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      console.log("Individual Order API:", response.status, data);
+
+      if (!response.ok) {
+        throw new Error(data.message || `Order API failed: ${response.status}`);
+      }
+
+      if (data.success && data.order) {
+        setOrder(data.order);
+      } else {
+        setOrder(null);
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Fetch Order Error:", error);
+      setOrder(null);
+    } finally {
       setLoading(false);
     }
   };
