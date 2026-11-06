@@ -72,13 +72,18 @@ const COLOR = {
   line: "#E4E1D8", // hairline borders on porcelain
 };
 
-function initials(name: string) {
+function initials(name?: string | null) {
+  if (!name || typeof name !== "string") {
+    return "E";
+  }
+
   return name
-    .split(" ")
+    .trim()
+    .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
     .map((n) => n[0]?.toUpperCase())
-    .join("");
+    .join("") || "E";
 }
 
 function greeting() {

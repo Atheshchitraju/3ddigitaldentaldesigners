@@ -234,22 +234,16 @@ export const getEmployeeDashboard = async (
             switch (department) {
                 case "Designer":
                     return !o.production.designer.startedAt;
-
                 case "Printer":
                     return !o.production.printing.startedAt;
-
                 case "Metalist":
                     return !o.production.metalist.startedAt;
-
                 case "Ceramist":
                     return !o.production.ceramist.startedAt;
-
                 case "QC":
                     return !o.production.qc.startedAt;
-
                 case "Dispatch":
                     return !o.production.dispatch.startedAt;
-
                 default:
                     return false;
             }
@@ -259,22 +253,16 @@ export const getEmployeeDashboard = async (
             switch (department) {
                 case "Designer":
                     return o.production.designer.startedAt && !o.production.designer.completedAt;
-
                 case "Printer":
                     return o.production.printing.startedAt && !o.production.printing.completedAt;
-
                 case "Metalist":
                     return o.production.metalist.startedAt && !o.production.metalist.completedAt;
-
                 case "Ceramist":
                     return o.production.ceramist.startedAt && !o.production.ceramist.completedAt;
-
                 case "QC":
                     return o.production.qc.startedAt && !o.production.qc.completedAt;
-
                 case "Dispatch":
                     return o.production.dispatch.startedAt && !o.production.dispatch.completedAt;
-
                 default:
                     return false;
             }
@@ -284,22 +272,16 @@ export const getEmployeeDashboard = async (
             switch (department) {
                 case "Designer":
                     return o.production.designer.completedAt;
-
                 case "Printer":
                     return o.production.printing.completedAt;
-
                 case "Metalist":
                     return o.production.metalist.completedAt;
-
                 case "Ceramist":
                     return o.production.ceramist.completedAt;
-
                 case "QC":
                     return o.production.qc.completedAt;
-
                 case "Dispatch":
                     return o.production.dispatch.completedAt;
-
                 default:
                     return false;
             }
@@ -307,7 +289,17 @@ export const getEmployeeDashboard = async (
 
         return res.json({
             success: true,
-            employee: user,
+            employee: {
+                id: employee._id,
+                employeeId: employee.employeeId,
+                name: employee.name,
+                email: employee.email,
+                phone: employee.phone,
+                role: employee.role,
+                department: employee.department,
+                status: employee.status,
+                workingStatus: employee.workingStatus,
+            },
             statistics: {
                 total: orders.length,
                 new: newOrders.length,

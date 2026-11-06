@@ -1,21 +1,43 @@
+
 import express from "express";
-import { authMiddleware } from "../middleware/authMiddleware";
 
 import {
-  createOrder,
-  getOrders,
-  getOrderById,
-  updateOrderStatus,
+    authMiddleware,
+    requireRole,
+} from "../middleware/authMiddleware";
+
+import {
+    createOrder,
+    getOrders,
+    getOrderById,
+    updateOrderStatus,
 } from "../controllers/orderController";
 
 const router = express.Router();
 
+// Public order creation
 router.post("/", createOrder);
 
-router.get("/", authMiddleware, getOrders);
+// Admin-only order management
+router.get(
+    "/",
+    authMiddleware,
+    requireRole("admin"),
+    getOrders
+);
 
-router.get("/:id", getOrderById);
+router.get(
+    "/:id",
+    authMiddleware,
+    requireRole("admin"),
+    getOrderById
+);
 
-router.put("/:id", updateOrderStatus);
+router.put(
+    "/:id",
+    authMiddleware,
+    requireRole("admin"),
+    updateOrderStatus
+);
 
 export default router;
