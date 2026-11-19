@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 
 import { PageShell } from "@/components/PageShell";
 import { Reveal } from "@/components/Section";
-import eventPoster from "@/assets/social-media-strategy-poster.jpg";
-import { X, CalendarCheck } from "lucide-react";
 
 import logo from "@/assets/logo1.webp";
 import logo1 from "@/assets/Excel.webp";
@@ -538,26 +536,6 @@ function Index() {
   const [active, setActive] = useState(0);
 
   const [showScannerModal, setShowScannerModal] = useState(false);
-
-  // Event popup state. The popup is now only a teaser: registration happens on
-  // the dedicated /events/the-dentist-as-a-brand page.
-  const [showEventPopup, setShowEventPopup] = useState(false);
-
-  // Show the popup automatically once per browser session.
-  useEffect(() => {
-    if (sessionStorage.getItem("event-popup-dismissed")) return;
-
-    const timer = window.setTimeout(() => {
-      setShowEventPopup(true);
-    }, 2500);
-
-    return () => window.clearTimeout(timer);
-  }, []);
-
-  const closeEventPopup = () => {
-    setShowEventPopup(false);
-    sessionStorage.setItem("event-popup-dismissed", "true");
-  };
 
   const nextSlide = () => {
     setActive((prev) => (prev + 1) % clients.length);
@@ -1426,71 +1404,6 @@ function Index() {
         </div>
       )}
       {/* HERO */}
-
-      {/* FLOATING EVENT REGISTRATION BUTTON
-          Navigates to the "The Dentist as a Brand" event route instead of opening the popup. */}
-      {!showEventPopup && (
-        <Link
-          to="/events/the-dentist-as-a-brand"
-          aria-label="Register for The Dentist as a Brand event"
-          className="
-            fixed bottom-5 right-5 z-[90]
-            flex items-center gap-2
-            rounded-full bg-[#5631a5]
-            px-4 py-3 sm:px-5 sm:py-3.5
-            text-sm font-semibold text-white
-            shadow-xl shadow-purple-900/30
-            transition-all duration-300
-            hover:scale-105 hover:bg-[#40227e]
-            focus-visible:outline-none
-            focus-visible:ring-4 focus-visible:ring-purple-300
-            animate-pulse motion-reduce:animate-none
-          "
-        >
-          <CalendarCheck size={21} aria-hidden="true" />
-          <span>Register Now</span>
-        </Link>
-      )}
-
-      {/* EVENT POPUP (poster teaser that links to the event page) */}
-      {showEventPopup && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 p-3 backdrop-blur-sm sm:p-6"
-          onClick={closeEventPopup}
-        >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label="The Dentist as a Brand event"
-            className="relative max-h-[92vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-3 shadow-2xl sm:p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={closeEventPopup}
-              aria-label="Close event popup"
-              className="absolute right-2 top-2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/80 text-white transition hover:bg-black"
-            >
-              <X size={20} />
-            </button>
-
-            <img
-              src={eventPoster}
-              alt="The Dentist as a Brand event poster"
-              className="mx-auto max-h-[68vh] w-full rounded-lg object-contain"
-            />
-
-            {/* Registration (payment + form) lives on the event page */}
-            <Link
-              to="/events/the-dentist-as-a-brand"
-              onClick={closeEventPopup}
-              className="mt-3 block w-full rounded-xl bg-[#5631a5] px-5 py-3 text-center font-semibold text-white transition hover:bg-[#40227e]"
-            >
-              Register Now
-            </Link>
-          </div>
-        </div>
-      )}
     </PageShell>
   );
 }

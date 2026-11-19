@@ -2,6 +2,12 @@ import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      index: true,
+    },
+
     clinicId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Clinic",
@@ -99,6 +105,15 @@ bookingSchema.index({ city: 1 });
 
 // Fetch bookings for a selected date
 bookingSchema.index({ bookingDate: 1 });
+
+// Customer-specific history and details
+bookingSchema.index({
+  userId: 1,
+  bookingDate: -1,
+  bookingTime: 1,
+  status: 1,
+  createdAt: -1,
+});
 
 // Sort bookings by date and time
 bookingSchema.index({ bookingDate: 1, bookingTime: 1 });

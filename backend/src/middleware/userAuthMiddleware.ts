@@ -1,6 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
+export interface AuthenticatedRequest extends Request {
+  user?: {
+    userId: string;
+    email?: string;
+    accountType?: string;
+  };
+}
+
 export const userAuthMiddleware = (
   req: Request,
   res: Response,
@@ -43,7 +51,11 @@ export const userAuthMiddleware = (
       });
     }
 
-    (req as any).user = decoded;
+    (req as AuthenticatedRequest).user = {
+      userId: decoded.userId,
+      email: decoded.email,
+      accountType: decoded.accountType,
+    };
 
     next();
   } catch (error) {
